@@ -1,0 +1,20 @@
+logging:
+  level:
+    ROOT: info
+    io.dereknelson.lostcities: error
+    org.springframework.security.web.FilterChainProxy: debug
+    org.hibernate: info
+    org.springframework.amqp.rabbit.connection: info
+
+spring:
+  profiles:
+    active: dev
+  rabbitmq:
+    host: 172.20.0.60
+    port: 5672
+    username: guest
+    password: guest
+  redis:
+    database: 0
+    host: 172.20.0.61
+    port: 6379
