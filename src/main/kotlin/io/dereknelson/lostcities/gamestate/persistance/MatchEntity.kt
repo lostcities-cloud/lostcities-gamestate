@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 @RedisHash("matches")
 class MatchEntity(
-    @Id val id: Long? = null,
+    @Id val id: Long,
     val players: UserPair,
     val seed: Long,
     val isReady: Boolean = false,
