@@ -54,6 +54,13 @@ tasks.withType<KotlinCompile> {
 	}
 }
 
+tasks.bootRun {
+	if (project.hasProperty("debug_jvm")) {
+		jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005")
+	}
+}
+
+
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
