@@ -2,9 +2,6 @@ package io.dereknelson.lostcities.gamestate.game
 
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.common.model.game.GameState
-import io.dereknelson.lostcities.common.model.game.components.Card
-import io.dereknelson.lostcities.common.model.game.components.PlayArea
-import io.dereknelson.lostcities.gamestate.api.CommandDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -12,11 +9,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
-@RestController("/api/")
+@RestController("/api/games")
 class GameController(
     private var gameService: GameService
 ) {
@@ -26,7 +22,7 @@ class GameController(
         ApiResponse(responseCode="200", description= "Game retrieved."),
         ApiResponse(responseCode="404", description= "Game not found.")
     ])
-    @GetMapping("/api/games/{id}")
+    @GetMapping("/{id}")
     fun getPlayerView(
         @PathVariable id: Long,
         @AuthenticationPrincipal @Parameter(hidden=true) userDetails: LostCitiesUserDetails,
@@ -41,21 +37,12 @@ class GameController(
         ApiResponse(responseCode="200", description= "Game retrieved."),
         ApiResponse(responseCode="404", description= "Game not found.")
     ])
-    @GetMapping("/api/games/:id/debug")
+    @GetMapping("/:id/debug")
     fun getDebugGameState(
         @PathVariable id: Long
     ): GameState {
         return gameService.getGame(id)
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
-    }
-
-
-    @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun findById(
-        @PathVariable id: Long,
-        userDetails: UserDetails
-    ): GameState {
-        throw NotImplementedError()
     }
 
     @Operation(description = "Play a command in a game.")
