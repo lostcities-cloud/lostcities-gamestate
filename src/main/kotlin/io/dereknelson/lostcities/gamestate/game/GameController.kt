@@ -12,7 +12,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
-@RestController("/api/gamestate")
+@RestController
+@RequestMapping("/api/gamestate")
 class GameController(
     private var gameService: GameService
 ) {
