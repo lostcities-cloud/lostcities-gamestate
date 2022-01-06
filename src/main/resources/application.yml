@@ -1,6 +1,6 @@
 logging:
   level:
-    ROOT: debug
+    ROOT: error
     io.dereknelson.lostcities: debug
     org.springframework.security.web.FilterChainProxy: debug
     org.hibernate: info

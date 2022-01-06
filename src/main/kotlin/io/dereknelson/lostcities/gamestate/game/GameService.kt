@@ -1,6 +1,5 @@
 package io.dereknelson.lostcities.gamestate.game
 
-import io.dereknelson.lostcities.common.model.game.GameState
 import io.dereknelson.lostcities.gamestate.persistance.MatchRepository
 import org.springframework.stereotype.Service
 import java.util.*

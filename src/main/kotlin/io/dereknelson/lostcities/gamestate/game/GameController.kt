@@ -1,7 +1,6 @@
 package io.dereknelson.lostcities.gamestate.game
 
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
-import io.dereknelson.lostcities.common.model.game.GameState
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -29,7 +28,7 @@ class GameController(
         @AuthenticationPrincipal @Parameter(hidden=true) userDetails: LostCitiesUserDetails,
     ): PlayerViewDto {
         return gameService.getGame(id)
-            .map { it.asPlayerView(userDetails.name) }
+            .map { it.asPlayerView(userDetails.login) }
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
     }
 
@@ -70,7 +69,8 @@ class GameController(
             player=player,
             isPlayerTurn=this.currentPlayer==player,
             hand=this.playerHands[player]!!,
-            playAreas=this.playerAreas
+            playAreas=this.playerAreas,
+            discard=this.discard
         )
     }
 }
