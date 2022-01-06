@@ -1,7 +1,7 @@
 package io.dereknelson.lostcities.gamestate.game
 
-import io.dereknelson.lostcities.common.model.game.components.Card
-import io.dereknelson.lostcities.common.model.game.components.Color
+import io.dereknelson.lostcities.gamestate.game.components.Card
+import io.dereknelson.lostcities.gamestate.game.components.Color
 import io.dereknelson.lostcities.gamestate.persistance.MatchEntity
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors
@@ -33,12 +33,14 @@ class GameFactory {
     }
 
     private fun buildCardsForColor(color: Color) : List<Card> {
-        val cards : MutableList<Card> = IntStream.range(1, 10)
-            .mapToObj { Card(color, it) }
-            .collect(Collectors.toList())
+        var i = 1
+        val cards = mutableListOf<Card>()
+        cards.add(Card(i++, color, 0, true))
+        cards.add(Card(i++, color, 0, true))
 
-        cards.add(Card(color, 0, true))
-        cards.add(Card(color, 0, true))
+         IntStream.range(1, 10)
+            .mapToObj { Card(i++, color, it) }
+            .collect(Collectors.toList())
 
         return cards
     }

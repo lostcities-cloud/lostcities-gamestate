@@ -1,10 +1,11 @@
 package io.dereknelson.lostcities.gamestate.game
 
-import io.dereknelson.lostcities.common.model.game.components.Card
-import io.dereknelson.lostcities.common.model.game.components.Color
-import io.dereknelson.lostcities.common.model.game.components.Phase
-import io.dereknelson.lostcities.common.model.game.components.PlayArea
+
 import io.dereknelson.lostcities.common.model.match.UserPair
+import io.dereknelson.lostcities.gamestate.game.components.Card
+import io.dereknelson.lostcities.gamestate.game.components.Color
+import io.dereknelson.lostcities.gamestate.game.components.Phase
+import io.dereknelson.lostcities.gamestate.game.components.PlayArea
 import kotlin.collections.LinkedHashSet
 
 class GameState(
@@ -89,5 +90,4 @@ class GameState(
     private fun getPlayerArea(player : String) : PlayArea {
         return playerAreas[player]!!
     }
-
 }
