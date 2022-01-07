@@ -1,6 +1,10 @@
 package io.dereknelson.lostcities.gamestate.game.state
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
+
 class PlayArea {
+    @JsonProperty
     private val board: Map<Color, MutableList<Card>> = Color.values()
         .associateWith { mutableListOf() }
 

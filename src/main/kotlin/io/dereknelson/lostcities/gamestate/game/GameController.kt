@@ -1,5 +1,6 @@
 package io.dereknelson.lostcities.gamestate.game
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.gamestate.game.command.CommandDto
 import io.dereknelson.lostcities.gamestate.game.command.CommandType
@@ -17,7 +18,8 @@ import java.lang.IllegalStateException
 @RestController
 @RequestMapping("/api/gamestate")
 class GameController(
-    private var gameService: GameService
+    private var gameService: GameService,
+    private var objectMapper: ObjectMapper
 ) {
 
     @Operation(description = "Retrieve a player view.")
@@ -40,7 +42,7 @@ class GameController(
         ApiResponse(responseCode="200", description= "Game retrieved."),
         ApiResponse(responseCode="404", description= "Game not found.")
     ])
-    @GetMapping("/:id/debug")
+    @GetMapping("/{id}/debug")
     fun getDebugGameState(
         @PathVariable id: Long
     ): GameState {
@@ -60,12 +62,13 @@ class GameController(
         @RequestBody commandDto: CommandDto,
         @AuthenticationPrincipal @Parameter(hidden=true) userDetails: LostCitiesUserDetails,
     ): PlayerViewDto? {
+        val user = userDetails.login
+        val (type, card, color) = commandDto
+
         val game = gameService.getGame(id)
             .orElseThrow { throw ResponseStatusException(HttpStatus.NOT_FOUND)}
 
-        val (user, type, card, color) = commandDto
-
-        if(commandDto.user !== userDetails.login || game.currentPlayer !== user) {
+        if(!game.currentPlayer.equals(user)) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN)
         }
 

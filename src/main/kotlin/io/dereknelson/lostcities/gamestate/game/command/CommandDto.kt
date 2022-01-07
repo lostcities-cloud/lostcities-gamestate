@@ -12,7 +12,6 @@ import io.dereknelson.lostcities.gamestate.game.state.Color
  */
 
 data class CommandDto(
-    val user: String,
     val type: CommandType,
     val card: String?,
     val color: Color?

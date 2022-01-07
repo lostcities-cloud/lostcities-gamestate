@@ -63,8 +63,9 @@ class GameState(
 
     fun playCard(player : String, card : String) {
         if(isCardInHand(player, card)) {
-            val removed = removeCardFromHand(player, card)
-            getPlayerArea(player).get(removed!!.color).add(removed)
+            val toPlay = removeCardFromHand(player, card)
+            getPlayerArea(player).get(toPlay!!.color).add(toPlay)
+            getPlayerArea(player).get(toPlay.color)
         }
     }
 
