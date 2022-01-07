@@ -6,15 +6,17 @@ import io.dereknelson.lostcities.gamestate.game.state.Card
 import io.dereknelson.lostcities.gamestate.game.state.Color
 import io.dereknelson.lostcities.gamestate.game.state.Phase
 import io.dereknelson.lostcities.gamestate.game.state.PlayArea
+import io.dereknelson.lostcities.gamestate.persistance.MatchEntity
 import kotlin.collections.LinkedHashSet
 
 class GameState(
     val id : Long,
     players : UserPair,
-    val deck : LinkedHashSet<Card>
+    val deck : LinkedHashSet<Card>,
+    val matchEntity: MatchEntity,
 ) {
-    var phase = Phase.PLAY_OR_DISCARD
     var currentPlayer = players.user1
+    private var nextPlayer = players.user2
     val discard = PlayArea()
 
     val playerAreas: Map<String, PlayArea> = mapOf(
@@ -28,16 +30,8 @@ class GameState(
     )
 
     init {
-        drawXCards(players.user1, 5)
-        drawXCards(players.user2!!, 5)
-    }
-
-    fun nextPhase() {
-        phase = if(phase == Phase.PLAY_OR_DISCARD) {
-            Phase.DRAW
-        } else {
-            Phase.PLAY_OR_DISCARD
-        }
+        drawXCards(players.user1, 8)
+        drawXCards(players.user2!!, 8)
     }
 
     fun drawCard(player: String) {
@@ -45,12 +39,6 @@ class GameState(
             val drawn = deck.last()
             deck.remove(drawn)
             getHand(player)[drawn.id] = drawn
-        }
-    }
-
-    fun drawXCards(player: String, number: Int) {
-        for(x in 0 until number) {
-            drawCard(player)
         }
     }
 
@@ -65,7 +53,6 @@ class GameState(
         if(isCardInHand(player, card)) {
             val toPlay = removeCardFromHand(player, card)
             getPlayerArea(player).get(toPlay!!.color).add(toPlay)
-            getPlayerArea(player).get(toPlay.color)
         }
     }
 
@@ -78,6 +65,20 @@ class GameState(
 
     fun isCardInHand(player : String, card : String) : Boolean {
         return getHand(player).contains(card)
+    }
+
+    fun endTurn() {
+        val current = nextPlayer
+        val next = currentPlayer
+
+        currentPlayer = current!!
+        nextPlayer = next
+    }
+
+    private fun drawXCards(player: String, number: Int) {
+        for(x in 0 until number) {
+            drawCard(player)
+        }
     }
 
     private fun canDrawFromDiscard(color : Color) : Boolean {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.gamestate.game.command.CommandDto
 import io.dereknelson.lostcities.gamestate.game.command.CommandType
+import io.dereknelson.lostcities.gamestate.persistance.CommandEntity
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -14,11 +15,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import java.lang.IllegalStateException
+import java.sql.Timestamp
+import java.time.Instant
 
 @RestController
 @RequestMapping("/api/gamestate")
 class GameController(
     private var gameService: GameService,
+    private var commandService: CommandService,
     private var objectMapper: ObjectMapper
 ) {
 
@@ -33,7 +37,10 @@ class GameController(
         @AuthenticationPrincipal @Parameter(hidden=true) userDetails: LostCitiesUserDetails,
     ): PlayerViewDto {
         return gameService.getGame(id)
-            .map { it.asPlayerView(userDetails.login) }
+            .map {
+                playCommandsForward(it)
+                it.asPlayerView(userDetails.login)
+            }
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
     }
 
@@ -68,36 +75,34 @@ class GameController(
         val game = gameService.getGame(id)
             .orElseThrow { throw ResponseStatusException(HttpStatus.NOT_FOUND)}
 
-        if(!game.currentPlayer.equals(user)) {
-            throw ResponseStatusException(HttpStatus.FORBIDDEN)
-        }
+        playCommandsForward(game)
 
-        if (type === CommandType.PLAY) {
-            if(game.isCardInHand(user, card!!)) {
-                game.playCard(user, card)
-            } else {
-                throw ResponseStatusException(HttpStatus.BAD_REQUEST)
-            }
-        } else if (type === CommandType.DRAW && color !== null) {
-                game.drawFromDiscard(user, color)
-        } else if (type === CommandType.DRAW) {
-                game.drawCard(user)
-        } else if (type === CommandType.DISCARD) {
-            if(game.isCardInHand(user, card!!)) {
-                game.discard(user, card)
-            } else {
-                throw ResponseStatusException(HttpStatus.BAD_REQUEST)
-            }
-        }
+        commandService.execCommand(game, type, card, color, user)
+
+        gameService.saveCommand(game, commandDto.asEntity())
 
         return game.asPlayerView(user)
     }
 
+    private fun playCommandsForward(gameState: GameState) {
+        gameState.matchEntity.commands.forEach {
+            commandService.execCommand(
+                gameState,
+                it.type,
+                it.card,
+                it.color,
+                gameState.currentPlayer
+            )
+        }
+    }
+
+    private fun CommandDto.asEntity(): CommandEntity {
+        return CommandEntity(type, card, color, Instant.now().toEpochMilli())
+    }
 
     private fun GameState.asPlayerView(player: String): PlayerViewDto {
         return PlayerViewDto(
             id=this.id,
-            gamePhase=this.phase,
             deckRemaining=this.deck.size,
             player=player,
             isPlayerTurn=this.currentPlayer==player,

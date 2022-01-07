@@ -1,5 +1,6 @@
 package io.dereknelson.lostcities.gamestate.game
 
+import io.dereknelson.lostcities.gamestate.persistance.CommandEntity
 import io.dereknelson.lostcities.gamestate.persistance.MatchRepository
 import org.springframework.stereotype.Service
 import java.util.*
@@ -18,5 +19,11 @@ class GameService(
         return matchRepository
             .findById(id)
             .map { gameFactory.build(it!!) }
+    }
+
+    fun saveCommand(gameState: GameState, commandEntity: CommandEntity) {
+        val match = gameState.matchEntity
+        match.commands.add(commandEntity)
+        matchRepository.save(match)
     }
 }

@@ -6,6 +6,10 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
+
+
+
 
 @Configuration
 class RedisConfiguration {
@@ -33,6 +37,7 @@ class RedisConfiguration {
     fun redisTemplate(): RedisTemplate<String, Any> {
         val template = RedisTemplate<String, Any>()
         template.setConnectionFactory(jedisConnectionFactory())
+        template.setDefaultSerializer(Jackson2JsonRedisSerializer(Any::class.java))
         return template
     }
 }

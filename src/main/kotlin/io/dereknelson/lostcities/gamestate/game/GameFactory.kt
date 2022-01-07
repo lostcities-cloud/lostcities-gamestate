@@ -18,7 +18,8 @@ class GameFactory {
         return GameState(
             match.id,
             match.players,
-            LinkedHashSet(shuffledCards)
+            LinkedHashSet(shuffledCards),
+            match
         )
     }
 
@@ -39,8 +40,8 @@ class GameFactory {
         cards.add(Card(i++, color, 0, true))
 
          IntStream.range(1, 10)
-            .mapToObj { Card(i++, color, it) }
-            .collect(Collectors.toList())
+             .mapToObj { Card(i++, color, it) }
+             .forEach { cards.add(it) }
 
         return cards
     }

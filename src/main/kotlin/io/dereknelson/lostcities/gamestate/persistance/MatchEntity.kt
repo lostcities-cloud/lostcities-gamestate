@@ -16,6 +16,8 @@ class MatchEntity(
 
     val concededBy: String? = null,
 
+    val commands: MutableList<CommandEntity> = mutableListOf(),
+
     val createdDate: LocalDateTime? = null,
     val lastModifiedDate: LocalDateTime? = null,
     val createdBy: String? = null,
