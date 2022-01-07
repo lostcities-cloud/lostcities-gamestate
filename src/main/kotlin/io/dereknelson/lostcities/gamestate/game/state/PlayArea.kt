@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.game.components
+package io.dereknelson.lostcities.gamestate.game.state
 
 class PlayArea {
     private val board: Map<Color, MutableList<Card>> = Color.values()

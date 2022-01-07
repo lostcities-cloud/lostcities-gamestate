@@ -1,8 +1,8 @@
 package io.dereknelson.lostcities.gamestate.game
 
-import io.dereknelson.lostcities.gamestate.game.components.Card
-import io.dereknelson.lostcities.gamestate.game.components.Phase
-import io.dereknelson.lostcities.gamestate.game.components.PlayArea
+import io.dereknelson.lostcities.gamestate.game.state.Card
+import io.dereknelson.lostcities.gamestate.game.state.Phase
+import io.dereknelson.lostcities.gamestate.game.state.PlayArea
 
 
 class PlayerViewDto(

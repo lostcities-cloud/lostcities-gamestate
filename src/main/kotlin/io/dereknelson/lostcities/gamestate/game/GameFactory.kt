@@ -1,7 +1,7 @@
 package io.dereknelson.lostcities.gamestate.game
 
-import io.dereknelson.lostcities.gamestate.game.components.Card
-import io.dereknelson.lostcities.gamestate.game.components.Color
+import io.dereknelson.lostcities.gamestate.game.state.Card
+import io.dereknelson.lostcities.gamestate.game.state.Color
 import io.dereknelson.lostcities.gamestate.persistance.MatchEntity
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors

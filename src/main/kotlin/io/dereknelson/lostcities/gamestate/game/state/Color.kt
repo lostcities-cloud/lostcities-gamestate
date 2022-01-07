@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.game.components
+package io.dereknelson.lostcities.gamestate.game.state
 
 enum class Color {
     YELLOW,
