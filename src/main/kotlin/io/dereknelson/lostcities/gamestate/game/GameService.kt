@@ -21,9 +21,10 @@ class GameService(
             .map { gameFactory.build(it!!) }
     }
 
-    fun saveCommand(gameState: GameState, commandEntity: CommandEntity) {
+    fun saveTurn(gameState: GameState, playOrDiscardCommand: CommandEntity, drawCommand: CommandEntity) {
         val match = gameState.matchEntity
-        match.commands.add(commandEntity)
+        match.commands.add(playOrDiscardCommand)
+        match.commands.add(drawCommand)
         matchRepository.save(match)
     }
 }

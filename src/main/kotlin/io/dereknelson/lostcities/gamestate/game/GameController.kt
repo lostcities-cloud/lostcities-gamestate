@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.gamestate.game.command.CommandDto
 import io.dereknelson.lostcities.gamestate.game.command.CommandType
+import io.dereknelson.lostcities.gamestate.game.command.TurnCommandRequest
 import io.dereknelson.lostcities.gamestate.persistance.CommandEntity
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -66,23 +67,34 @@ class GameController(
     @PatchMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun playCommand(
         @PathVariable id: Long,
-        @RequestBody commandDto: CommandDto,
+        @RequestBody turnCommandRequest: TurnCommandRequest,
         @AuthenticationPrincipal @Parameter(hidden=true) userDetails: LostCitiesUserDetails,
     ): PlayerViewDto? {
         val user = userDetails.login
-        val (type, card, color) = commandDto
+
 
         val game = gameService.getGame(id)
             .orElseThrow { throw ResponseStatusException(HttpStatus.NOT_FOUND)}
 
         playCommandsForward(game)
 
-        commandService.execCommand(game, type, card, color, user)
+        play(game, turnCommandRequest.playOrDiscard, user)
+        play(game, turnCommandRequest.draw, user)
 
-        gameService.saveCommand(game, commandDto.asEntity())
+        gameService.saveTurn(
+            game,
+            turnCommandRequest.playOrDiscard.asEntity(),
+            turnCommandRequest.draw.asEntity()
+        )
 
         return game.asPlayerView(user)
     }
+
+    private fun play(game: GameState, commandDto: CommandDto, user: String) {
+        val (type, card, color) = commandDto
+        commandService.execCommand(game, type, card, color, user)
+    }
+
 
     private fun playCommandsForward(gameState: GameState) {
         gameState.matchEntity.commands.forEach {
