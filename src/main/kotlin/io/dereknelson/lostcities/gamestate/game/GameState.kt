@@ -42,6 +42,13 @@ class GameState(
         }
     }
 
+    fun canPlayCard(player: String, cardId: String): Boolean {
+        val card = getHand(player).get(cardId)!!
+        val lastPlayed = playerAreas.get(player)?.get(card.color)?.last()
+
+        return lastPlayed === null || card.value >= lastPlayed.value
+    }
+
     fun drawFromDiscard(player : String, color: Color) {
         if(canDrawFromDiscard(color)) {
             val drawn = discard.get(color).removeLast()

@@ -1,6 +1,6 @@
-package io.dereknelson.lostcities.gamestate.game
+package io.dereknelson.lostcities.gamestate.game.command
 
-import io.dereknelson.lostcities.gamestate.game.command.CommandType
+import io.dereknelson.lostcities.gamestate.game.GameState
 import io.dereknelson.lostcities.gamestate.game.state.Color
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -15,7 +15,7 @@ class CommandService {
         }
 
         if (type === CommandType.PLAY) {
-            if(game.isCardInHand(user, card!!)) {
+            if(game.isCardInHand(user, card!!) && game.canPlayCard(user, card)) {
                 game.playCard(user, card)
             } else {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST)
