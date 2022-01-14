@@ -43,8 +43,8 @@ class GameState(
     }
 
     fun canPlayCard(player: String, cardId: String): Boolean {
-        val card = getHand(player).get(cardId)!!
-        val lastPlayed = playerAreas.get(player)?.get(card.color)?.last()
+        val card = getHand(player)[cardId]!!
+        val lastPlayed = playerAreas[player]?.get(card.color)?.lastOrNull()
 
         return lastPlayed === null || card.value >= lastPlayed.value
     }

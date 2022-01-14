@@ -22,13 +22,13 @@ class CommandService {
             }
         } else if (type === CommandType.DRAW && color !== null) {
             game.drawFromDiscard(user, color)
+            game.endTurn()
         } else if (type === CommandType.DRAW) {
             game.drawCard(user)
             game.endTurn()
         } else if (type === CommandType.DISCARD) {
             if(game.isCardInHand(user, card!!)) {
                 game.discard(user, card)
-                game.endTurn()
             } else {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST)
             }
