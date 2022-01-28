@@ -1,7 +1,7 @@
 package io.dereknelson.lostcities.gamestate.persistance
 
 import io.dereknelson.lostcities.common.model.match.UserPair
-import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.*
 import org.springframework.data.redis.core.RedisHash
 import java.time.LocalDateTime
 
@@ -18,9 +18,14 @@ class MatchEntity(
 
     val commands: MutableList<CommandEntity> = mutableListOf(),
 
+    @CreatedDate
     val createdDate: LocalDateTime? = null,
+    @LastModifiedDate
     val lastModifiedDate: LocalDateTime? = null,
+
+    @CreatedBy
     val createdBy: String? = null,
+    @LastModifiedBy
     var lastModifiedBy: String? = null
 ) {
 

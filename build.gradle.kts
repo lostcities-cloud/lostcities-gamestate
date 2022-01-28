@@ -13,6 +13,8 @@ java.sourceCompatibility = JavaVersion.VERSION_16
 
 
 repositories {
+
+
 	maven {
 		url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-common")
 		credentials {
@@ -20,13 +22,23 @@ repositories {
 			password = System.getenv("GITHUB_TOKEN")
 		}
 	}
+
+	maven {
+		url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-models")
+		credentials {
+			username = System.getenv("GITHUB_ACTOR")
+			password = System.getenv("GITHUB_TOKEN")
+		}
+	}
+
 	mavenCentral()
 	maven { url = uri("https://repo.spring.io/milestone") }
 	maven { url = uri("https://repo.spring.io/snapshot") }
 }
 
 dependencies {
-	implementation("com.github.lostcities-cloud:lostcities-common:1.0-SNAPSHOT")
+	implementation("io.dereknelson.lostcities-cloud:lostcities-common:1.0-SNAPSHOT")
+	implementation("io.dereknelson.lostcities-cloud:lostcities-models:1.0-SNAPSHOT")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

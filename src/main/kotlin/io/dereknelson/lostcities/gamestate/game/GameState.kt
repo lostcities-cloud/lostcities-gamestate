@@ -7,16 +7,27 @@ import io.dereknelson.lostcities.gamestate.game.state.Color
 import io.dereknelson.lostcities.gamestate.game.state.Phase
 import io.dereknelson.lostcities.gamestate.game.state.PlayArea
 import io.dereknelson.lostcities.gamestate.persistance.MatchEntity
+
 import kotlin.collections.LinkedHashSet
+import kotlin.random.Random
+
 
 class GameState(
     val id : Long,
     players : UserPair,
     val deck : LinkedHashSet<Card>,
     val matchEntity: MatchEntity,
+    seed: Random
 ) {
-    var currentPlayer = players.user1
-    private var nextPlayer = players.user2
+    var currentPlayer: String
+    private var nextPlayer: String
+
+    init {
+        val turnOrder = players.toList().shuffled(seed)
+        currentPlayer = turnOrder[0]
+        nextPlayer = turnOrder[1]
+    }
+
     val discard = PlayArea()
 
     val playerAreas: Map<String, PlayArea> = mapOf(
@@ -102,5 +113,9 @@ class GameState(
 
     private fun getPlayerArea(player : String) : PlayArea {
         return playerAreas[player]!!
+    }
+
+    private fun UserPair.toList(): List<String> {
+        return listOf(user1, user2!!)
     }
 }

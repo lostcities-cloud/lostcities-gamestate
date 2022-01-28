@@ -81,8 +81,8 @@ class GameController(
 
         gameService.saveTurn(
             game,
-            turnCommandRequest.playOrDiscard.asEntity(),
-            turnCommandRequest.draw.asEntity()
+            turnCommandRequest.playOrDiscard.asEntity(user),
+            turnCommandRequest.draw.asEntity(user)
         )
 
         return game.asPlayerView(user)
@@ -106,8 +106,8 @@ class GameController(
         }
     }
 
-    private fun CommandDto.asEntity(): CommandEntity {
-        return CommandEntity(type, card, color, Instant.now().toEpochMilli())
+    private fun CommandDto.asEntity(user: String): CommandEntity {
+        return CommandEntity(user, type, card, color, Instant.now().toEpochMilli())
     }
 
     private fun GameState.asPlayerView(player: String): PlayerViewDto {

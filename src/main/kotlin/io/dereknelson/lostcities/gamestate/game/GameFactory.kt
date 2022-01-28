@@ -12,14 +12,16 @@ import kotlin.random.Random
 class GameFactory {
 
     fun build(match: MatchEntity) : GameState {
+        val random = Random(match.seed)
         val shuffledCards = buildDeck()
-            .shuffled(Random(match.seed))
+            .shuffled(random)
 
         return GameState(
             match.id,
             match.players,
             LinkedHashSet(shuffledCards),
-            match
+            match,
+            random
         )
     }
 
