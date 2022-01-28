@@ -1,5 +1,6 @@
 package io.dereknelson.lostcities.gamestate.game
 
+import io.dereknelson.lostcities.gamestate.matchevents.MatchEventService
 import io.dereknelson.lostcities.gamestate.persistance.CommandEntity
 import io.dereknelson.lostcities.gamestate.persistance.MatchRepository
 import org.springframework.stereotype.Service
@@ -8,7 +9,8 @@ import java.util.*
 @Service
 class GameService(
     private var matchRepository: MatchRepository,
-    private var gameFactory: GameFactory
+    private var gameFactory: GameFactory,
+    private var matchEventService: MatchEventService
 ) {
 
     fun exists(id: Long): Boolean {
@@ -26,5 +28,6 @@ class GameService(
         match.commands.add(playOrDiscardCommand)
         match.commands.add(drawCommand)
         matchRepository.save(match)
+        matchEventService.sendTurnChangeEvent(match.id, playOrDiscardCommand.user)
     }
 }
