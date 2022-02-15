@@ -46,6 +46,7 @@ dependencies {
 	implementation("org.apache.commons:commons-pool2:2.11.1")
 	implementation("redis.clients:jedis:3.3.0")
 
+	implementation("org.springframework.boot:spring-boot-starter-undertow")
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-security")

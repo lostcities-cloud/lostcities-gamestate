@@ -4,7 +4,7 @@ logging:
     io.dereknelson.lostcities: debug
     org.springframework.security.web.FilterChainProxy: debug
     org.hibernate: info
-    org.springframework.amqp.rabbit.connection: info
+    org.springframework.amqp.rabbit.connection: debug
 
 spring:
   profiles:
@@ -14,6 +14,7 @@ spring:
     port: 5672
     username: guest
     password: guest
+
   redis:
     database: 0
     host: 172.20.0.61

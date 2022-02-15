@@ -23,7 +23,7 @@ class CreateGameListener(
 
     @RabbitListener(queues = ["create-game"])
     fun createGame(gameMessage: Message) {
-        println("Message read from myQueue : ${String(gameMessage.body)}\n\n\n\n\n\n\n\n\n\n\n\n")
+        println("Message read from create-game: ${String(gameMessage.body)}\n\n\n\n\n\n\n\n\n\n\n\n")
         val match = objectMapper.readValue(gameMessage.body, MatchEntity::class.java)
 
         matchRepository.save(match)
