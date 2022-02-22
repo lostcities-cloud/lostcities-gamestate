@@ -9,7 +9,6 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
 
-
 @Component
 class CreateGameListener(
     val matchRepository: MatchRepository,
@@ -18,7 +17,7 @@ class CreateGameListener(
 
     @Bean
     fun createGame(): Queue {
-        return Queue("create-game", )
+        return Queue("create-game",)
     }
 
     @RabbitListener(queues = ["create-game"])
@@ -29,6 +28,5 @@ class CreateGameListener(
         matchRepository.save(match)
 
         println("Saved match to repo")
-
     }
 }

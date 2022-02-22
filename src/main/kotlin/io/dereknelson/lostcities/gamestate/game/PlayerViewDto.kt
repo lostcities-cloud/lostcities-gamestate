@@ -1,10 +1,8 @@
 package io.dereknelson.lostcities.gamestate.game
 
 import io.dereknelson.lostcities.gamestate.game.state.Card
-import io.dereknelson.lostcities.gamestate.game.state.Phase
 import io.dereknelson.lostcities.gamestate.game.state.PlayArea
 import io.dereknelson.lostcities.models.matches.PlayerEvent
-
 
 class PlayerViewDto(
     val id: Long,

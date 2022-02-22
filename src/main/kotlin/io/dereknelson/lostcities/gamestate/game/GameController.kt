@@ -26,14 +26,16 @@ class GameController(
 ) {
 
     @Operation(description = "Retrieve a player view.")
-    @ApiResponses(value = [
-        ApiResponse(responseCode="200", description= "Game retrieved."),
-        ApiResponse(responseCode="404", description= "Game not found.")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Game retrieved."),
+            ApiResponse(responseCode = "404", description = "Game not found.")
+        ]
+    )
     @GetMapping("/{id}")
     fun getPlayerView(
         @PathVariable id: Long,
-        @AuthenticationPrincipal @Parameter(hidden=true) userDetails: LostCitiesUserDetails,
+        @AuthenticationPrincipal @Parameter(hidden = true) userDetails: LostCitiesUserDetails,
     ): PlayerViewDto {
         return gameService.getGame(id)
             .map {
@@ -44,10 +46,12 @@ class GameController(
     }
 
     @Operation(description = "Retrieve a game state for debugging.")
-    @ApiResponses(value = [
-        ApiResponse(responseCode="200", description= "Game retrieved."),
-        ApiResponse(responseCode="404", description= "Game not found.")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Game retrieved."),
+            ApiResponse(responseCode = "404", description = "Game not found.")
+        ]
+    )
     @GetMapping("/{id}/debug")
     fun getDebugGameState(
         @PathVariable id: Long
@@ -57,22 +61,23 @@ class GameController(
     }
 
     @Operation(description = "Play a command in a game.")
-    @ApiResponses(value = [
-        ApiResponse(responseCode="201", description= "Command executed."),
-        ApiResponse(responseCode="404", description= "Game not found."),
-        ApiResponse(responseCode="406", description= "Invalid command.")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "201", description = "Command executed."),
+            ApiResponse(responseCode = "404", description = "Game not found."),
+            ApiResponse(responseCode = "406", description = "Invalid command.")
+        ]
+    )
     @PatchMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun playCommand(
         @PathVariable id: Long,
         @RequestBody turnCommandRequest: TurnCommandRequest,
-        @AuthenticationPrincipal @Parameter(hidden=true) userDetails: LostCitiesUserDetails,
+        @AuthenticationPrincipal @Parameter(hidden = true) userDetails: LostCitiesUserDetails,
     ): PlayerViewDto? {
         val user = userDetails.login
 
-
         val game = gameService.getGame(id)
-            .orElseThrow { throw ResponseStatusException(HttpStatus.NOT_FOUND)}
+            .orElseThrow { throw ResponseStatusException(HttpStatus.NOT_FOUND) }
 
         playCommandsForward(game)
 
@@ -97,7 +102,6 @@ class GameController(
         val (type, card, color) = commandDto
         commandService.execCommand(game, type, card, color, user)
     }
-
 
     private fun playCommandsForward(gameState: GameState) {
         gameState.matchEntity.commands.forEach {

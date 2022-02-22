@@ -10,12 +10,12 @@ import org.springframework.web.server.ResponseStatusException
 class CommandService {
 
     fun execCommand(game: GameState, type: CommandType, card: String?, color: Color?, user: String) {
-        if(!game.currentPlayer.equals(user)) {
+        if (!game.currentPlayer.equals(user)) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN)
         }
 
         if (type === CommandType.PLAY) {
-            if(game.isCardInHand(user, card!!) && game.canPlayCard(user, card)) {
+            if (game.isCardInHand(user, card!!) && game.canPlayCard(user, card)) {
                 game.playCard(user, card)
             } else {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST)
@@ -27,7 +27,7 @@ class CommandService {
             game.drawCard(user)
             game.endTurn()
         } else if (type === CommandType.DISCARD) {
-            if(game.isCardInHand(user, card!!)) {
+            if (game.isCardInHand(user, card!!)) {
                 game.discard(user, card)
             } else {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST)

@@ -1,6 +1,6 @@
 package io.dereknelson.lostcities.gamestate.game.state
 
-data class Command (
+data class Command(
     val gameId: Long,
     val player: String,
     val phase: Phase,
@@ -10,7 +10,7 @@ data class Command (
     val card: Card?
 ) {
     fun validate(): Boolean {
-        return if(phase == Phase.PLAY_OR_DISCARD) {
+        return if (phase == Phase.PLAY_OR_DISCARD) {
             !draw && card != null
         } else if (phase == Phase.DRAW) {
             draw && (color != null)

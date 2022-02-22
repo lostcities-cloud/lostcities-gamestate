@@ -3,7 +3,6 @@ package io.dereknelson.lostcities.gamestate.game
 import io.dereknelson.lostcities.gamestate.matchevents.MatchEventService
 import io.dereknelson.lostcities.gamestate.persistance.CommandEntity
 import io.dereknelson.lostcities.gamestate.persistance.MatchRepository
-import io.dereknelson.lostcities.models.matches.PlayerEvent
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -28,7 +27,7 @@ class GameService(
         gameState: GameState,
         playOrDiscardCommand: CommandEntity,
         drawCommand: CommandEntity,
-        playerEvents : Map<String, PlayerViewDto>
+        playerEvents: Map<String, PlayerViewDto>
     ) {
         val match = gameState.matchEntity
         match.commands.add(playOrDiscardCommand)
