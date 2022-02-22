@@ -3,6 +3,7 @@ package io.dereknelson.lostcities.gamestate.game
 import io.dereknelson.lostcities.gamestate.matchevents.MatchEventService
 import io.dereknelson.lostcities.gamestate.persistance.CommandEntity
 import io.dereknelson.lostcities.gamestate.persistance.MatchRepository
+import io.dereknelson.lostcities.models.matches.PlayerEvent
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -23,11 +24,18 @@ class GameService(
             .map { gameFactory.build(it!!) }
     }
 
-    fun saveTurn(gameState: GameState, playOrDiscardCommand: CommandEntity, drawCommand: CommandEntity) {
+    fun saveTurn(
+        gameState: GameState,
+        playOrDiscardCommand: CommandEntity,
+        drawCommand: CommandEntity,
+        playerEvents : Map<String, PlayerViewDto>
+    ) {
         val match = gameState.matchEntity
         match.commands.add(playOrDiscardCommand)
         match.commands.add(drawCommand)
         matchRepository.save(match)
         matchEventService.sendTurnChangeEvent(match.id, playOrDiscardCommand.user)
+
+        matchEventService.sendPlayerEvents(playerEvents)
     }
 }

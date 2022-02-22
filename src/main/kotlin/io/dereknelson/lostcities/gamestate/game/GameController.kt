@@ -77,12 +77,17 @@ class GameController(
         playCommandsForward(game)
 
         play(game, turnCommandRequest.playOrDiscard, user)
+        game.playerEvents.clear()
         play(game, turnCommandRequest.draw, user)
+
+        val playerViews = game.playerAreas.keys
+            .associateWith { game.asPlayerView(it) }
 
         gameService.saveTurn(
             game,
             turnCommandRequest.playOrDiscard.asEntity(user),
-            turnCommandRequest.draw.asEntity(user)
+            turnCommandRequest.draw.asEntity(user),
+            playerViews
         )
 
         return game.asPlayerView(user)
@@ -108,17 +113,5 @@ class GameController(
 
     private fun CommandDto.asEntity(user: String): CommandEntity {
         return CommandEntity(user, type, card, color, Instant.now().toEpochMilli())
-    }
-
-    private fun GameState.asPlayerView(player: String): PlayerViewDto {
-        return PlayerViewDto(
-            id=this.id,
-            deckRemaining=this.deck.size,
-            player=player,
-            isPlayerTurn=this.currentPlayer==player,
-            hand=this.playerHands[player]!!.values.toMutableList(),
-            playAreas=this.playerAreas,
-            discard=this.discard
-        )
     }
 }

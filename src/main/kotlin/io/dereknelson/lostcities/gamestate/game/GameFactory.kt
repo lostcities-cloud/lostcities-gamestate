@@ -16,13 +16,17 @@ class GameFactory {
         val shuffledCards = buildDeck()
             .shuffled(random)
 
-        return GameState(
+        val gameState = GameState(
             match.id,
             match.players,
             LinkedHashSet(shuffledCards),
             match,
             random
         )
+
+        gameState.playerEvents.clear()
+
+        return gameState
     }
 
     fun buildDeck() : List<Card> {
