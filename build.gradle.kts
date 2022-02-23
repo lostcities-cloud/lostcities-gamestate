@@ -46,7 +46,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	implementation("org.apache.commons:commons-pool2:2.11.1")
-	implementation("redis.clients:jedis:3.3.0")
+	implementation("redis.clients:jedis:4.1.0")
 
 	implementation("org.springframework.boot:spring-boot-starter-undertow")
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
@@ -64,8 +64,8 @@ dependencies {
 		}
 	}
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.5")
-	testImplementation("org.springframework.amqp:spring-rabbit-test:2.3.9")
+	testImplementation("org.springframework.boot:spring-boot-starter-test:2.6.3")
+	testImplementation("org.springframework.amqp:spring-rabbit-test:2.4.2")
 }
 
 val outputDir = "${project.buildDir}/reports/ktlint/"

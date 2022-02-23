@@ -1,9 +1,9 @@
 package io.dereknelson.lostcities.gamestate.game
 
 import io.dereknelson.lostcities.common.model.match.UserPair
-import io.dereknelson.lostcities.gamestate.game.state.Card
-import io.dereknelson.lostcities.gamestate.game.state.Color
-import io.dereknelson.lostcities.gamestate.game.state.PlayArea
+import io.dereknelson.lostcities.models.state.Card
+import io.dereknelson.lostcities.models.state.Color
+import io.dereknelson.lostcities.models.state.PlayArea
 import io.dereknelson.lostcities.gamestate.persistance.MatchEntity
 import io.dereknelson.lostcities.models.matches.PlayerEvent
 import io.dereknelson.lostcities.models.matches.PlayerEventType
@@ -11,35 +11,34 @@ import kotlin.collections.LinkedHashSet
 import kotlin.random.Random
 
 class GameState(
-    val id: Long,
+    private val id: Long,
     players: UserPair,
-    val deck: LinkedHashSet<Card>,
+    private val deck: LinkedHashSet<Card>,
     val matchEntity: MatchEntity,
     seed: Random
 ) {
     var currentPlayer: String
-    private var nextPlayer: String
     val playerEvents = mutableListOf<PlayerEvent>()
-
-    init {
-        val turnOrder = players.toList().shuffled(seed)
-        currentPlayer = turnOrder[0]
-        nextPlayer = turnOrder[1]
-    }
-
-    val discard = PlayArea()
 
     val playerAreas: Map<String, PlayArea> = mapOf(
         players.user1 to PlayArea(),
         players.user2!! to PlayArea()
     )
 
-    val playerHands: Map<String, MutableMap<String, Card>> = mapOf(
+    private var nextPlayer: String
+    private val discard = PlayArea()
+
+    private val playerHands: Map<String, MutableMap<String, Card>> = mapOf(
         players.user1 to mutableMapOf(),
         players.user2!! to mutableMapOf()
     )
 
     init {
+        val turnOrder = players.toList().shuffled(seed)
+
+        currentPlayer = turnOrder[0]
+        nextPlayer = turnOrder[1]
+
         drawXCards(players.user1, 8)
         drawXCards(players.user2!!, 8)
     }

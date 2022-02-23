@@ -1,7 +1,7 @@
 package io.dereknelson.lostcities.gamestate.game.command
 
 import io.dereknelson.lostcities.gamestate.game.GameState
-import io.dereknelson.lostcities.gamestate.game.state.Color
+import io.dereknelson.lostcities.models.state.Color
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException

@@ -1,7 +1,7 @@
 package io.dereknelson.lostcities.gamestate.game
 
-import io.dereknelson.lostcities.gamestate.game.state.Card
-import io.dereknelson.lostcities.gamestate.game.state.PlayArea
+import io.dereknelson.lostcities.models.state.Card
+import io.dereknelson.lostcities.models.state.PlayArea
 import io.dereknelson.lostcities.models.matches.PlayerEvent
 
 class PlayerViewDto(

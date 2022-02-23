@@ -21,8 +21,7 @@ import java.time.Instant
 @RequestMapping("/api/gamestate")
 class GameController(
     private var gameService: GameService,
-    private var commandService: CommandService,
-    private var objectMapper: ObjectMapper
+    private var commandService: CommandService
 ) {
 
     @Operation(description = "Retrieve a player view.")

@@ -1,6 +1,6 @@
 package io.dereknelson.lostcities.gamestate.game.command
 
-import io.dereknelson.lostcities.gamestate.game.state.Color
+import io.dereknelson.lostcities.models.state.Color
 
 /**
  *  Events

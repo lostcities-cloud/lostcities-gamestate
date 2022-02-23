@@ -1,7 +1,7 @@
 package io.dereknelson.lostcities.gamestate.persistance
 
 import io.dereknelson.lostcities.gamestate.game.command.CommandType
-import io.dereknelson.lostcities.gamestate.game.state.Color
+import io.dereknelson.lostcities.models.state.Color
 
 class CommandEntity(
     val user: String,

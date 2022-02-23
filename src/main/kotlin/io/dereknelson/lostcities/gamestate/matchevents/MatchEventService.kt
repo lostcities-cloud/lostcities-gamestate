@@ -13,7 +13,8 @@ class MatchEventService(
 ) {
 
     companion object {
-        val TURN_CHANGE_EVENT = "turn-change-event"
+        const val TURN_CHANGE_EVENT = "turn-change-event"
+        const val PLAYER_EVENT = "player-event"
     }
 
     fun sendTurnChangeEvent(id: Long, login: String) {
@@ -25,7 +26,7 @@ class MatchEventService(
 
     fun sendPlayerEvents(playerEvents: Map<String, PlayerViewDto>) {
         rabbitTemplate.convertAndSend(
-            "player-event",
+            PLAYER_EVENT,
             objectMapper.writeValueAsBytes(playerEvents)
         )
     }
