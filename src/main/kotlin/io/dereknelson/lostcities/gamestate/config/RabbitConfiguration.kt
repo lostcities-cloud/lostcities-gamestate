@@ -1,6 +1,7 @@
 package io.dereknelson.lostcities.gamestate.config
 
 import io.dereknelson.lostcities.gamestate.matchevents.MatchEventService
+import io.dereknelson.lostcities.gamestate.matchevents.MatchEventService.Companion.END_GAME_EVENT
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.Queue
 import org.springframework.amqp.rabbit.core.RabbitAdmin
@@ -21,17 +22,56 @@ class RabbitConfiguration(
     @PostConstruct
     fun initialize() {
         try {
-            val turnChangeQueue = Queue(MatchEventService.TURN_CHANGE_EVENT, true, false, false)
-            val turnChangeBinding =
-                Binding(MatchEventService.TURN_CHANGE_EVENT, Binding.DestinationType.QUEUE, exchange, "", null)
+            val turnChangeQueue = Queue(
+                MatchEventService.TURN_CHANGE_EVENT,
+                true,
+                false,
+                false
+
+            )
+            val turnChangeBinding = Binding(
+                MatchEventService.TURN_CHANGE_EVENT,
+                Binding.DestinationType.QUEUE,
+                exchange,
+                "",
+                null
+            )
             admin.declareQueue(turnChangeQueue)
             admin.declareBinding(turnChangeBinding)
 
-            val playerEventQueue = Queue("player-event", true, false, false)
-            val playerEventBinding = Binding("player-event", Binding.DestinationType.QUEUE, exchange, "", null)
+            val playerEventQueue = Queue(
+                "player-event",
+                true,
+                false,
+                false
+            )
+            val playerEventBinding = Binding(
+                "player-event",
+                Binding.DestinationType.QUEUE,
+                exchange,
+                "",
+                null
+            )
 
             admin.declareQueue(playerEventQueue)
             admin.declareBinding(playerEventBinding)
+
+            val gameOverQueue = Queue(
+                END_GAME_EVENT,
+                true,
+                false,
+                false
+            )
+            val gameOverBinding = Binding(
+                END_GAME_EVENT,
+                Binding.DestinationType.QUEUE,
+                exchange,
+                "",
+                null
+            )
+
+            admin.declareQueue(gameOverQueue)
+            admin.declareBinding(gameOverBinding)
         } catch (e: Exception) {
             println("Alright.")
         }

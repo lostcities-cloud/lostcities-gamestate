@@ -43,6 +43,16 @@ class GameState(
         drawXCards(players.user2!!, 8)
     }
 
+    fun isGameOver(): Boolean {
+        return deck.isEmpty()
+    }
+
+    fun calculateScores(): Map<String, Int> {
+        return playerAreas.keys.map {
+            it to calculateScoreForPlayer(it)
+        }.toMap()
+    }
+
     fun drawCard(player: String) {
         if (deck.isNotEmpty()) {
             val drawn = deck.last()
@@ -96,6 +106,30 @@ class GameState(
 
         currentPlayer = current
         nextPlayer = next
+    }
+
+    private fun calculateScoreForPlayer(player: String): Int {
+        val playerArea = getPlayerArea(player)
+
+        return Color.values().map {
+            scoreCards(playerArea.get(it))
+        }.sumOf { it }
+    }
+
+    private fun scoreCards(cards: List<Card>): Int {
+        return if(cards.isEmpty()) {
+            0
+        } else {
+            (-20 * countMultipliers(cards)) + sumCards(cards)
+        }
+    }
+
+    private fun countMultipliers(cards: List<Card>): Int {
+        return cards.filter { it.isMultiplier }.size
+    }
+
+    private fun sumCards(cards: List<Card>): Int {
+        return cards.sumOf { it.value }
     }
 
     private fun drawXCards(player: String, number: Int) {

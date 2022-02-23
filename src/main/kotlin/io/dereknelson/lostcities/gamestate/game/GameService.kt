@@ -37,4 +37,8 @@ class GameService(
 
         matchEventService.sendPlayerEvents(playerEvents)
     }
+
+    fun endGame(scores: Map<String, Int>) {
+        matchEventService.endGame(scores)
+    }
 }

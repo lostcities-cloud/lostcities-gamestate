@@ -94,6 +94,10 @@ class GameController(
             playerViews
         )
 
+        if(game.isGameOver()) {
+            gameService.endGame(game.calculateScores())
+        }
+
         return game.asPlayerView(user)
     }
 

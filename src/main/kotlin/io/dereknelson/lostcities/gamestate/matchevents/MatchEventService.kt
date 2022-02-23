@@ -15,6 +15,7 @@ class MatchEventService(
     companion object {
         const val TURN_CHANGE_EVENT = "turn-change-event"
         const val PLAYER_EVENT = "player-event"
+        const val END_GAME_EVENT = "end-game-event"
     }
 
     fun sendTurnChangeEvent(id: Long, login: String) {
@@ -28,6 +29,13 @@ class MatchEventService(
         rabbitTemplate.convertAndSend(
             PLAYER_EVENT,
             objectMapper.writeValueAsBytes(playerEvents)
+        )
+    }
+
+    fun endGame(scores: Map<String, Int>) {
+        rabbitTemplate.convertAndSend(
+            END_GAME_EVENT,
+            objectMapper.writeValueAsBytes(scores)
         )
     }
 }
