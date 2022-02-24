@@ -120,7 +120,6 @@ class GameState(
         return if(cards.isEmpty()) {
             0
         } else {
-
             (-20 + sumCards(cards)) * countMultipliers(cards)
         }
     }

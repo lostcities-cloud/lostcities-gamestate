@@ -1,3 +1,4 @@
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -105,6 +106,11 @@ tasks.bootRun {
 	}
 }
 
+tasks.getByName<BootBuildImage>("bootBuildImage") {
+    imageName = "dereknelson.io/library/${project.name}"
+    environment = mapOf("BP_JVM_VERSION" to "17.*")
+    builder = "paketobuildpacks/builder:base"
+}
 
 tasks.withType<Test> {
 	useJUnitPlatform()

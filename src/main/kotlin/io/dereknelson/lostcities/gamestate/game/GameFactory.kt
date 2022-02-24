@@ -44,7 +44,7 @@ class GameFactory {
         cards.add(Card(i++, color, 0, true))
         cards.add(Card(i++, color, 0, true))
 
-        IntStream.range(1, 10)
+        IntStream.range(1, 11)
             .mapToObj { Card(i++, color, it) }
             .forEach { cards.add(it) }
 

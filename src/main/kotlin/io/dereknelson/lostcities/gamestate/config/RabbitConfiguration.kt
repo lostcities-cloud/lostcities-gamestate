@@ -1,7 +1,6 @@
 package io.dereknelson.lostcities.gamestate.config
 
 import io.dereknelson.lostcities.gamestate.matchevents.MatchEventService
-import io.dereknelson.lostcities.gamestate.matchevents.MatchEventService.Companion.END_GAME_EVENT
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.Queue
 import org.springframework.amqp.rabbit.core.RabbitAdmin
@@ -40,13 +39,13 @@ class RabbitConfiguration(
             admin.declareBinding(turnChangeBinding)
 
             val playerEventQueue = Queue(
-                "player-event",
+                MatchEventService.PLAYER_EVENT,
                 true,
                 false,
                 false
             )
             val playerEventBinding = Binding(
-                "player-event",
+                MatchEventService.PLAYER_EVENT,
                 Binding.DestinationType.QUEUE,
                 exchange,
                 "",
@@ -57,13 +56,13 @@ class RabbitConfiguration(
             admin.declareBinding(playerEventBinding)
 
             val gameOverQueue = Queue(
-                END_GAME_EVENT,
+                MatchEventService.END_GAME_EVENT,
                 true,
                 false,
                 false
             )
             val gameOverBinding = Binding(
-                END_GAME_EVENT,
+                MatchEventService.END_GAME_EVENT,
                 Binding.DestinationType.QUEUE,
                 exchange,
                 "",
