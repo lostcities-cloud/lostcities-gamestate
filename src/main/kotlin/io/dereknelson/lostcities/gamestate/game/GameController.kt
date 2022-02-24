@@ -1,6 +1,5 @@
 package io.dereknelson.lostcities.gamestate.game
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.gamestate.game.command.CommandDto
 import io.dereknelson.lostcities.gamestate.game.command.CommandService
@@ -95,7 +94,7 @@ class GameController(
         )
 
         if(game.isGameOver()) {
-            gameService.endGame(game.calculateScores())
+            gameService.endGame(game.id, game.calculateScores())
         }
 
         return game.asPlayerView(user)

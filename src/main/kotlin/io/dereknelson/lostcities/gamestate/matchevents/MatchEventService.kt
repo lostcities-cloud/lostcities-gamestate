@@ -2,9 +2,14 @@ package io.dereknelson.lostcities.gamestate.matchevents
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.dereknelson.lostcities.gamestate.game.PlayerViewDto
+import io.dereknelson.lostcities.models.matches.FinishMatchEvent
 import io.dereknelson.lostcities.models.matches.TurnChangeEvent
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.ZoneOffset.UTC
+import java.util.TimeZone
 
 @Component
 class MatchEventService(
@@ -32,10 +37,15 @@ class MatchEventService(
         )
     }
 
-    fun endGame(scores: Map<String, Int>) {
+    fun endGame(id:Long, scores: Map<String, Int>) {
+        val event = FinishMatchEvent(
+            id,
+            scores,
+            LocalDateTime.now(UTC)
+        )
         rabbitTemplate.convertAndSend(
             END_GAME_EVENT,
-            objectMapper.writeValueAsBytes(scores)
+            objectMapper.writeValueAsBytes(event)
         )
     }
 }

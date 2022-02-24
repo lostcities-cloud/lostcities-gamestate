@@ -11,7 +11,7 @@ import kotlin.collections.LinkedHashSet
 import kotlin.random.Random
 
 class GameState(
-    private val id: Long,
+    val id: Long,
     players: UserPair,
     private val deck: LinkedHashSet<Card>,
     val matchEntity: MatchEntity,
