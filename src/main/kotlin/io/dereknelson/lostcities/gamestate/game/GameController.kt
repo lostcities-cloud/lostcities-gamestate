@@ -20,7 +20,7 @@ import java.time.Instant
 @RequestMapping("/api/gamestate")
 class GameController(
     private var gameService: GameService,
-    private var commandService: CommandService
+
 ) {
 
     @Operation(description = "Retrieve a player view.")
@@ -37,7 +37,6 @@ class GameController(
     ): PlayerViewDto {
         return gameService.getGame(id)
             .map {
-                playCommandsForward(it)
                 it.asPlayerView(userDetails.login)
             }
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
@@ -77,20 +76,13 @@ class GameController(
         val game = gameService.getGame(id)
             .orElseThrow { throw ResponseStatusException(HttpStatus.NOT_FOUND) }
 
-        playCommandsForward(game)
-
-        play(game, turnCommandRequest.playOrDiscard, user)
-        game.playerEvents.clear()
-        play(game, turnCommandRequest.draw, user)
-
-        val playerViews = game.playerAreas.keys
-            .associateWith { game.asPlayerView(it) }
+        gameService.play(game, turnCommandRequest.playOrDiscard, user)
+        gameService.play(game, turnCommandRequest.draw, user)
 
         gameService.saveTurn(
             game,
             turnCommandRequest.playOrDiscard.asEntity(user),
-            turnCommandRequest.draw.asEntity(user),
-            playerViews
+            turnCommandRequest.draw.asEntity(user)
         )
 
         if(game.isGameOver()) {
@@ -98,23 +90,6 @@ class GameController(
         }
 
         return game.asPlayerView(user)
-    }
-
-    private fun play(game: GameState, commandDto: CommandDto, user: String) {
-        val (type, card, color) = commandDto
-        commandService.execCommand(game, type, card, color, user)
-    }
-
-    private fun playCommandsForward(gameState: GameState) {
-        gameState.matchEntity.commands.forEach {
-            commandService.execCommand(
-                gameState,
-                it.type,
-                it.card,
-                it.color,
-                gameState.currentPlayer
-            )
-        }
     }
 
     private fun CommandDto.asEntity(user: String): CommandEntity {
