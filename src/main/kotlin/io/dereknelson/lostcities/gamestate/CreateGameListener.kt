@@ -3,7 +3,6 @@ package io.dereknelson.lostcities.gamestate
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.dereknelson.lostcities.gamestate.game.GameService
 import io.dereknelson.lostcities.gamestate.persistance.MatchEntity
-import io.dereknelson.lostcities.gamestate.persistance.MatchRepository
 import org.springframework.amqp.core.Message
 import org.springframework.amqp.core.Queue
 import org.springframework.amqp.rabbit.annotation.RabbitListener
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class CreateGameListener(
-    val matchRepository: MatchRepository,
     val gameService: GameService,
     val objectMapper: ObjectMapper
 ) {
