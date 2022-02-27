@@ -40,6 +40,8 @@ repositories {
 val ktlint by configurations.creating
 
 dependencies {
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+
 	implementation("io.dereknelson.lostcities-cloud:lostcities-common:1.0-SNAPSHOT")
 	implementation("io.dereknelson.lostcities-cloud:lostcities-models:1.0-SNAPSHOT")
 
@@ -53,6 +55,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
 	implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.10")
