@@ -70,27 +70,34 @@ class GameState(
     }
 
     fun drawFromDiscard(player: String, color: Color) {
-        if (canDrawFromDiscard(color)) {
-            val drawn = discard.get(color).removeLast()
-            getHand(player)[drawn.id] = drawn
-            playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.DRAW_CARD, drawn.id, null))
+        if (!canDrawFromDiscard(color)) {
+            throw RuntimeException("Cannot draw from discard: $color")
         }
+
+        val drawn = discard.get(color).removeLast()
+        getHand(player)[drawn.id] = drawn
+        playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.DRAW_CARD, drawn.id, null))
     }
 
     fun playCard(player: String, card: String) {
-        if (isCardInHand(player, card)) {
-            val toPlay = removeCardFromHand(player, card)
-            getPlayerArea(player).get(toPlay!!.color).add(toPlay)
-            playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.PLAY_CARD, toPlay.id, null))
+        if (!isCardInHand(player, card)) {
+            throw RuntimeException("Cannot draw from discard: $card")
         }
+
+        val toPlay = removeCardFromHand(player, card)
+        getPlayerArea(player).get(toPlay!!.color).add(toPlay)
+        playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.PLAY_CARD, toPlay.id, null))
+
     }
 
     fun discard(player: String, card: String) {
-        if (isCardInHand(player, card)) {
-            val removed = removeCardFromHand(player, card)
-            discard.get(removed!!.color).add(removed)
-            playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.DISCARD_CARD, removed.id, null))
+        if (!isCardInHand(player, card)) {
+            throw RuntimeException("Cannot discard $card that is not in hand")
         }
+
+        val removed = removeCardFromHand(player, card)
+        discard.get(removed!!.color).add(removed)
+        playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.DISCARD_CARD, removed.id, null))
     }
 
     fun isCardInHand(player: String, card: String): Boolean {

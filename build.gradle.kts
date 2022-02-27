@@ -2,10 +2,10 @@ import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "2.4.9"
+    id("org.springframework.boot") version "2.6.3"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-	kotlin("jvm") version "1.5.31"
-	kotlin("plugin.spring") version "1.5.31"
+	kotlin("jvm") version "1.6.10"
+	kotlin("plugin.spring") version "1.6.10"
 }
 
 group = "io.dereknelson.lostcities"
@@ -47,7 +47,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	implementation("org.apache.commons:commons-pool2:2.11.1")
-	implementation("redis.clients:jedis:3.3.0")
+	implementation("redis.clients:jedis:3.7.1")
 
 	implementation("org.springframework.boot:spring-boot-starter-undertow")
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
@@ -110,6 +110,11 @@ tasks.getByName<BootBuildImage>("bootBuildImage") {
     imageName = "dereknelson.io/library/${project.name}"
     environment = mapOf("BP_JVM_VERSION" to "17.*")
     builder = "paketobuildpacks/builder:base"
+    buildpacks = listOf(
+        "gcr.io/paketo-buildpacks/eclipse-openj9",
+        "paketo-buildpacks/java",
+        "gcr.io/paketo-buildpacks/spring-boot"
+    )
 }
 
 tasks.withType<Test> {
