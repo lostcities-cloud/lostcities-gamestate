@@ -15,7 +15,10 @@ class CommandService {
         }
 
         if (type === CommandType.PLAY) {
-            if (game.isCardInHand(user, card!!) && game.canPlayCard(user, card)) {
+            if (!game.isGameOver() &&
+                game.isCardInHand(user, card!!) &&
+                game.canPlayCard(user, card)
+            ) {
                 game.playCard(user, card)
             } else {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST)

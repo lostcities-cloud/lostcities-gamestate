@@ -127,12 +127,12 @@ class GameState(
         return if(cards.isEmpty()) {
             0
         } else {
-            (-20 + sumCards(cards)) * countMultipliers(cards)
+            (-20 + sumCards(cards)) * multiplier(cards)
         }
     }
 
-    private fun countMultipliers(cards: List<Card>): Int {
-        return cards.filter { it.isMultiplier }.size
+    private fun multiplier(cards: List<Card>): Int {
+        return 1 + cards.filter { it.isMultiplier }.size
     }
 
     private fun sumCards(cards: List<Card>): Int {
