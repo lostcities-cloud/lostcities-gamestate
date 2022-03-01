@@ -1,10 +1,10 @@
-package io.dereknelson.lostcities.gamestate.game
+package io.dereknelson.lostcities.gamestate.games
 
 import io.dereknelson.lostcities.common.model.match.UserPair
 import io.dereknelson.lostcities.models.state.Card
 import io.dereknelson.lostcities.models.state.Color
 import io.dereknelson.lostcities.models.state.PlayArea
-import io.dereknelson.lostcities.gamestate.persistance.MatchEntity
+import io.dereknelson.lostcities.gamestate.matches.entity.MatchEntity
 import io.dereknelson.lostcities.models.matches.PlayerEvent
 import io.dereknelson.lostcities.models.matches.PlayerEventType
 import kotlin.collections.LinkedHashSet

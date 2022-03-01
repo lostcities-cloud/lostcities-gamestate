@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.game
+package io.dereknelson.lostcities.gamestate.games
 
 import io.dereknelson.lostcities.models.state.Card
 import io.dereknelson.lostcities.models.state.PlayArea

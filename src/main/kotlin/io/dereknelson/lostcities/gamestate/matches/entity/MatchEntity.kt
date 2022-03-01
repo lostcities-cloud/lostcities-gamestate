@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.persistance
+package io.dereknelson.lostcities.gamestate.matches.entity
 
 import io.dereknelson.lostcities.common.model.match.UserPair
 import org.springframework.data.annotation.*

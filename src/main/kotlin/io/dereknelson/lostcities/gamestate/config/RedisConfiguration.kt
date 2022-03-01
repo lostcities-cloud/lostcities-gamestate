@@ -1,5 +1,6 @@
 package io.dereknelson.lostcities.gamestate.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -31,10 +32,14 @@ class RedisConfiguration {
     }
 
     @Bean
-    fun redisTemplate(): RedisTemplate<String, Any> {
+    fun redisTemplate(objectMapper: ObjectMapper): RedisTemplate<String, Any> {
+        val serializer = Jackson2JsonRedisSerializer(Any::class.java)
+        serializer.setObjectMapper(objectMapper)
+
         val template = RedisTemplate<String, Any>()
         template.setConnectionFactory(jedisConnectionFactory())
-        template.setDefaultSerializer(Jackson2JsonRedisSerializer(Any::class.java))
+        template.setDefaultSerializer(serializer)
+
         return template
     }
 }

@@ -42,6 +42,8 @@ val ktlint by configurations.creating
 dependencies {
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 
+    implementation("io.github.microutils:kotlin-logging-jvm:2.1.20")
+
 	implementation("io.dereknelson.lostcities-cloud:lostcities-common:1.0-SNAPSHOT")
 	implementation("io.dereknelson.lostcities-cloud:lostcities-models:1.0-SNAPSHOT")
 
@@ -50,6 +52,12 @@ dependencies {
 
 	implementation("org.apache.commons:commons-pool2:2.11.1")
 	implementation("redis.clients:jedis:3.7.1")
+
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations")
+
 
 	implementation("org.springframework.boot:spring-boot-starter-undertow")
 	implementation("org.springframework.boot:spring-boot-starter-amqp")

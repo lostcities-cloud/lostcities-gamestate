@@ -1,6 +1,7 @@
-package io.dereknelson.lostcities.gamestate.persistance
+package io.dereknelson.lostcities.gamestate.matches.entity
 
-import io.dereknelson.lostcities.gamestate.game.command.CommandType
+
+import io.dereknelson.lostcities.models.commands.CommandType
 import io.dereknelson.lostcities.models.state.Color
 
 class CommandEntity(
