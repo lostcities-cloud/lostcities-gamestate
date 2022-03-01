@@ -56,9 +56,15 @@ class MatchEventService(
             scores,
             LocalDateTime.now(UTC)
         )
+
+        val finishMatchEvent = objectMapper.writeValueAsBytes(event)
+
+        println("Finished Match: ")
+        println(finishMatchEvent)
+
         rabbitTemplate.convertAndSend(
             END_GAME_EVENT,
-            objectMapper.writeValueAsBytes(event)
+            finishMatchEvent
         )
     }
 }
