@@ -96,7 +96,7 @@ class GameState(
         }
 
         val removed = removeCardFromHand(player, card)
-        discard.get(removed!!.color).add(removed)
+        discard.get(removed!!.color).add(0, removed)
         playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.DISCARD_CARD, removed.id, null))
     }
 
