@@ -22,7 +22,20 @@ class CommandService(
                     commandDto,
                     "Not your turn."
                 ).send()
+                return
             }
+
+            if(game.isGameOver()) {
+                CommandError(
+                    game.id,
+                    user,
+                    commandDto,
+                    "Game over."
+                ).send()
+                return
+            }
+
+
 
             if (type === CommandType.PLAY) {
                 if (game.isCardInHand(user, card!!) &&
@@ -36,6 +49,7 @@ class CommandService(
                         commandDto,
                         "Unable to play card."
                     ).send()
+                    throw Exception()
                 }
             } else if (type === CommandType.DRAW && color !== null) {
                 game.drawFromDiscard(user, color)
@@ -53,10 +67,12 @@ class CommandService(
                         commandDto,
                         "Unable to discard card."
                     ).send()
+
+                    throw Exception()
                 }
             }
 
-        } catch (e: RuntimeException) {
+        } catch (e: Exception) {
             CommandError(
                 game.id,
                 user,
