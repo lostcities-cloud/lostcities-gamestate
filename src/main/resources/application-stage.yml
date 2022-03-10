@@ -1,0 +1,28 @@
+logging:
+  level:
+    ROOT: error
+    io.dereknelson.lostcities: debug
+    org.springframework.security.web.FilterChainProxy: error
+    org.springframework.amqp.rabbit.connection: error
+    org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+
+spring:
+  application.name: gamestate-stage
+
+
+  rabbitmq:
+    addresses: ${sm://lostcities_event_queue_url}
+    port: 1883
+
+  redis:
+    database: 0
+    host: ${sm://gamestate_store_url}
+    port: ${sm://gamestate_store_port}
+    password: ${sm://gamestate_store_password}
+
+
+  cloud.gcp.secretsmanager:
+    enabled: true
+    bootstrap: true
+    credentials.encoded-key: ${SECRET_MANAGER_KEY:""}
+    project-id: lostcities-cloud

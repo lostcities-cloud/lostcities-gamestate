@@ -1,0 +1,22 @@
+logging:
+  level:
+    ROOT: error
+    io.dereknelson.lostcities: debug
+    org.springframework.security.web.FilterChainProxy: error
+    org.springframework.amqp.rabbit.connection: error
+    org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+
+spring:
+  application.name: gamestate-dev
+
+  rabbitmq:
+    host: 172.20.0.60
+    port: 5672
+    username: guest
+    password: guest
+
+  redis:
+    database: 0
+    host: 172.20.0.61
+    port: 6379
+

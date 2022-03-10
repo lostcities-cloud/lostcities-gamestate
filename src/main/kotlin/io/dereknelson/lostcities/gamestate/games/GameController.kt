@@ -19,7 +19,7 @@ import org.springframework.web.server.ResponseStatusException
 
 
 @RestController
-@RequestMapping("/api/gamestate")
+@RequestMapping
 class GameController(
     private var applicationEventPublisher: ApplicationEventPublisher,
     private var matchService: MatchService,
