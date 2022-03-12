@@ -37,14 +37,17 @@ class GameController(
     fun getPlayerView(
         @PathVariable id: Long,
         @AuthenticationPrincipal @Parameter(hidden = true) userDetails: LostCitiesUserDetails,
-    ): PlayerViewDto = matchService
+    ): PlayerViewDto {
+
+      return matchService
             .getMatch(id)
             .map {
                 gameService
                     .build(it)
                     .asPlayerView(userDetails.login)
             }
-        .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+            .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+    }
 
     @Operation(description = "Play a command in a game.")
     @ApiResponses(

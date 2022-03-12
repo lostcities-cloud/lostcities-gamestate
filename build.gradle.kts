@@ -2,7 +2,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.5.8"
+    id("org.springframework.boot") version "2.6.3"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	kotlin("jvm") version "1.6.10"
 	kotlin("plugin.spring") version "1.6.10"
@@ -66,8 +66,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
 
-    implementation("com.google.cloud:spring-cloud-gcp-starter:2.0.8")
-    implementation("com.google.cloud:spring-cloud-gcp-starter-secretmanager:2.0.8")
+    implementation("com.google.cloud:spring-cloud-gcp-starter:3.0.0")
+    implementation("com.google.cloud:spring-cloud-gcp-starter-secretmanager:3.0.0")
 
     implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.10")
 	implementation("org.springdoc:springdoc-openapi-ui:1.5.10")

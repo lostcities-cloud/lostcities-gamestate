@@ -4,6 +4,7 @@ logging:
     io.dereknelson.lostcities: debug
     org.springframework.security.web.FilterChainProxy: error
     org.springframework.amqp.rabbit.connection: error
+    org.springframework.web: debug
     org.springframework.web.filter.CommonsRequestLoggingFilter: debug
 
 spring:
@@ -20,3 +21,5 @@ spring:
     host: 172.20.0.61
     port: 6379
 
+server:
+  port: 8092
