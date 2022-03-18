@@ -1,7 +1,7 @@
 package io.dereknelson.lostcities.gamestate.commandJob
 
 import io.dereknelson.lostcities.gamestate.games.GameService
-import io.dereknelson.lostcities.gamestate.matches.entity.CommandEntity
+import io.dereknelson.lostcities.gamestate.matches.CommandEntity
 import io.dereknelson.lostcities.models.commands.CommandDto
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired

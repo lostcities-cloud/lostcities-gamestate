@@ -1,7 +1,7 @@
 package io.dereknelson.lostcities.gamestate.games
 
-import io.dereknelson.lostcities.gamestate.matches.entity.CommandEntity
-import io.dereknelson.lostcities.gamestate.matches.entity.MatchEntity
+import io.dereknelson.lostcities.gamestate.matches.CommandEntity
+import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.gamestate.matches.MatchRepository
 import io.dereknelson.lostcities.models.commands.CommandDto
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,9 +27,11 @@ class GameService(
             .playCommandsForward()
     }
 
-    fun saveNewMatch(matchEntity: MatchEntity): GameState {
-        val gameState = gameFactory.build(matchEntity)
-        return save(gameState)
+    fun saveNewMatch(matchEntity: MatchEntity): GameState? {
+        return if(matchRepository.findById(matchEntity.id).isEmpty) {
+            val gameState = gameFactory.build(matchEntity)
+            save(gameState)
+        } else null
     }
 
     fun saveTurn(

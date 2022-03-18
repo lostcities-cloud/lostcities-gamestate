@@ -1,6 +1,5 @@
 package io.dereknelson.lostcities.gamestate.matches
 
-import io.dereknelson.lostcities.gamestate.matches.entity.MatchEntity
 import org.springframework.stereotype.Service
 import java.util.Optional
 

@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.matches.entity
+package io.dereknelson.lostcities.gamestate.matches
 
 
 import io.dereknelson.lostcities.models.commands.CommandType

@@ -1,13 +1,12 @@
 package io.dereknelson.lostcities.gamestate.games
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.dereknelson.lostcities.gamestate.matches.entity.MatchEntity
+import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.commands.CommandError
 import io.dereknelson.lostcities.models.matches.FinishMatchEvent
 import io.dereknelson.lostcities.models.matches.TurnChangeEvent
 import mu.KotlinLogging
 import org.springframework.amqp.core.Message
-import org.springframework.amqp.core.Queue
 import org.springframework.amqp.core.QueueBuilder
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.amqp.rabbit.core.RabbitTemplate
@@ -146,11 +145,14 @@ class GameEventService(
 
     @RabbitListener(queues = [CREATE_GAME_QUEUE])
     fun createGame(gameMessage: Message) {
-        logger.info("Message read from create-game: ${String(gameMessage.body)}")
         val match = objectMapper.readValue(gameMessage.body, MatchEntity::class.java)
 
-        gameService.saveNewMatch(match)
+        logger.info("Create Match[${match.id}]: ${String(gameMessage.body)}")
 
-        logger.info("Saved match to repo")
+        if(gameService.saveNewMatch(match) != null) {
+            logger.info("Match[${match.id}] saved match to repo")
+        } else {
+            logger.info("Match[${match.id}] already created")
+        }
     }
 }
