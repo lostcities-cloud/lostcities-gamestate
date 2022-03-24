@@ -43,6 +43,8 @@ dependencies {
 
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.20")
 
+    implementation("org.springframework.boot:spring-boot-devtools")
+
 	implementation("io.dereknelson.lostcities-cloud:lostcities-common:1.0-SNAPSHOT")
 	implementation("io.dereknelson.lostcities-cloud:lostcities-models:1.0-SNAPSHOT")
 

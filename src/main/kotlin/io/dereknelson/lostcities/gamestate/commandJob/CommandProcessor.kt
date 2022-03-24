@@ -32,6 +32,10 @@ class CommandProcessor: ApplicationListener<CommandEvent> {
         gameService.play(game, event.playOrDiscard, user)
         gameService.play(game, event.draw, user)
 
+        logger.info("This is a test")
+        logger.info("This is a test")
+        logger.info("This is a test")
+
         gameService.saveTurn(
             game,
             event.playOrDiscard.asEntity(user),
