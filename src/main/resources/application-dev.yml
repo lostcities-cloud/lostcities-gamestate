@@ -13,9 +13,19 @@ spring:
     database: 0
     host: 172.20.0.61
     port: 6379
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        healthCheckPath: ${server.servlet.context-path}/actuator/health
+        healthCheckInterval: 15s
+        metadata:
+          application: gamestate
+        tags: urlprefix-${server.servlet.context-path}
+        acl-token: b33bb520-ee21-9897-b223-da969dea60e3
 
 logging:
-  .
   level:
     ROOT: error
     org.springframework.aop.interceptor.PerformanceMonitorInterceptor: TRACE
@@ -35,3 +45,4 @@ logging:
 
 server:
   port: 8092
+

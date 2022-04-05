@@ -21,8 +21,6 @@ spring:
     password: ${sm://gamestate_store_password}
 
 
-  cloud.gcp.secretsmanager:
-    enabled: true
-    bootstrap: true
-    credentials.encoded-key: ${SECRET_MANAGER_KEY:""}
-    project-id: lostcities-cloud
+  cloud:
+    consul:
+      enabled: false

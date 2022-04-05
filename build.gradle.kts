@@ -38,6 +38,12 @@ repositories {
 
 val ktlint by configurations.creating
 
+//dependencyManagement {
+//    imports {
+//        mavenBom("org.springframework.cloud:spring-cloud-dependencies:3.0.0")
+//    }
+//}
+
 dependencies {
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 
@@ -67,7 +73,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
-
+    implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery:3.1.0")
     implementation("com.google.cloud:spring-cloud-gcp-starter:3.0.0")
     implementation("com.google.cloud:spring-cloud-gcp-starter-secretmanager:3.0.0")
 
@@ -123,11 +129,12 @@ tasks.bootRun {
 }
 
 tasks.getByName<BootBuildImage>("bootBuildImage") {
-    imageName = "ghcr.io/lostcities-cloud/${project.name}:$version"
+    imageName = "ghcr.io/lostcities-cloud/${project.name}:latest"
     isPublish = true
     environment = mapOf(
         "BP_JVM_VERSION" to "17.*",
-        "BPL_DEBUG_ENABLED" to "true"
+        "BPL_DEBUG_ENABLED" to "true",
+        "JAVA_TOOL_OPTIONS" to "-Xquickstart -Xshareclasses:cacheDir=/cache"
     )
     builder = "paketobuildpacks/builder:base"
     buildpacks = listOf(
