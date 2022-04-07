@@ -1,8 +1,6 @@
 spring:
   devtools.restart.enabled: true
-
   application.name: gamestate
-
   rabbitmq:
     host: 172.20.0.60
     port: 5672
@@ -14,16 +12,7 @@ spring:
     host: 172.20.0.61
     port: 6379
   cloud:
-    consul:
-      host: localhost
-      port: 8500
-      discovery:
-        healthCheckPath: ${server.servlet.context-path}/actuator/health
-        healthCheckInterval: 15s
-        metadata:
-          application: gamestate
-        tags: urlprefix-${server.servlet.context-path}
-        acl-token: b33bb520-ee21-9897-b223-da969dea60e3
+    consul.enabled: false
 
 logging:
   level:
