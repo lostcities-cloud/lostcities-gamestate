@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.redis.connection.RedisPassword
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
@@ -18,6 +19,9 @@ class RedisConfiguration {
     @Value("\${spring.redis.port}")
     private val port = 0
 
+    @Value("\${spring.redis.password}")
+    private val password: String? = null
+
     @Value("\${spring.redis.database}")
     private val database = 0
 
@@ -27,6 +31,10 @@ class RedisConfiguration {
         configuration.hostName = host!!
         configuration.port = port
         configuration.database = database
+
+        if(password != null) {
+            configuration.password = RedisPassword.of(password)
+        }
 
         return JedisConnectionFactory(configuration)
     }

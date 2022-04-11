@@ -59,7 +59,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	implementation("org.apache.commons:commons-pool2:2.11.1")
-	implementation("redis.clients:jedis:3.7.1")
+	implementation("redis.clients:jedis:3.6.2")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")

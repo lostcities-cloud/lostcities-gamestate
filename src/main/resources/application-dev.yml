@@ -21,6 +21,7 @@ logging:
     io.dereknelson.lostcities: debug
     org.springframework.security.web.FilterChainProxy: error
     org.springframework.amqp.rabbit.connection: error
+    org.
     org.springframework.web: error
   pattern:
     console: "%d %-5level %logger : %msg%n"
