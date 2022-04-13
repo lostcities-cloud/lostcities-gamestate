@@ -5,6 +5,7 @@ plugins {
     id("org.springframework.boot") version "2.6.3"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.jetbrains.dokka") version "1.6.10"
+    id("com.google.cloud.tools.jib") version "3.2.1"
 	kotlin("jvm") version "1.6.10"
 	kotlin("plugin.spring") version "1.6.10"
 }
@@ -19,16 +20,16 @@ repositories {
 	maven {
 		url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-common")
 		credentials {
-			username = System.getenv("GITHUB_ACTOR")
-			password = System.getenv("GITHUB_TOKEN")
+            username = System.getenv("GH_ACTOR")
+            password = System.getenv("GH_TOKEN")
 		}
 	}
 
 	maven {
 		url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-models")
 		credentials {
-			username = System.getenv("GITHUB_ACTOR")
-			password = System.getenv("GITHUB_TOKEN")
+			username = System.getenv("GH_ACTOR")
+			password = System.getenv("GH_TOKEN")
 		}
 	}
 
@@ -130,26 +131,15 @@ tasks.bootRun {
 	}
 }
 
-tasks.getByName<BootBuildImage>("bootBuildImage") {
-    imageName = "ghcr.io/lostcities-cloud/${project.name}:latest"
-    isPublish = true
-    environment = mapOf(
-        "BP_JVM_VERSION" to "17.*",
-        "BPL_DEBUG_ENABLED" to "true",
-        "JAVA_TOOL_OPTIONS" to "-Xquickstart -Xshareclasses:cacheDir=/cache"
-    )
-    builder = "paketobuildpacks/builder:base"
-    buildpacks = listOf(
-        "gcr.io/paketo-buildpacks/eclipse-openj9",
-        "paketo-buildpacks/java",
-        "gcr.io/paketo-buildpacks/spring-boot"
-    )
-
-    docker {
-        publishRegistry {
-            username = System.getenv("GITHUB_ACTOR")
-            password = System.getenv("GITHUB_TOKEN")
-            email = "lostcities@dereknelson.io"
+jib {
+    from {
+        image = "registry://eclipse-temurin:16-jdk-alpine"
+    }
+    to {
+        image = "ghcr.io/lostcities-cloud/${project.name}:latest"
+        auth {
+            username = System.getenv("GH_ACTOR")
+            password = System.getenv("GH_TOKEN")
         }
     }
 }
