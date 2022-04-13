@@ -18,7 +18,6 @@ class MatchEntity(
 
     val commands: MutableList<CommandEntity> = mutableListOf(),
 
-
     var isReady: Boolean = false,
     var isStarted: Boolean = false,
     var isCompleted: Boolean = false,

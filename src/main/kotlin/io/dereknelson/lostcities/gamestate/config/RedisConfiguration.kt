@@ -32,7 +32,7 @@ class RedisConfiguration {
         configuration.port = port
         configuration.database = database
 
-        if(password != null) {
+        if (password != null) {
             configuration.password = RedisPassword.of(password)
         }
 

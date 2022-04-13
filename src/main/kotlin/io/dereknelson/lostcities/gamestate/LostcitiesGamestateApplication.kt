@@ -6,16 +6,11 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-
 import org.springframework.amqp.rabbit.annotation.EnableRabbit
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.cloud.client.loadbalancer.LoadBalancerProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories
-
-
-
 
 @SpringBootApplication(
     scanBasePackages = [
@@ -32,7 +27,6 @@ fun main(args: Array<String>) {
 
     runApplication<LostcitiesGamestateApplication>(*args)
 }
-
 
 @Bean
 fun mapper(): ObjectMapper =

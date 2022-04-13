@@ -1,9 +1,9 @@
 package io.dereknelson.lostcities.gamestate.games
 
 import io.dereknelson.lostcities.common.model.match.UserPair
+import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.state.Card
 import io.dereknelson.lostcities.models.state.Color
-import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import org.springframework.stereotype.Service
 import java.util.stream.IntStream
 import kotlin.random.Random

@@ -1,12 +1,12 @@
 package io.dereknelson.lostcities.gamestate.games
 
 import io.dereknelson.lostcities.common.model.match.UserPair
-import io.dereknelson.lostcities.models.state.Card
-import io.dereknelson.lostcities.models.state.Color
-import io.dereknelson.lostcities.models.state.PlayArea
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.matches.PlayerEvent
 import io.dereknelson.lostcities.models.matches.PlayerEventType
+import io.dereknelson.lostcities.models.state.Card
+import io.dereknelson.lostcities.models.state.Color
+import io.dereknelson.lostcities.models.state.PlayArea
 import kotlin.collections.LinkedHashSet
 import kotlin.random.Random
 
@@ -58,7 +58,9 @@ class GameState(
             val drawn = deck.last()
             deck.remove(drawn)
             getHand(player)[drawn.id] = drawn
-            playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.DRAW_CARD, drawn.id, null))
+            playerEvents.add(
+                PlayerEvent(id, currentPlayer, PlayerEventType.DRAW_CARD, drawn.id, null)
+            )
         }
     }
 
@@ -87,7 +89,6 @@ class GameState(
         val toPlay = removeCardFromHand(player, card)
         getPlayerArea(player).get(toPlay!!.color).add(toPlay)
         playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.PLAY_CARD, toPlay.id, null))
-
     }
 
     fun discard(player: String, card: String) {
@@ -97,7 +98,9 @@ class GameState(
 
         val removed = removeCardFromHand(player, card)
         discard.get(removed!!.color).add(0, removed)
-        playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.DISCARD_CARD, removed.id, null))
+        playerEvents.add(
+            PlayerEvent(id, currentPlayer, PlayerEventType.DISCARD_CARD, removed.id, null)
+        )
     }
 
     fun isCardInHand(player: String, card: String): Boolean {
@@ -124,7 +127,7 @@ class GameState(
     }
 
     private fun scoreCards(cards: List<Card>): Int {
-        return if(cards.isEmpty()) {
+        return if (cards.isEmpty()) {
             0
         } else {
             (-20 + sumCards(cards)) * multiplier(cards)

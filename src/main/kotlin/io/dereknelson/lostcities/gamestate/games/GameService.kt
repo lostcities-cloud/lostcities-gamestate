@@ -28,7 +28,7 @@ class GameService(
     }
 
     fun saveNewMatch(matchEntity: MatchEntity): GameState? {
-        return if(matchRepository.findById(matchEntity.id).isEmpty) {
+        return if (matchRepository.findById(matchEntity.id).isEmpty) {
             val gameState = gameFactory.build(matchEntity)
             save(gameState)
         } else null
@@ -47,7 +47,7 @@ class GameService(
 
         matchEventService.sendTurnChangeEvent(match.id, playOrDiscardCommand.user)
 
-        if(gameState.isGameOver()) {
+        if (gameState.isGameOver()) {
             endGame(gameState.id, gameState.calculateScores())
         }
     }
@@ -85,5 +85,4 @@ class GameService(
     }
 
     private fun CommandEntity.toDto() = CommandDto(this.type, this.card, this.color)
-
 }

@@ -25,7 +25,7 @@ class CommandService(
                 return
             }
 
-            if(game.isGameOver()) {
+            if (game.isGameOver()) {
                 CommandError(
                     game.id,
                     user,
@@ -34,8 +34,6 @@ class CommandService(
                 ).send()
                 return
             }
-
-
 
             if (type === CommandType.PLAY) {
                 if (game.isCardInHand(user, card!!) &&
@@ -71,7 +69,6 @@ class CommandService(
                     throw Exception()
                 }
             }
-
         } catch (e: Exception) {
             CommandError(
                 game.id,

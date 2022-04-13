@@ -1,6 +1,5 @@
 package io.dereknelson.lostcities.gamestate.matches
 
-
 import io.dereknelson.lostcities.models.commands.CommandType
 import io.dereknelson.lostcities.models.state.Color
 

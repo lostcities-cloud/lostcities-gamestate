@@ -36,7 +36,7 @@ class GameController(
         @AuthenticationPrincipal @Parameter(hidden = true) userDetails: LostCitiesUserDetails,
     ): PlayerViewDto {
 
-      return matchService
+        return matchService
             .getMatch(id)
             .map {
                 gameService

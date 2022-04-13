@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service
 import java.util.Optional
 
 @Service
-class MatchService (
+class MatchService(
     private val matchRepository: MatchRepository
 ) {
     fun getMatch(id: Long): Optional<MatchEntity> {

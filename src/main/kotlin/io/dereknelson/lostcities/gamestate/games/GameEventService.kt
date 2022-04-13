@@ -67,7 +67,6 @@ class GameEventService(
         .durable(CREATE_GAME_QUEUE_DLQ)
         .build()!!
 
-
     @Bean @Qualifier(TURN_CHANGE_EVENT)
     fun turnChangeEventQueue() = QueueBuilder
         .durable(TURN_CHANGE_EVENT)
@@ -128,7 +127,7 @@ class GameEventService(
         )
     }
 
-    fun endGame(id:Long, scores: Map<String, Int>) {
+    fun endGame(id: Long, scores: Map<String, Int>) {
         val event = FinishMatchEvent(
             id,
             scores,
@@ -149,7 +148,7 @@ class GameEventService(
 
         logger.info("Create Match[${match.id}]: ${String(gameMessage.body)}")
 
-        if(gameService.saveNewMatch(match) != null) {
+        if (gameService.saveNewMatch(match) != null) {
             logger.info("Match[${match.id}] saved match to repo")
         } else {
             logger.info("Match[${match.id}] already created")
