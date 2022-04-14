@@ -90,6 +90,9 @@ dependencies {
 	}
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.6.10")
 
+    testImplementation("org.assertj:assertj-core:3.22.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.6.2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.5")
 	testImplementation("org.springframework.amqp:spring-rabbit-test:2.3.9")
 }
