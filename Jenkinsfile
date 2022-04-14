@@ -21,14 +21,14 @@ pipeline {
         stage('Assemble') {
             steps {
                 withGradle {
-                    sh './gradlew assemble'
+                    sh './gradlew clean assemble'
                 }
             }
         }
         stage('Test') {
             steps {
                 withGradle {
-                    sh './gradlew test'
+                    sh './gradlew check'
                 }
             }
         }
