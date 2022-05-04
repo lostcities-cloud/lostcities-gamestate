@@ -19,7 +19,7 @@ class RedisConfiguration {
     @Value("\${spring.redis.port}")
     private val port = 0
 
-    @Value("\${spring.redis.password}")
+    @Value("\${spring.redis.password:#{null}}")
     private val password: String? = null
 
     @Value("\${spring.redis.database}")

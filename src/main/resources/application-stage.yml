@@ -36,3 +36,6 @@ logging:
 
 server:
   port: 8092
+  forward-headers-strategy: framework
+  servlet:
+    context-path: /api/gamestate
