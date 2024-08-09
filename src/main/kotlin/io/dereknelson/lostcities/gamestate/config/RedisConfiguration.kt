@@ -10,7 +10,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
 
-@Configuration
+
 class RedisConfiguration {
 
     @Value("\${spring.redis.host}")
@@ -41,8 +41,7 @@ class RedisConfiguration {
 
     @Bean
     fun redisTemplate(objectMapper: ObjectMapper): RedisTemplate<String, Any> {
-        val serializer = Jackson2JsonRedisSerializer(Any::class.java)
-        serializer.setObjectMapper(objectMapper)
+        val serializer = Jackson2JsonRedisSerializer(objectMapper, Any::class.java)
 
         val template = RedisTemplate<String, Any>()
         template.setConnectionFactory(jedisConnectionFactory())

@@ -12,12 +12,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
-import org.springframework.web.filter.CorsFilter
 import org.springframework.web.filter.ForwardedHeaderFilter
 
 @Configuration
@@ -28,31 +28,15 @@ import org.springframework.web.filter.ForwardedHeaderFilter
 )
 class SecurityConfiguration(
     private val tokenProvider: TokenProvider,
-    private val corsFilter: CorsFilter,
-) : WebSecurityConfigurerAdapter() {
+) {
 
     @Bean
     fun forwardedHeaderFilter(): ForwardedHeaderFilter? {
         return ForwardedHeaderFilter()
     }
 
-    override fun configure(web: WebSecurity) {
-
-        web
-            .ignoring()
-            .antMatchers(HttpMethod.OPTIONS, "/**")
-            // .antMatchers("/api/**")
-            .antMatchers("/app/**/*.{js,html}")
-            .antMatchers("/i18n/**")
-            .antMatchers("/content/**")
-            .antMatchers("/swagger-ui/**")
-            .antMatchers("/test/**")
-    }
-
-    @Throws(Exception::class)
-    override fun configure(http: HttpSecurity) {
-        /* ktlint-disable max_line_length */
-        // @formatter:off
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): DefaultSecurityFilterChain {
         http
             .cors()
             .and()
@@ -63,22 +47,36 @@ class SecurityConfiguration(
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .authorizeRequests()
-            .antMatchers("/api/account/reset-password/init").permitAll()
-            .antMatchers("/api/account/reset-password/finish").permitAll()
-            .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/**").permitAll()
-            .antMatchers("/management/health").permitAll()
-            .antMatchers("/management/health/**").permitAll()
-            .antMatchers("/management/info").permitAll()
-            .antMatchers("/management/prometheus").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .authorizeHttpRequests()
+            .requestMatchers("/api/account/reset-password/init").permitAll()
+            .requestMatchers("/api/account/reset-password/finish").permitAll()
+            .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .requestMatchers("/api/**").permitAll()
+            .requestMatchers("/management/health").permitAll()
+            .requestMatchers("/management/health/**").permitAll()
+            .requestMatchers("/management/info").permitAll()
+            .requestMatchers("/management/prometheus").permitAll()
+            .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .and().addFilterAfter(
                 JwtFilter(tokenProvider), AnonymousAuthenticationFilter::class.java
             )
         http.headers().cacheControl()
-        // @formatter:on
-        /* ktlint-enable max_line_length */
+        return http.build()!!
+    }
+
+    @Bean
+    fun webSecurityCustomizer(): WebSecurityCustomizer {
+        return WebSecurityCustomizer { web: WebSecurity ->
+            web
+                .ignoring()
+                .requestMatchers(HttpMethod.OPTIONS, "/**")
+                // .requestMatchers("/api/**")
+                .requestMatchers("/app/**/*.{js,html}")
+                .requestMatchers("/i18n/**")
+                .requestMatchers("/content/**")
+                .requestMatchers("/swagger-ui/**")
+                .requestMatchers("/test/**")
+        }
     }
 
     @Bean

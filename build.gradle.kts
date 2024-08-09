@@ -1,18 +1,17 @@
-import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.6.3"
-	id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("org.springframework.boot") version "3.1.+"
+    id("io.spring.dependency-management") version "1.1.4"
     id("org.jetbrains.dokka") version "1.6.10"
     id("com.google.cloud.tools.jib") version "3.2.1"
-	kotlin("jvm") version "1.6.10"
-	kotlin("plugin.spring") version "1.6.10"
+	kotlin("jvm") version "2.0.+"
+	kotlin("plugin.spring") version "2.0.+"
 }
 
 group = "io.dereknelson.lostcities"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_16
+
 
 
 repositories {
@@ -53,8 +52,8 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-devtools")
 
-	implementation("io.dereknelson.lostcities-cloud:lostcities-common:1.0-SNAPSHOT")
-	implementation("io.dereknelson.lostcities-cloud:lostcities-models:1.0-SNAPSHOT")
+    implementation(project(":lostcities-common"))
+    implementation(project(":lostcities-models"))
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -73,13 +72,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
-    implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery:3.1.0")
-    implementation("com.google.cloud:spring-cloud-gcp-starter:3.0.0")
-    implementation("com.google.cloud:spring-cloud-gcp-starter-secretmanager:3.0.0")
-
-    implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.10")
-	implementation("org.springdoc:springdoc-openapi-ui:1.5.10")
-	implementation("org.springdoc:springdoc-openapi-kotlin:1.5.10")
+    implementation("org.springdoc:springdoc-openapi-webmvc-core:1.7.0")
+	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
+	implementation("org.springdoc:springdoc-openapi-kotlin:1.7.0")
 
 	ktlint("com.pinterest:ktlint:0.44.0") {
 		attributes {
@@ -95,7 +90,7 @@ dependencies {
 	testImplementation("org.springframework.amqp:spring-rabbit-test:2.3.9")
 }
 
-val outputDir = "${project.buildDir}/reports/ktlint/"
+val outputDir = "${layout.buildDirectory}/reports/ktlint/"
 val inputFiles = project.fileTree(mapOf("dir" to "src", "include" to "**/*.kt"))
 
 val ktlintCheck by tasks.creating(JavaExec::class) {
@@ -118,18 +113,20 @@ val ktlintFormat by tasks.creating(JavaExec::class) {
 	jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
-
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "16"
-	}
+tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java) {
+    compilerOptions {
+        freeCompilerArgs.add("-Xexport-kdoc")
+    }
 }
+tasks.withType<KotlinCompile>() {
 
-tasks.bootRun {
-	if (project.hasProperty("debug_jvm")) {
-		jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5925")
-	}
+    compilerOptions {
+        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
+        languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
+        freeCompilerArgs.addAll(listOf(
+            "-Xjsr305=strict", "-opt-in=kotlin.RequiresOptIn"
+        ))
+    }
 }
 
 jib {
@@ -139,8 +136,8 @@ jib {
     to {
         image = "ghcr.io/lostcities-cloud/${project.name}:latest"
         auth {
-            username = System.getenv("GH_ACTOR")
-            password = System.getenv("GH_TOKEN")
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
         }
     }
 }
