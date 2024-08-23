@@ -2,7 +2,7 @@ spring:
   devtools.restart.enabled: true
   application.name: gamestate
   rabbitmq:
-    host: 127.0.0.1
+    host: rabbitmq.service.consul
     port: 5672
     username: guest
     password: guest
@@ -10,7 +10,7 @@ spring:
   redis:
     redis:
       database: 0
-      host: 127.0.0.1
+      host: redis.service.consul
       port: 6379
   cloud:
     consul.enabled: false
