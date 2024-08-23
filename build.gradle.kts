@@ -2,9 +2,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot") version "3.1.+"
+    // id("org.graalvm.buildtools.native") version "0.10.+"
     id("io.spring.dependency-management") version "1.1.4"
     id("org.jetbrains.dokka") version "1.6.10"
-    id("com.google.cloud.tools.jib") version "3.2.1"
+    id("com.google.cloud.tools.jib") version "3.4.3"
 	kotlin("jvm") version "2.0.+"
 	kotlin("plugin.spring") version "2.0.+"
 }
@@ -113,11 +114,6 @@ val ktlintFormat by tasks.creating(JavaExec::class) {
 	jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
-tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java) {
-    compilerOptions {
-        freeCompilerArgs.add("-Xexport-kdoc")
-    }
-}
 tasks.withType<KotlinCompile>() {
 
     compilerOptions {
@@ -131,7 +127,7 @@ tasks.withType<KotlinCompile>() {
 
 jib {
     from {
-        image = "registry://adoptopenjdk/openjdk16-openj9:alpine-slim"
+        image = "registry://amd64/eclipse-temurin:21-alpine"
     }
     to {
         image = "ghcr.io/lostcities-cloud/${project.name}:latest"
