@@ -73,6 +73,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
+    implementation("org.springframework.cloud:spring-cloud-dependencies")
+    implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
+
     implementation("org.springdoc:springdoc-openapi-webmvc-core:1.7.0")
 	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
 	implementation("org.springdoc:springdoc-openapi-kotlin:1.7.0")

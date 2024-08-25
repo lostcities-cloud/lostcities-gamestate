@@ -1,6 +1,17 @@
 spring:
   devtools.restart.enabled: true
   application.name: gamestate
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        healthCheckPath: ${server.servlet.context-path}/actuator/health
+        healthCheckInterval: 15s
+        metadata:
+          application: ${spring.application.name}
+        tags: urlprefix-${server.servlet.context-path}
+
   rabbitmq:
     host: rabbitmq.service.consul
     port: 5672
@@ -12,8 +23,6 @@ spring:
       database: 0
       host: redis.service.consul
       port: 6379
-  cloud:
-    consul.enabled: false
   data:
     cassandra:
       repositories:
