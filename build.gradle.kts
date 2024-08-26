@@ -40,11 +40,12 @@ repositories {
 
 val ktlint by configurations.creating
 
-//dependencyManagement {
-//    imports {
-//        mavenBom("org.springframework.cloud:spring-cloud-dependencies:3.0.0")
-//    }
-//}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.5")
+    }
+}
 
 dependencies {
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
@@ -73,7 +74,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
-    implementation("org.springframework.cloud:spring-cloud-dependencies")
     implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
 
     implementation("org.springdoc:springdoc-openapi-webmvc-core:1.7.0")

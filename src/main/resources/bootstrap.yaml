@@ -1,1 +1,16 @@
-spring.cloud.gcp.secretmanager.enabled: ${SECRET_MANAGER:false}
+spring:
+  cloud:
+    bootstrap.enabled: true
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      discovery:
+        metadata:
+          application: ${spring.application.name}
+        tags: urlprefix-${server.servlet.context-path}
+        management-port: 4452
+        register-health-check: false
+      config:
+        enabled: true
+

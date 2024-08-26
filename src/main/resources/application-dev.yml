@@ -1,16 +1,6 @@
 spring:
   devtools.restart.enabled: true
   application.name: gamestate
-  cloud:
-    consul:
-      host: localhost
-      port: 8500
-      discovery:
-        healthCheckPath: ${server.servlet.context-path}/actuator/health
-        healthCheckInterval: 15s
-        metadata:
-          application: ${spring.application.name}
-        tags: urlprefix-${server.servlet.context-path}
 
   rabbitmq:
     host: rabbitmq.service.consul
@@ -49,3 +39,10 @@ logging:
 server:
   port: 8092
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  server:
+    port: 4452
