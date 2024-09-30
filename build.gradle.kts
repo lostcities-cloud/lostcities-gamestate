@@ -43,6 +43,7 @@ val ktlint by configurations.creating
 
 dependencyManagement {
     imports {
+        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.5")
     }
 }
