@@ -3,7 +3,7 @@ spring:
     bootstrap.enabled: true
     consul:
       enabled: true
-      host: localhost
+      host: host.docker.internal
       port: 8500
       discovery:
         metadata:
