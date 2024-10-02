@@ -44,7 +44,6 @@ val ktlint by configurations.creating
 dependencyManagement {
     imports {
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.5")
     }
 }
 
@@ -74,8 +73,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
-
-    implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
 
     implementation("org.springdoc:springdoc-openapi-webmvc-core:1.7.0")
 	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
@@ -131,7 +128,7 @@ tasks.withType<KotlinCompile>() {
 
 jib {
     from {
-        image = "registry://amd64/eclipse-temurin:21-alpine"
+        image = "registry://bellsoft/liberica-openjdk-alpine:21.0.4-9-cds"
     }
     to {
         image = "ghcr.io/lostcities-cloud/${project.name}:latest"
