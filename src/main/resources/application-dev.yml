@@ -40,9 +40,12 @@ server:
   port: 8092
 
 management:
+  metrics.tags:
+    application: ${spring.application.name}
   endpoints:
     web:
       exposure:
         include: "*"
   server:
     port: 4452
+
