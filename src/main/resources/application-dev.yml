@@ -3,7 +3,7 @@ spring:
   application.name: gamestate
 
   rabbitmq:
-    host: rabbitmq.service.consul
+    host: ${RABBITMQ_IP}
     port: 5672
     username: guest
     password: guest
@@ -11,7 +11,7 @@ spring:
   redis:
     redis:
       database: 0
-      host: redis.service.consul
+      host: ${REDIS_IP}
       port: 6379
   data:
     cassandra:
