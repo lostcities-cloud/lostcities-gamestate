@@ -77,7 +77,7 @@ class SecurityConfiguration(
                 .ignoring()
                 .requestMatchers(HttpMethod.OPTIONS, "/**")
                 // .requestMatchers("/api/**")
-                .requestMatchers("/app/**/*.{js,html}")
+                //.requestMatchers("/app/**/*.{js,html}")
                 .requestMatchers("/i18n/**")
                 .requestMatchers("/content/**")
                 .requestMatchers("/swagger-ui/**")

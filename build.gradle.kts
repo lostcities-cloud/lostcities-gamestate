@@ -77,11 +77,11 @@ dependencies {
 
     implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
 
-    implementation("org.springdoc:springdoc-openapi-webmvc-core:1.7.0")
-	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
-	implementation("org.springdoc:springdoc-openapi-kotlin:1.7.0")
+    implementation("org.springdoc:springdoc-openapi-webmvc-core:1.8.0")
+	implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
+	implementation("org.springdoc:springdoc-openapi-kotlin:1.8.0")
 
-	ktlint("com.pinterest:ktlint:0.44.0") {
+	ktlint("com.pinterest:ktlint:1.3.1") {
 		attributes {
 			attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
 		}
