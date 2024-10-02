@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.games
+package io.dereknelson.lostcities.gamestate.api
 
 import io.dereknelson.lostcities.common.model.match.UserPair
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity

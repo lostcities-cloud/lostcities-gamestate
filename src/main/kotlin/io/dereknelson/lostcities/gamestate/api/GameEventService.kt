@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.games
+package io.dereknelson.lostcities.gamestate.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity

@@ -1,8 +1,8 @@
-package io.dereknelson.lostcities.gamestate.games
+package io.dereknelson.lostcities.gamestate.api
 
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.gamestate.commandJob.CommandEvent
-import io.dereknelson.lostcities.gamestate.games.dto.TurnCommandRequest
+import io.dereknelson.lostcities.gamestate.api.dto.TurnCommandRequest
 import io.dereknelson.lostcities.gamestate.matches.MatchService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter

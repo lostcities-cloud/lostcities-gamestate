@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.web.filter.ForwardedHeaderFilter
 
 @Configuration
@@ -60,11 +61,14 @@ class SecurityConfiguration(
                     .requestMatchers("/api/account/reset-password/finish").permitAll()
                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers("/api/**").permitAll()
-                    .requestMatchers("/management/health").permitAll()
-                    .requestMatchers("/management/health/**").permitAll()
-                    .requestMatchers("/management/info").permitAll()
-                    .requestMatchers("/management/prometheus").permitAll()
-                    .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(AntPathRequestMatcher("/actuator/swagger-ui/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/actuator/openapi/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/actuator/**")).permitAll()
+                    .requestMatchers("/actuator/health").permitAll()
+                    .requestMatchers("/actuator/health/**").permitAll()
+                    .requestMatchers("/actuator/info").permitAll()
+                    .requestMatchers("/actuator/prometheus").permitAll()
+                    //.requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             }
 
         return http.build()!!
@@ -78,6 +82,7 @@ class SecurityConfiguration(
                 .requestMatchers(HttpMethod.OPTIONS, "/**")
                 // .requestMatchers("/api/**")
                 //.requestMatchers("/app/**/*.{js,html}")
+                .requestMatchers("/management/health")
                 .requestMatchers("/i18n/**")
                 .requestMatchers("/content/**")
                 .requestMatchers("/swagger-ui/**")

@@ -74,10 +74,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
-    implementation("org.springdoc:springdoc-openapi-webmvc-core:1.8.0")
-	implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
-	implementation("org.springdoc:springdoc-openapi-kotlin:1.8.0")
-
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.8.0")
 	ktlint("com.pinterest:ktlint:1.3.1") {
 		attributes {
 			attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
