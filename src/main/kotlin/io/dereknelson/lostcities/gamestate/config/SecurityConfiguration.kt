@@ -39,7 +39,7 @@ class SecurityConfiguration(
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): DefaultSecurityFilterChain {
-        http.csrf { it.init(http) }
+        http.csrf { it.disable() }
             .cors { it.configure(http) }
             .addFilterBefore(JwtFilter(tokenProvider), AnonymousAuthenticationFilter::class.java)
             .exceptionHandling {}
