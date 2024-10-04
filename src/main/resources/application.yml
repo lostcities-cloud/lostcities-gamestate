@@ -15,4 +15,6 @@ management:
     metrics:
         tags:
             application: ${spring.application.name}
+    server:
+      base-path: /actuator/${spring.application.name}
 
