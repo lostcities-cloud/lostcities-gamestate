@@ -7,7 +7,7 @@ spring:
 server:
   forward-headers-strategy: framework
   servlet:
-      contextPath: /api/gamestate
+      contextPath: /api
 
 management:
     endpoints:

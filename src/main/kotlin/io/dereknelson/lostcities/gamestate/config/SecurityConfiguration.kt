@@ -57,13 +57,9 @@ class SecurityConfiguration(
             }
             .authorizeHttpRequests { requests ->
                 requests
-                    .requestMatchers("/api/account/reset-password/init").permitAll()
-                    .requestMatchers("/api/account/reset-password/finish").permitAll()
+
                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers("/api/**").permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/actuator/swagger-ui/**")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/actuator/openapi/**")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/actuator/**")).permitAll()
+                    .requestMatchers("/gamestate/**").hasAuthority(AuthoritiesConstants.USER)
                     .requestMatchers("/actuator/health").permitAll()
                     .requestMatchers("/actuator/health/**").permitAll()
                     .requestMatchers("/actuator/info").permitAll()

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
 @RestController
-@RequestMapping
+@RequestMapping("/gamestate")
 class GameController(
     private var applicationEventPublisher: ApplicationEventPublisher,
     private var matchService: MatchService,
