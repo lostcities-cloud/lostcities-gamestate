@@ -51,15 +51,5 @@ logging:
 server:
   port: 8092
 
-management:
-  endpoint.health:
-    show-details: "ALWAYS"
-  metrics.tags:
-    application: ${spring.application.name}
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  server:
-    port: 4452
+
 

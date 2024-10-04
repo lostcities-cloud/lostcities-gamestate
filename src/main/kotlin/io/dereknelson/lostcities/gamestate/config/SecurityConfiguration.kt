@@ -60,10 +60,7 @@ class SecurityConfiguration(
 
                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers("/gamestate/**").hasAuthority(AuthoritiesConstants.USER)
-                    .requestMatchers("/actuator/health").permitAll()
-                    .requestMatchers("/actuator/health/**").permitAll()
-                    .requestMatchers("/actuator/info").permitAll()
-                    .requestMatchers("/actuator/prometheus").permitAll()
+                    .requestMatchers("/actuator/**").permitAll()
                     //.requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             }
 
@@ -78,7 +75,7 @@ class SecurityConfiguration(
                 .requestMatchers(HttpMethod.OPTIONS, "/**")
                 // .requestMatchers("/api/**")
                 //.requestMatchers("/app/**/*.{js,html}")
-                .requestMatchers("/management/health")
+                .requestMatchers("/actuator/**")
                 .requestMatchers("/i18n/**")
                 .requestMatchers("/content/**")
                 .requestMatchers("/swagger-ui/**")
