@@ -14,6 +14,7 @@ management:
     show-details: "ALWAYS"
   metrics.tags:
     application: ${spring.application.name}
+    host: ${spring.application.name}.lostcities.dev
   endpoints:
     web:
       exposure:
