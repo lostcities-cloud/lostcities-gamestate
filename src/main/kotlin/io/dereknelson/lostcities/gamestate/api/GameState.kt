@@ -2,6 +2,7 @@ package io.dereknelson.lostcities.gamestate.api
 
 import io.dereknelson.lostcities.common.model.match.UserPair
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity
+import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.matches.PlayerEvent
 import io.dereknelson.lostcities.models.matches.PlayerEventType
 import io.dereknelson.lostcities.models.state.Card
@@ -15,11 +16,11 @@ class GameState(
     players: UserPair,
     private val deck: LinkedHashSet<Card>,
     val matchEntity: MatchEntity,
-    seed: Random
+    seed: Random,
 ) {
     var currentPlayer: String
     val playerEvents = mutableListOf<PlayerEvent>()
-
+    val log = mutableListOf<CommandDto>()
     val playerAreas: Map<String, PlayArea> = mapOf(
         players.user1 to PlayArea(),
         players.user2!! to PlayArea()
@@ -177,7 +178,8 @@ class GameState(
             hand = this.playerHands[player]!!.values.toMutableList(),
             playAreas = this.playerAreas,
             discard = this.discard,
-            playerEvents
+            playerEvents,
+            this.log
         )
     }
 }

@@ -39,6 +39,7 @@ class CommandService(
                 if (game.isCardInHand(user, card!!) &&
                     game.canPlayCard(user, card)
                 ) {
+                    game.log.addLast(commandDto)
                     game.playCard(user, card)
                 } else {
                     CommandError(
@@ -50,13 +51,16 @@ class CommandService(
                     throw Exception()
                 }
             } else if (type === CommandType.DRAW && color !== null) {
+                game.log.addLast(commandDto)
                 game.drawFromDiscard(user, color)
                 game.endTurn()
             } else if (type === CommandType.DRAW) {
+                game.log.addLast(commandDto)
                 game.drawCard(user)
                 game.endTurn()
             } else if (type === CommandType.DISCARD) {
                 if (game.isCardInHand(user, card!!)) {
+                    game.log.addLast(commandDto)
                     game.discard(user, card)
                 } else {
                     CommandError(

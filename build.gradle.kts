@@ -4,7 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.1.+"
     // id("org.graalvm.buildtools.native") version "0.10.+"
     id("io.spring.dependency-management") version "1.1.4"
-    id("org.jetbrains.dokka") version "1.6.10"
+    id("org.jetbrains.dokka") version "2.0.0-Beta"
     id("com.google.cloud.tools.jib") version "3.4.3"
 	kotlin("jvm") version "2.0.+"
 	kotlin("plugin.spring") version "2.0.+"
@@ -82,7 +82,7 @@ dependencies {
 			attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
 		}
 	}
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.6.10")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:2.0.0-Beta")
 
     testImplementation("org.assertj:assertj-core:3.22.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")

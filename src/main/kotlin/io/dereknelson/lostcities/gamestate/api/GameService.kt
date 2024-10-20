@@ -7,6 +7,11 @@ import io.dereknelson.lostcities.models.commands.CommandDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.TimeZone
 
 @Service
 class GameService(
@@ -74,15 +79,24 @@ class GameService(
 
     private fun GameState.playCommandsForward(): GameState {
         this.matchEntity.commands.forEach { command ->
+            val commandDto = command.toDto()
+
             commandService.execCommand(
                 this,
-                command.toDto(),
+                commandDto,
                 this.currentPlayer
             )
         }
+
         this.playerEvents.clear()
         return this
     }
 
-    private fun CommandEntity.toDto() = CommandDto(this.type, this.card, this.color)
+    private fun CommandEntity.toDto() = CommandDto(
+        player = this.user,
+        received = this.received(),
+        type = this.type,
+        card = this.card,
+        color = this.color
+    )
 }
