@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.web.filter.ForwardedHeaderFilter
 
 @Configuration
@@ -77,6 +78,7 @@ class SecurityConfiguration(
                 // .requestMatchers("/api/**")
                 // .requestMatchers("/app/**/*.{js,html}")
                 .requestMatchers("/actuator/**")
+                .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/actuator/**"))
                 .requestMatchers("/i18n/**")
                 .requestMatchers("/content/**")
                 .requestMatchers("/swagger-ui/**")
