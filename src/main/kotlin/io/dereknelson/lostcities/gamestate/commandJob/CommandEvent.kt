@@ -9,5 +9,5 @@ data class CommandEvent(
     val userDetails: LostCitiesUserDetails,
     val match: MatchEntity,
     val playOrDiscard: CommandDto,
-    val draw: CommandDto
+    val draw: CommandDto,
 ) : ApplicationEvent(userDetails)

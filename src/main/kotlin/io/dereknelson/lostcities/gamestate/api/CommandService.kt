@@ -8,19 +8,18 @@ import org.springframework.stereotype.Service
 
 @Service
 class CommandService(
-    private val gameEventService: GameEventService
+    private val gameEventService: GameEventService,
 ) {
 
     fun execCommand(game: GameState, commandDto: CommandDto, user: String) {
         try {
-
             val (type: CommandType, card: String?, color: Color?) = commandDto
             if (game.currentPlayer != user) {
                 CommandError(
                     game.id,
                     user,
                     commandDto,
-                    "Not your turn."
+                    "Not your turn.",
                 ).send()
                 return
             }
@@ -30,7 +29,7 @@ class CommandService(
                     game.id,
                     user,
                     commandDto,
-                    "Game over."
+                    "Game over.",
                 ).send()
                 return
             }
@@ -46,7 +45,7 @@ class CommandService(
                         game.id,
                         user,
                         commandDto,
-                        "Unable to play card."
+                        "Unable to play card.",
                     ).send()
                     throw Exception()
                 }
@@ -67,7 +66,7 @@ class CommandService(
                         game.id,
                         user,
                         commandDto,
-                        "Unable to discard card."
+                        "Unable to discard card.",
                     ).send()
 
                     throw Exception()
@@ -78,7 +77,7 @@ class CommandService(
                 game.id,
                 user,
                 commandDto,
-                "Unable to execute command."
+                "Unable to execute command.",
             ).send()
 
             throw e

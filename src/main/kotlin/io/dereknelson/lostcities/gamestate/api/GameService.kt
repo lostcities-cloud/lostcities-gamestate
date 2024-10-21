@@ -7,17 +7,12 @@ import io.dereknelson.lostcities.models.commands.CommandDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.TimeZone
 
 @Service
 class GameService(
     private var matchRepository: MatchRepository,
     private var gameFactory: GameFactory,
-    private var matchEventService: GameEventService
+    private var matchEventService: GameEventService,
 ) {
 
     @Autowired @Lazy
@@ -36,13 +31,15 @@ class GameService(
         return if (matchRepository.findById(matchEntity.id).isEmpty) {
             val gameState = gameFactory.build(matchEntity)
             save(gameState)
-        } else null
+        } else {
+            null
+        }
     }
 
     fun saveTurn(
         gameState: GameState,
         playOrDiscardCommand: CommandEntity,
-        drawCommand: CommandEntity
+        drawCommand: CommandEntity,
     ) {
         val match = gameState.matchEntity
         match.commands.add(playOrDiscardCommand)
@@ -84,7 +81,7 @@ class GameService(
             commandService.execCommand(
                 this,
                 commandDto,
-                this.currentPlayer
+                this.currentPlayer,
             )
         }
 
@@ -97,6 +94,6 @@ class GameService(
         received = this.received(),
         type = this.type,
         card = this.card,
-        color = this.color
+        color = this.color,
     )
 }

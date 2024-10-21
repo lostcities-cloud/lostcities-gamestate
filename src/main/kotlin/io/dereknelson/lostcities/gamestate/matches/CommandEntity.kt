@@ -11,12 +11,12 @@ class CommandEntity(
     val type: CommandType,
     val card: String?,
     val color: Color?,
-    val createdDate: Long
+    val createdDate: Long,
 ) {
     fun received(): LocalDateTime {
         return LocalDateTime.ofInstant(
             Instant.ofEpochMilli(this.createdDate),
-            ZoneId.of("UTC")
+            ZoneId.of("UTC"),
         )
     }
 }

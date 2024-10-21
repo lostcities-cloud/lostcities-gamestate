@@ -30,5 +30,5 @@ class MatchEntity(
     @CreatedBy
     val createdBy: String? = null,
     @LastModifiedBy
-    var lastModifiedBy: String? = null
+    var lastModifiedBy: String? = null,
 )

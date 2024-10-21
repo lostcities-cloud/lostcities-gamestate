@@ -5,7 +5,7 @@ import java.util.Optional
 
 @Service
 class MatchService(
-    private val matchRepository: MatchRepository
+    private val matchRepository: MatchRepository,
 ) {
     fun getMatch(id: Long): Optional<MatchEntity> {
         return matchRepository.findById(id)

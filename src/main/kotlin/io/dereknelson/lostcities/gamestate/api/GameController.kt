@@ -1,8 +1,8 @@
 package io.dereknelson.lostcities.gamestate.api
 
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
-import io.dereknelson.lostcities.gamestate.commandJob.CommandEvent
 import io.dereknelson.lostcities.gamestate.api.dto.TurnCommandRequest
+import io.dereknelson.lostcities.gamestate.commandJob.CommandEvent
 import io.dereknelson.lostcities.gamestate.matches.MatchService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -27,15 +27,14 @@ class GameController(
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Game retrieved."),
-            ApiResponse(responseCode = "404", description = "Game not found.")
-        ]
+            ApiResponse(responseCode = "404", description = "Game not found."),
+        ],
     )
     @GetMapping("/{id}")
     fun getPlayerView(
         @PathVariable id: Long,
         @AuthenticationPrincipal @Parameter(hidden = true) userDetails: LostCitiesUserDetails,
     ): PlayerViewDto {
-
         return matchService
             .getMatch(id)
             .map {
@@ -51,7 +50,7 @@ class GameController(
         value = [
             ApiResponse(responseCode = "201", description = "Command executed."),
             ApiResponse(responseCode = "404", description = "Game not found."),
-        ]
+        ],
     )
     @PatchMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun playCommand(
@@ -67,8 +66,8 @@ class GameController(
                     userDetails,
                     it,
                     turn.playOrDiscard,
-                    turn.draw
-                )
+                    turn.draw,
+                ),
             )
         }
 }

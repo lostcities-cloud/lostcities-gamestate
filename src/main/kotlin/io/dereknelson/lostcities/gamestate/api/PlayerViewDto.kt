@@ -14,5 +14,5 @@ class PlayerViewDto(
     val playAreas: Map<String, PlayArea>,
     val discard: PlayArea,
     val playerEvents: List<PlayerEvent>,
-    var log: List<CommandDto> = listOf()
+    var log: List<CommandDto> = listOf(),
 )

@@ -20,11 +20,11 @@ class GameFactory {
             match.id,
             players = UserPair(
                 user1 = match.player1,
-                user2 = match.player2
+                user2 = match.player2,
             ),
             LinkedHashSet(shuffledCards),
             match,
-            random
+            random,
         )
 
         gameState.playerEvents.clear()

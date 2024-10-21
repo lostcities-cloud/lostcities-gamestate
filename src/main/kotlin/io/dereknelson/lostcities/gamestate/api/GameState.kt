@@ -23,7 +23,7 @@ class GameState(
     val log = mutableListOf<CommandDto>()
     val playerAreas: Map<String, PlayArea> = mapOf(
         players.user1 to PlayArea(),
-        players.user2!! to PlayArea()
+        players.user2!! to PlayArea(),
     )
 
     private var nextPlayer: String
@@ -31,7 +31,7 @@ class GameState(
 
     private val playerHands: Map<String, MutableMap<String, Card>> = mapOf(
         players.user1 to mutableMapOf(),
-        players.user2!! to mutableMapOf()
+        players.user2!! to mutableMapOf(),
     )
 
     init {
@@ -60,7 +60,7 @@ class GameState(
             deck.remove(drawn)
             getHand(player)[drawn.id] = drawn
             playerEvents.add(
-                PlayerEvent(id, currentPlayer, PlayerEventType.DRAW_CARD, drawn.id, null)
+                PlayerEvent(id, currentPlayer, PlayerEventType.DRAW_CARD, drawn.id, null),
             )
         }
     }
@@ -100,7 +100,7 @@ class GameState(
         val removed = removeCardFromHand(player, card)
         discard.get(removed!!.color).add(0, removed)
         playerEvents.add(
-            PlayerEvent(id, currentPlayer, PlayerEventType.DISCARD_CARD, removed.id, null)
+            PlayerEvent(id, currentPlayer, PlayerEventType.DISCARD_CARD, removed.id, null),
         )
     }
 
@@ -179,7 +179,7 @@ class GameState(
             playAreas = this.playerAreas,
             discard = this.discard,
             playerEvents,
-            this.log
+            this.log,
         )
     }
 }

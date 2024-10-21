@@ -41,7 +41,8 @@ class GameEventService(
         const val COMMAND_ERROR_QUEUE_DLQ = "command-error-event-dlq"
     }
 
-    @Bean @Qualifier(COMMAND_ERROR_QUEUE)
+    @Bean
+    @Qualifier(COMMAND_ERROR_QUEUE)
     fun commandError() = QueueBuilder
         .durable(COMMAND_ERROR_QUEUE)
         .ttl(5000)
@@ -49,12 +50,14 @@ class GameEventService(
         .withArgument("x-dead-letter-routing-key", COMMAND_ERROR_QUEUE_DLQ)
         .build()!!
 
-    @Bean @Qualifier(COMMAND_ERROR_QUEUE_DLQ)
+    @Bean
+    @Qualifier(COMMAND_ERROR_QUEUE_DLQ)
     fun commandErrorDlQueue() = QueueBuilder
         .durable(COMMAND_ERROR_QUEUE_DLQ)
         .build()!!
 
-    @Bean @Qualifier(CREATE_GAME_QUEUE)
+    @Bean
+    @Qualifier(CREATE_GAME_QUEUE)
     fun createGame() = QueueBuilder
         .durable(CREATE_GAME_QUEUE)
         .ttl(5000)
@@ -62,12 +65,14 @@ class GameEventService(
         .withArgument("x-dead-letter-routing-key", CREATE_GAME_QUEUE_DLQ)
         .build()!!
 
-    @Bean @Qualifier(CREATE_GAME_QUEUE_DLQ)
+    @Bean
+    @Qualifier(CREATE_GAME_QUEUE_DLQ)
     fun createGameDlQueue() = QueueBuilder
         .durable(CREATE_GAME_QUEUE_DLQ)
         .build()!!
 
-    @Bean @Qualifier(TURN_CHANGE_EVENT)
+    @Bean
+    @Qualifier(TURN_CHANGE_EVENT)
     fun turnChangeEventQueue() = QueueBuilder
         .durable(TURN_CHANGE_EVENT)
         .ttl(5000)
@@ -75,12 +80,14 @@ class GameEventService(
         .withArgument("x-dead-letter-routing-key", TURN_CHANGE_EVENT_DLQ)
         .build()!!
 
-    @Bean @Qualifier(TURN_CHANGE_EVENT_DLQ)
+    @Bean
+    @Qualifier(TURN_CHANGE_EVENT_DLQ)
     fun turnChangeEventDlQueue() = QueueBuilder
         .durable(TURN_CHANGE_EVENT_DLQ)
         .build()!!
 
-    @Bean @Qualifier(PLAYER_EVENT)
+    @Bean
+    @Qualifier(PLAYER_EVENT)
     fun playerEventQueue() = QueueBuilder
         .durable(PLAYER_EVENT)
         .ttl(5000)
@@ -88,12 +95,14 @@ class GameEventService(
         .withArgument("x-dead-letter-routing-key", PLAYER_EVENT_DLQ)
         .build()!!
 
-    @Bean @Qualifier(PLAYER_EVENT_DLQ)
+    @Bean
+    @Qualifier(PLAYER_EVENT_DLQ)
     fun playerEventDlQueue() = QueueBuilder
         .durable(PLAYER_EVENT_DLQ)
         .build()!!
 
-    @Bean @Qualifier(END_GAME_EVENT)
+    @Bean
+    @Qualifier(END_GAME_EVENT)
     fun endGameEventQueue() = QueueBuilder
         .durable(END_GAME_EVENT)
         .ttl(5000)
@@ -101,7 +110,8 @@ class GameEventService(
         .withArgument("x-dead-letter-routing-key", END_GAME_EVENT_DLQ)
         .build()!!
 
-    @Bean @Qualifier(END_GAME_EVENT_DLQ)
+    @Bean
+    @Qualifier(END_GAME_EVENT_DLQ)
     fun endGameEventDlQueue() = QueueBuilder
         .durable(END_GAME_EVENT_DLQ)
         .build()!!
@@ -109,21 +119,21 @@ class GameEventService(
     fun sendCommandError(error: CommandError) {
         rabbitTemplate.convertAndSend(
             COMMAND_ERROR_QUEUE,
-            objectMapper.writeValueAsBytes(error)
+            objectMapper.writeValueAsBytes(error),
         )
     }
 
     fun sendTurnChangeEvent(id: Long, login: String) {
         rabbitTemplate.convertAndSend(
             TURN_CHANGE_EVENT,
-            objectMapper.writeValueAsBytes(TurnChangeEvent(id, login))
+            objectMapper.writeValueAsBytes(TurnChangeEvent(id, login)),
         )
     }
 
     fun sendPlayerEvents(playerEvents: Map<String, PlayerViewDto>) {
         rabbitTemplate.convertAndSend(
             PLAYER_EVENT,
-            objectMapper.writeValueAsBytes(playerEvents)
+            objectMapper.writeValueAsBytes(playerEvents),
         )
     }
 
@@ -131,14 +141,14 @@ class GameEventService(
         val event = FinishMatchEvent(
             id,
             scores,
-            LocalDateTime.now(UTC)
+            LocalDateTime.now(UTC),
         )
 
         logger.info("Finished Match: $event")
 
         rabbitTemplate.convertAndSend(
             END_GAME_EVENT,
-            objectMapper.writeValueAsBytes(event)
+            objectMapper.writeValueAsBytes(event),
         )
     }
 

@@ -25,7 +25,7 @@ class CommandProcessor : ApplicationListener<CommandEvent> {
         if (game.isGameOver()) {
             logger.info(
                 "Game Already Completed, Player($user) ",
-                "{${event.playOrDiscard}} {${event.draw}}"
+                "{${event.playOrDiscard}} {${event.draw}}",
             )
         }
 
@@ -39,7 +39,7 @@ class CommandProcessor : ApplicationListener<CommandEvent> {
         gameService.saveTurn(
             game,
             event.playOrDiscard.asEntity(user),
-            event.draw.asEntity(user)
+            event.draw.asEntity(user),
         )
     }
 

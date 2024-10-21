@@ -24,7 +24,6 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 class LostcitiesGamestateApplication
 
 fun main(args: Array<String>) {
-
     runApplication<LostcitiesGamestateApplication>(*args)
 }
 

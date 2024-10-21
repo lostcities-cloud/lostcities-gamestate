@@ -79,11 +79,11 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.8.0")
-	ktlint("com.pinterest:ktlint:1.3.1") {
-		attributes {
-			attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
-		}
-	}
+    ktlint("com.pinterest:ktlint:0.49.1") {
+        attributes {
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
+        }
+    }
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:2.0.0-Beta")
 
     testImplementation("org.assertj:assertj-core:3.22.0")
