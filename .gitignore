@@ -1,4 +1,5 @@
 .env
+./owasap
 HELP.md
 .gradle
 build/
