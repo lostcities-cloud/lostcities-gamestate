@@ -1,7 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.1.+"
+    id("org.springframework.boot") version "3.2.0"
+    id("org.owasp.dependencycheck") version "11.0.0"
     id("com.github.rising3.semver") version "0.8.2"
     id("io.spring.dependency-management") version "1.1.4"
     id("org.jetbrains.dokka") version "2.0.0-Beta"
