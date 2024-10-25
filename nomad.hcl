@@ -31,6 +31,11 @@ job "gamestate" {
         max_parallel = var.max_parallel
     }
 
+    spread {
+        attribute = "${node.datacenter}"
+        weight    = 100
+    }
+
     group "gamestate" {
         count = var.count
 
