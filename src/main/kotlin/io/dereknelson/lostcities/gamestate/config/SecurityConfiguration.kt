@@ -79,7 +79,7 @@ class SecurityConfiguration(
                 // .requestMatchers("/api/**")
                 // .requestMatchers("/app/**/*.{js,html}")
                 .requestMatchers("/actuator/**")
-                .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/actuator/**"))
+                .requestMatchers(antMatcher(HttpMethod.GET, "/actuator/**"))
                 .requestMatchers("/i18n/**")
                 .requestMatchers("/content/**")
                 .requestMatchers("/swagger-ui/**")
