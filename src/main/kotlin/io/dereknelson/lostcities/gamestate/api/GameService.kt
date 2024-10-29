@@ -1,6 +1,5 @@
 package io.dereknelson.lostcities.gamestate.api
 
-import io.dereknelson.lostcities.common.auth.TokenProvider
 import io.dereknelson.lostcities.gamestate.matches.CommandEntity
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.gamestate.matches.MatchRepository
@@ -87,7 +86,7 @@ class GameService(
                     this.currentPlayer,
                 )
             } catch (e: Exception) {
-                logger.error("Command failed: ${command.toString()}")
+                logger.error("Command failed: $command")
             }
         }
 

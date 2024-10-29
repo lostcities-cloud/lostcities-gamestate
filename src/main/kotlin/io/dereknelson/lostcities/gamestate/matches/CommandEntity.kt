@@ -41,6 +41,4 @@ class CommandEntity(
         result = 31 * result + (color?.hashCode() ?: 0)
         return result
     }
-
-
 }

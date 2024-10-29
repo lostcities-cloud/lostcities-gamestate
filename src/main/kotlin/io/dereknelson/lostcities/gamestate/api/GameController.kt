@@ -3,7 +3,6 @@ package io.dereknelson.lostcities.gamestate.api
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.gamestate.api.dto.TurnCommandRequest
 import io.dereknelson.lostcities.gamestate.commandJob.CommandEvent
-import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.gamestate.matches.MatchService
 import io.dereknelson.lostcities.models.SimpleResponseMessage
 import io.swagger.v3.oas.annotations.Operation
@@ -19,15 +18,17 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
 @RestController()
-@CrossOrigin(origins = [
-    "http://localhost:4452",
-    "http://127.0.0.1:4452",
-    "http://localhost:8080",
-    "http://127.0.0.1:8080",
-    "http://192.168.1.241:8080",
+@CrossOrigin(
+    origins = [
+        "http://localhost:4452",
+        "http://127.0.0.1:4452",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://192.168.1.241:8080",
 
-    "*",
-])
+        "*",
+    ],
+)
 class GameController(
     private var applicationEventPublisher: ApplicationEventPublisher,
     private var matchService: MatchService,

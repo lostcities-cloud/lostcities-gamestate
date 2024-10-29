@@ -18,7 +18,6 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.DefaultSecurityFilterChain
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher
@@ -33,7 +32,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
     name = "Bearer Authentication",
     type = SecuritySchemeType.HTTP,
     bearerFormat = "JWT",
-    scheme = "bearer"
+    scheme = "bearer",
 )
 class SecurityConfiguration(
     private val tokenProvider: TokenProvider,
@@ -72,7 +71,6 @@ class SecurityConfiguration(
                     )
                 }
                 headersConfigurer.referrerPolicy {
-
                     it.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
                 }.cacheControl { }
             }
@@ -85,11 +83,12 @@ class SecurityConfiguration(
                     .requestMatchers(antMatcher("/gamestate/**")).hasAuthority(AuthoritiesConstants.USER)
                     .requestMatchers(
                         "/actuator",
-                        "/actuator/**")
+                        "/actuator/**",
+                    )
                     .permitAll()
                     .requestMatchers(
                         "/v3/api-docs/**",
-                        "/swagger-ui/**"
+                        "/swagger-ui/**",
                     ).permitAll()
                     .requestMatchers("/v3/api-docs/swagger-config").permitAll()
                 // .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
