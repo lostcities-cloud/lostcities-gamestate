@@ -18,8 +18,14 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "*, openapi, swagger-ui"
+      discovery:
+        enabled: true
+    enabled-by-default: true
   server:
     port: 4452
     base-path: /management/${spring.application.name}
+  endpoint:
+    env:
+      show-values: always
 

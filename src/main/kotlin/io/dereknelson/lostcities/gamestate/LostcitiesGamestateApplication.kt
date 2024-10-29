@@ -6,8 +6,10 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import io.dereknelson.lostcities.common.WebConfigProperties
 import org.springframework.amqp.rabbit.annotation.EnableRabbit
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories
@@ -15,10 +17,10 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @SpringBootApplication(
     scanBasePackages = [
         "io.dereknelson.lostcities.gamestate",
-        "io.dereknelson.lostcities.common.auth",
-        "io.dereknelson.lostcities.common.library",
+        "io.dereknelson.lostcities.common",
     ],
 )
+@EnableConfigurationProperties(WebConfigProperties::class)
 @EnableRabbit
 @EnableRedisRepositories
 class LostcitiesGamestateApplication

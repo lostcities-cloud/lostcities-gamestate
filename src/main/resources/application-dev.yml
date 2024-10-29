@@ -14,11 +14,24 @@ spring:
       host: ${REDIS_IP}
       port: 6379
 
+web:
+  cors:
+    allowed-origins: http://192.168.1.241:8080, http://192.168.1.201:8091, http://localhost:8080, http://localhost:4452, http://127.0.0.1:8080, http://127.0.0.1:4452, http://192.168.1.233:80
+    allowed-methods: GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD
+    max-age: 3600
+    allowed-headers: "*"
+    exposed-headers: "*"
 
 springdoc:
   use-management-port: true
-  api-docs.enabled: true
-  packagesToScan: io.dereknelson.lostcities.gamestate.api
+#  api-docs.enabled: true
+  #packagesToScan: io.dereknelson.lostcities.gamestate
+  enable-spring-security: false
+  #show-actuator: true
+
+
+  #swagger-ui:
+    #configUrl: #http://localhost:8080/api/v3/api-docs/swagger-config
 
 application:
   security:
@@ -49,7 +62,7 @@ logging:
       max-history: 10
 
 server:
-  port: 8092
+  port: 8080
 
 
 

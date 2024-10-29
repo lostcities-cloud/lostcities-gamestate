@@ -54,7 +54,7 @@ job "gamestate" {
             }
 
             port "service-port" {
-                to = 8092
+                to = 8080
             }
         }
 

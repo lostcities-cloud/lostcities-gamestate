@@ -1,6 +1,7 @@
 package io.dereknelson.lostcities.gamestate.config
 
 import io.dereknelson.lostcities.common.AuthoritiesConstants
+import io.dereknelson.lostcities.common.WebConfigProperties
 import io.dereknelson.lostcities.common.auth.JwtFilter
 import io.dereknelson.lostcities.common.auth.TokenProvider
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
@@ -18,18 +19,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher
 import org.springframework.web.filter.ForwardedHeaderFilter
+import org.springframework.web.servlet.config.annotation.CorsRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 @EnableWebSecurity(debug = true)
-@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = false, jsr250Enabled = true)
 @SecurityScheme(
-    name = "jwt_auth",
+    name = "Bearer Authentication",
     type = SecuritySchemeType.HTTP,
     bearerFormat = "JWT",
-    scheme = "bearer",
+    scheme = "bearer"
 )
 class SecurityConfiguration(
     private val tokenProvider: TokenProvider,
@@ -41,17 +45,34 @@ class SecurityConfiguration(
     }
 
     @Bean
+    fun corsMappingConfigurer(webConfigProperties: WebConfigProperties): WebMvcConfigurer {
+        return object : WebMvcConfigurer {
+            override fun addCorsMappings(registry: CorsRegistry) {
+                val cors: WebConfigProperties.Cors = webConfigProperties.cors
+                registry.addMapping("/**")
+                    .allowedOrigins(*cors.allowedOrigins)
+                    .allowedMethods(*cors.allowedMethods)
+                    .maxAge(cors.maxAge)
+                    .allowedHeaders(*cors.allowedHeaders)
+                    .exposedHeaders(*cors.exposedHeaders)
+            }
+        }
+    }
+
+    @Bean
     fun securityFilterChain(http: HttpSecurity): DefaultSecurityFilterChain {
         http.csrf { it.disable() }
-            .cors { it.configure(http) }
-            .addFilterBefore(JwtFilter(tokenProvider), AnonymousAuthenticationFilter::class.java)
+            .cors { it.disable() } // configure(http) }
+            .addFilterBefore(JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling {}
             .headers { headersConfigurer ->
                 headersConfigurer.contentSecurityPolicy {
                     it.policyDirectives(
-                        "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:",
+                        "default-src 'self' localhost:* ws://localhost:*;",
                     )
-                }.referrerPolicy {
+                }
+                headersConfigurer.referrerPolicy {
+
                     it.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
                 }.cacheControl { }
             }
@@ -62,7 +83,15 @@ class SecurityConfiguration(
                 requests
                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(antMatcher("/gamestate/**")).hasAuthority(AuthoritiesConstants.USER)
-                    .requestMatchers("/actuator/**").permitAll()
+                    .requestMatchers(
+                        "/actuator",
+                        "/actuator/**")
+                    .permitAll()
+                    .requestMatchers(
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**"
+                    ).permitAll()
+                    .requestMatchers("/v3/api-docs/swagger-config").permitAll()
                 // .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             }
 
@@ -74,7 +103,7 @@ class SecurityConfiguration(
         return WebSecurityCustomizer { web: WebSecurity ->
             web
                 .ignoring()
-                .requestMatchers(HttpMethod.OPTIONS, "/**")
+                .requestMatchers(antMatcher(HttpMethod.OPTIONS, "/**"))
                 // .requestMatchers("/api/**")
                 // .requestMatchers("/app/**/*.{js,html}")
                 .requestMatchers("/actuator/**")
@@ -82,6 +111,8 @@ class SecurityConfiguration(
                 .requestMatchers("/i18n/**")
                 .requestMatchers("/content/**")
                 .requestMatchers("/swagger-ui/**")
+                .requestMatchers(antMatcher("/v3/api-docs/**"))
+                .requestMatchers("/v3/api-docs/swagger-config")
                 .requestMatchers("/test/**")
         }
     }

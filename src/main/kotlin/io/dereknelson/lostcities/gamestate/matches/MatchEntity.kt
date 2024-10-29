@@ -16,7 +16,7 @@ class MatchEntity(
 
     var currentPlayer: String? = null,
 
-    val commands: MutableList<CommandEntity> = mutableListOf(),
+    val commands: LinkedHashSet<CommandEntity> = LinkedHashSet(),
 
     var isReady: Boolean = false,
     var isStarted: Boolean = false,

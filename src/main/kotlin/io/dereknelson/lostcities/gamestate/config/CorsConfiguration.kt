@@ -6,11 +6,11 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.filter.CorsFilter
 
-@Configuration
+//@Configuration
 class CorsConfiguration {
 
     companion object {
-        const val allowedOrigins = "*"
+        val allowedOrigins = listOf("*", "http://localhost:8080", "http://localhost:4452")
     }
 
     @Bean
@@ -29,7 +29,7 @@ class CorsConfiguration {
 
     fun corsConfiguration(): CorsConfiguration {
         val config = CorsConfiguration()
-        config.allowedOriginPatterns = mutableListOf(allowedOrigins)
+        config.allowedOriginPatterns = allowedOrigins
 
         config.allowCredentials = true
 

@@ -1,9 +1,11 @@
 package io.dereknelson.lostcities.gamestate.api
 
+import io.dereknelson.lostcities.common.auth.TokenProvider
 import io.dereknelson.lostcities.gamestate.matches.CommandEntity
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.gamestate.matches.MatchRepository
 import io.dereknelson.lostcities.models.commands.CommandDto
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
@@ -14,6 +16,7 @@ class GameService(
     private var gameFactory: GameFactory,
     private var matchEventService: GameEventService,
 ) {
+    private val logger = LoggerFactory.getLogger(GameService::class.java)
 
     @Autowired @Lazy
     private lateinit var commandService: CommandService
@@ -77,12 +80,15 @@ class GameService(
     private fun GameState.playCommandsForward(): GameState {
         this.matchEntity.commands.forEach { command ->
             val commandDto = command.toDto()
-
-            commandService.execCommand(
-                this,
-                commandDto,
-                this.currentPlayer,
-            )
+            try {
+                commandService.execCommand(
+                    this,
+                    commandDto,
+                    this.currentPlayer,
+                )
+            } catch (e: Exception) {
+                logger.error("Command failed: ${command.toString()}")
+            }
         }
 
         this.playerEvents.clear()
