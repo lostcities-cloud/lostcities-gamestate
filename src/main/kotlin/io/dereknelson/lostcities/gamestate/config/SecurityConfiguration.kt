@@ -20,6 +20,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher
 import org.springframework.web.filter.ForwardedHeaderFilter
 
 @Configuration
@@ -61,7 +62,7 @@ class SecurityConfiguration(
             .authorizeHttpRequests { requests ->
                 requests
                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers("/gamestate/**").hasAuthority(AuthoritiesConstants.USER)
+                    .requestMatchers(antMatcher("/gamestate/**")).hasAuthority(AuthoritiesConstants.USER)
                     .requestMatchers("/actuator/**").permitAll()
                 // .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             }
