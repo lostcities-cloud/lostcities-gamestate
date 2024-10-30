@@ -27,10 +27,6 @@ job "gamestate" {
     region = "global"
     datacenters = [ "tower-datacenter"]
 
-    update {
-        max_parallel = var.max_parallel
-    }
-
     spread {
         attribute = "${node.datacenter}"
         weight    = 100
@@ -133,5 +129,14 @@ EOF
                 env         = true
             }
         }
+    }
+
+    update {
+        max_parallel     = var.max_parallel
+        min_healthy_time = "20s"
+        healthy_deadline = "3m"
+        auto_revert      = true
+        canary           = 1
+        auto_promote     = true
     }
 }
