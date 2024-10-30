@@ -24,7 +24,6 @@ class GameFactory {
             ),
             LinkedHashSet(shuffledCards),
             match,
-            random,
         )
 
         gameState.playerEvents.clear()
@@ -35,8 +34,8 @@ class GameFactory {
     fun buildDeck(): List<Card> {
         val cards: MutableList<Card> = mutableListOf()
 
-        Color.values().forEach {
-            cards.addAll(buildCardsForColor(it))
+        Color.entries.forEach { color ->
+            cards.addAll(buildCardsForColor(color))
         }
 
         return cards

@@ -9,16 +9,14 @@ import io.dereknelson.lostcities.models.state.Card
 import io.dereknelson.lostcities.models.state.Color
 import io.dereknelson.lostcities.models.state.PlayArea
 import kotlin.collections.LinkedHashSet
-import kotlin.random.Random
 
 class GameState(
     val id: Long,
     players: UserPair,
     private val deck: LinkedHashSet<Card>,
     val matchEntity: MatchEntity,
-    seed: Random,
 ) {
-    var currentPlayer: String
+    var currentPlayer: String = matchEntity.currentPlayer!!
     val playerEvents = mutableListOf<PlayerEvent>()
     val log = mutableListOf<CommandDto>()
     val playerAreas: Map<String, PlayArea> = mapOf(
@@ -26,7 +24,7 @@ class GameState(
         players.user2!! to PlayArea(),
     )
 
-    private var nextPlayer: String
+    private var nextPlayer: String = players.toList().first { it != currentPlayer }
     private val discard = PlayArea()
 
     private val playerHands: Map<String, MutableMap<String, Card>> = mapOf(
@@ -35,11 +33,6 @@ class GameState(
     )
 
     init {
-        val turnOrder = players.toList().shuffled(seed)
-
-        currentPlayer = turnOrder[0]
-        nextPlayer = turnOrder[1]
-
         drawXCards(players.user1, 8)
         drawXCards(players.user2!!, 8)
     }

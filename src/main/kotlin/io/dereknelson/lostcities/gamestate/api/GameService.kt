@@ -30,12 +30,13 @@ class GameService(
     }
 
     fun saveNewMatch(matchEntity: MatchEntity): GameState? {
-        return if (matchRepository.findById(matchEntity.id).isEmpty) {
+        val match = matchRepository.findById(matchEntity.id)
+        if (match.isEmpty) {
             val gameState = gameFactory.build(matchEntity)
-            save(gameState)
-        } else {
-            null
+            return save(gameState)
         }
+
+        return null
     }
 
     fun saveTurn(
