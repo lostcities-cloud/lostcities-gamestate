@@ -5,20 +5,16 @@ import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.gamestate.matches.MatchRepository
 import io.dereknelson.lostcities.models.commands.CommandDto
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 
 @Service
 class GameService(
-    private var matchRepository: MatchRepository,
-    private var gameFactory: GameFactory,
-    private var matchEventService: GameEventService,
+    private val matchRepository: MatchRepository,
+    private val gameFactory: GameFactory,
+    private val matchEventService: GameEventService,
+    private val commandService: CommandService
 ) {
     private val logger = LoggerFactory.getLogger(GameService::class.java)
-
-    @Autowired @Lazy
-    private lateinit var commandService: CommandService
 
     fun exists(id: Long): Boolean {
         return matchRepository.existsById(id)
