@@ -29,16 +29,16 @@ class GameEventService(
     private lateinit var gameService: GameService
 
     companion object {
-        const val TURN_CHANGE_EVENT = "turn-change-event"
-        const val TURN_CHANGE_EVENT_DLQ = "turn-change-event-dlq"
+        const val TURN_CHANGE_EVENT = "turn-change"
+        const val TURN_CHANGE_EVENT_DLQ = "turn-change-dlq"
         const val PLAYER_EVENT = "player-event"
         const val PLAYER_EVENT_DLQ = "player-event-dlq"
         const val END_GAME_EVENT = "end-game-event"
         const val END_GAME_EVENT_DLQ = "end-game-event-dlq"
         const val CREATE_GAME_QUEUE = "create-game"
         const val CREATE_GAME_QUEUE_DLQ = "create-game-dlq"
-        const val COMMAND_ERROR_QUEUE = "command-error-event"
-        const val COMMAND_ERROR_QUEUE_DLQ = "command-error-event-dlq"
+        const val COMMAND_ERROR_QUEUE = "command-error"
+        const val COMMAND_ERROR_QUEUE_DLQ = "command-error-dlq"
     }
 
     @Bean
