@@ -12,7 +12,7 @@ class GameService(
     private val matchRepository: MatchRepository,
     private val gameFactory: GameFactory,
     private val matchEventService: GameEventService,
-    private val commandService: CommandService
+    private val commandService: CommandService,
 ) {
     private val logger = LoggerFactory.getLogger(GameService::class.java)
 
