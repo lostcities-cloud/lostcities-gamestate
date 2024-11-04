@@ -50,7 +50,6 @@ class GameController(
         @PathVariable id: Long,
         @AuthenticationPrincipal @Parameter(hidden = true) userDetails: LostCitiesUserDetails,
     ): PlayerViewDto {
-
         val match = matchService.getMatch(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND)
         }

@@ -5,7 +5,6 @@ import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.commands.CommandError
 import io.dereknelson.lostcities.models.matches.FinishMatchEvent
 import io.dereknelson.lostcities.models.matches.TurnChangeEvent
-import mu.KotlinLogging
 import org.slf4j.LoggerFactory
 import org.springframework.amqp.core.Message
 import org.springframework.amqp.core.QueueBuilder
@@ -18,8 +17,6 @@ import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.time.ZoneOffset.UTC
-
-
 
 @Component
 class GameEventService(
