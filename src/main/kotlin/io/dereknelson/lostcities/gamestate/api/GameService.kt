@@ -44,9 +44,15 @@ class GameService(
         match.commands.add(playOrDiscardCommand)
         match.commands.add(drawCommand)
 
+        match.currentPlayer = if (match.currentPlayer != match.player1) {
+            match.player1
+        } else {
+            match.player2
+        }
+
         save(gameState)
 
-        matchEventService.sendTurnChangeEvent(match.id, playOrDiscardCommand.user)
+        matchEventService.sendTurnChangeEvent(match.id, match.currentPlayer!!)
 
         if (gameState.isGameOver()) {
             endGame(gameState.id, gameState.calculateScores())
