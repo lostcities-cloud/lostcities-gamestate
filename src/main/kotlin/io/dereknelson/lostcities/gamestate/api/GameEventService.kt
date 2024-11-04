@@ -168,10 +168,14 @@ class GameEventService(
 
         logger.info("Create Match[${match.id}]: $match}")
 
-        if (gameService.saveNewMatch(match) != null) {
-            logger.info("Match[${match.id}] saved match to repo")
-        } else {
-            logger.info("Match[${match.id}] already created")
+        try {
+            if (gameService.saveNewMatch(match) != null) {
+                logger.info("Match[${match.id}] saved match to repo")
+            } else {
+                logger.info("Match[${match.id}] already created")
+            }
+        } catch (e: Exception) {
+            logger.error(e.message, e)
         }
     }
 }
