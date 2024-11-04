@@ -110,7 +110,7 @@ class GameEventService(
     fun playerEventDlQueue() = QueueBuilder
         .durable(PLAYER_EVENT_DLQ)
         .quorum()
-        .build()!!val logger = KotlinLogging.logger {}
+        .build()!!
 
     @Bean
     @Qualifier(END_GAME_EVENT)
