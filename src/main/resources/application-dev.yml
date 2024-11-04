@@ -47,7 +47,7 @@ logging:
   level:
     ROOT: error
     org.springframework.aop.interceptor.PerformanceMonitorInterceptor: TRACE
-    io.dereknelson.lostcities: debug
+    io.dereknelson.lostcities: info
     org.springframework.security.web.FilterChainProxy: debug
     org.springframework.amqp.rabbit.connection: debug
     org.springframework.web: debug
