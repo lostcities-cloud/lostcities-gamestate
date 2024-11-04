@@ -13,8 +13,8 @@ class MatchEntity(
 
     var player1: String,
     var player2: String? = null,
-
-    var currentPlayer: String? = null,
+    var firstPlayer: String? = null,
+    var currentPlayer: String,
 
     val commands: LinkedHashSet<CommandEntity> = LinkedHashSet(),
 

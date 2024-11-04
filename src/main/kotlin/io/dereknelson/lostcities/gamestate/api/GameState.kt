@@ -16,7 +16,7 @@ class GameState(
     private val deck: LinkedHashSet<Card>,
     val matchEntity: MatchEntity,
 ) {
-    var currentPlayer: String = matchEntity.currentPlayer!!
+    var currentPlayer: String = matchEntity.firstPlayer!!
     val playerEvents = mutableListOf<PlayerEvent>()
     val log = mutableListOf<CommandDto>()
     val playerAreas: Map<String, PlayArea> = mapOf(
