@@ -48,7 +48,7 @@ class GameService(
         match.currentPlayer = if (match.currentPlayer != match.player1) {
             match.player1
         } else {
-            match.player2
+            match.player2!!
         }
 
         save(gameState)
