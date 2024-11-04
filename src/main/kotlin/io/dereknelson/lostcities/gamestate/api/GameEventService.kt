@@ -45,6 +45,7 @@ class GameEventService(
     @Qualifier(COMMAND_ERROR_QUEUE)
     fun commandError() = QueueBuilder
         .durable(COMMAND_ERROR_QUEUE)
+        .quorum()
         .ttl(5000)
         .withArgument("x-dead-letter-exchange", "")
         .withArgument("x-dead-letter-routing-key", COMMAND_ERROR_QUEUE_DLQ)
@@ -54,12 +55,14 @@ class GameEventService(
     @Qualifier(COMMAND_ERROR_QUEUE_DLQ)
     fun commandErrorDlQueue() = QueueBuilder
         .durable(COMMAND_ERROR_QUEUE_DLQ)
+        .quorum()
         .build()!!
 
     @Bean
     @Qualifier(CREATE_GAME_QUEUE)
     fun createGame() = QueueBuilder
         .durable(CREATE_GAME_QUEUE)
+        .quorum()
         .ttl(5000)
         .withArgument("x-dead-letter-exchange", "")
         .withArgument("x-dead-letter-routing-key", CREATE_GAME_QUEUE_DLQ)
@@ -69,12 +72,14 @@ class GameEventService(
     @Qualifier(CREATE_GAME_QUEUE_DLQ)
     fun createGameDlQueue() = QueueBuilder
         .durable(CREATE_GAME_QUEUE_DLQ)
+        .quorum()
         .build()!!
 
     @Bean
     @Qualifier(TURN_CHANGE_EVENT)
     fun turnChangeEventQueue() = QueueBuilder
         .durable(TURN_CHANGE_EVENT)
+        .quorum()
         .ttl(5000)
         .withArgument("x-dead-letter-exchange", "")
         .withArgument("x-dead-letter-routing-key", TURN_CHANGE_EVENT_DLQ)
@@ -84,27 +89,31 @@ class GameEventService(
     @Qualifier(TURN_CHANGE_EVENT_DLQ)
     fun turnChangeEventDlQueue() = QueueBuilder
         .durable(TURN_CHANGE_EVENT_DLQ)
+        .quorum()
         .build()!!
 
     @Bean
     @Qualifier(PLAYER_EVENT)
     fun playerEventQueue() = QueueBuilder
         .durable(PLAYER_EVENT)
-        .ttl(5000)
+        .quorum()
         .withArgument("x-dead-letter-exchange", "")
         .withArgument("x-dead-letter-routing-key", PLAYER_EVENT_DLQ)
+        .ttl(5000)
         .build()!!
 
     @Bean
     @Qualifier(PLAYER_EVENT_DLQ)
     fun playerEventDlQueue() = QueueBuilder
         .durable(PLAYER_EVENT_DLQ)
+        .quorum()
         .build()!!
 
     @Bean
     @Qualifier(END_GAME_EVENT)
     fun endGameEventQueue() = QueueBuilder
         .durable(END_GAME_EVENT)
+        .quorum()
         .ttl(5000)
         .withArgument("x-dead-letter-exchange", "")
         .withArgument("x-dead-letter-routing-key", END_GAME_EVENT_DLQ)
@@ -114,6 +123,7 @@ class GameEventService(
     @Qualifier(END_GAME_EVENT_DLQ)
     fun endGameEventDlQueue() = QueueBuilder
         .durable(END_GAME_EVENT_DLQ)
+        .quorum()
         .build()!!
 
     fun sendCommandError(error: CommandError) {
