@@ -14,8 +14,7 @@ class MatchEntity(
     var seed: Long,
 
     var player1: String,
-    var player2: String? = null,
-    var firstPlayer: String? = null,
+    var player2: String,
     var currentPlayer: String,
 
     val commands: LinkedHashSet<CommandEntity> = LinkedHashSet(),
@@ -24,13 +23,8 @@ class MatchEntity(
     val createdDate: LocalDateTime? = null,
     @LastModifiedDate
     val lastModifiedDate: LocalDateTime? = null,
-
-    @CreatedBy
-    val createdBy: String? = null,
-    @LastModifiedBy
-    var lastModifiedBy: String? = null,
 ) {
     override fun toString(): String {
-        return "MatchEntity(id=$id, seed=$seed, player1='$player1', player2=$player2, firstPlayer=$firstPlayer, currentPlayer='$currentPlayer', commands=$commands, createdDate=$createdDate, lastModifiedDate=$lastModifiedDate, createdBy=$createdBy, lastModifiedBy=$lastModifiedBy)"
+        return "MatchEntity(id=$id, seed=$seed, player1='$player1', player2=$player2, currentPlayer='$currentPlayer', commands=$commands, createdDate=$createdDate, lastModifiedDate=$lastModifiedDate)"
     }
 }
