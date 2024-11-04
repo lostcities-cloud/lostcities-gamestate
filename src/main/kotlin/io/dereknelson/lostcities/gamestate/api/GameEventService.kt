@@ -166,7 +166,7 @@ class GameEventService(
     fun createGame(gameMessage: Message) {
         val match = objectMapper.readValue(gameMessage.body, MatchEntity::class.java)
 
-        logger.info("Create Match[${match.id}]: ${String(gameMessage.body)}")
+        logger.info("Create Match[${match.id}]: $match}")
 
         if (gameService.saveNewMatch(match) != null) {
             logger.info("Match[${match.id}] saved match to repo")
