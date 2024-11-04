@@ -6,6 +6,7 @@ import io.dereknelson.lostcities.models.commands.CommandError
 import io.dereknelson.lostcities.models.matches.FinishMatchEvent
 import io.dereknelson.lostcities.models.matches.TurnChangeEvent
 import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import org.springframework.amqp.core.Message
 import org.springframework.amqp.core.QueueBuilder
 import org.springframework.amqp.rabbit.annotation.RabbitListener
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.time.ZoneOffset.UTC
 
-private val logger = KotlinLogging.logger {}
+
 
 @Component
 class GameEventService(
@@ -27,6 +28,8 @@ class GameEventService(
 ) {
     @Autowired @Lazy
     private lateinit var gameService: GameService
+
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     companion object {
         const val TURN_CHANGE_EVENT = "turn-change"
@@ -107,7 +110,7 @@ class GameEventService(
     fun playerEventDlQueue() = QueueBuilder
         .durable(PLAYER_EVENT_DLQ)
         .quorum()
-        .build()!!
+        .build()!!val logger = KotlinLogging.logger {}
 
     @Bean
     @Qualifier(END_GAME_EVENT)

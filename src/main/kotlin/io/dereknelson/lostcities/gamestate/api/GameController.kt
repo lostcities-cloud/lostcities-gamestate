@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -34,6 +35,7 @@ class GameController(
     private var matchService: MatchService,
     private var gameService: GameService,
 ) {
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     @Operation(description = "Retrieve a player view.")
     @ApiResponses(
@@ -48,14 +50,26 @@ class GameController(
         @PathVariable id: Long,
         @AuthenticationPrincipal @Parameter(hidden = true) userDetails: LostCitiesUserDetails,
     ): PlayerViewDto {
-        return matchService
-            .getMatch(id)
-            .map {
-                gameService
-                    .build(it)
-                    .asPlayerView(userDetails.login)
-            }
-            .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+
+        val match = matchService.getMatch(id).orElseThrow {
+            ResponseStatusException(HttpStatus.NOT_FOUND)
+        }
+
+        val gamestate = try {
+            gameService.build(match)
+        } catch (e: Exception) {
+            logger.error("Unable to build game-state for match: $match")
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+
+        val playerViewDto = try {
+            gamestate.asPlayerView(userDetails.login)
+        } catch (e: Exception) {
+            logger.error("Unable to build player-view for game-state: $match")
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+
+        return playerViewDto
     }
 
     @Operation(description = "Play a command in a game.")

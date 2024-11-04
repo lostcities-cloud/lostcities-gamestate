@@ -31,4 +31,8 @@ class MatchEntity(
     val createdBy: String? = null,
     @LastModifiedBy
     var lastModifiedBy: String? = null,
-)
+) {
+    override fun toString(): String {
+        return "MatchEntity(id=$id, seed=$seed, player1='$player1', player2=$player2, firstPlayer=$firstPlayer, currentPlayer='$currentPlayer', commands=$commands, isReady=$isReady, isStarted=$isStarted, isCompleted=$isCompleted, createdDate=$createdDate, lastModifiedDate=$lastModifiedDate, createdBy=$createdBy, lastModifiedBy=$lastModifiedBy)"
+    }
+}
