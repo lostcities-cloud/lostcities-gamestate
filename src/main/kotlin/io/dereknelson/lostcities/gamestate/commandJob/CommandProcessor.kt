@@ -34,7 +34,6 @@ class CommandProcessor : ApplicationListener<CommandEvent> {
         try {
             gameService.play(game, event.playOrDiscard, user)
             gameService.play(game, event.draw, user)
-
         } catch (e: Exception) {
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
         }
