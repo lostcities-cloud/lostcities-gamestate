@@ -7,7 +7,9 @@ import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationListener
 import org.springframework.context.annotation.Lazy
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 
 private val logger = KotlinLogging.logger {}
@@ -29,8 +31,13 @@ class CommandProcessor : ApplicationListener<CommandEvent> {
             )
         }
 
-        gameService.play(game, event.playOrDiscard, user)
-        gameService.play(game, event.draw, user)
+        try {
+            gameService.play(game, event.playOrDiscard, user)
+            gameService.play(game, event.draw, user)
+
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
 
         logger.info("This is a test")
         logger.info("This is a test")

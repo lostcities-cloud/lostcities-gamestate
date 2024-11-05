@@ -47,11 +47,7 @@ class GameService(
 
         match.turns++
 
-        match.currentPlayer = if (match.currentPlayer != match.player1) {
-            match.player1
-        } else {
-            match.player2
-        }
+        match.currentPlayer = gameState.currentPlayer
 
         save(gameState)
 
