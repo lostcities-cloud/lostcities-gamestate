@@ -133,10 +133,10 @@ class GameEventService(
         )
     }
 
-    fun sendTurnChangeEvent(id: Long, login: String) {
+    fun sendTurnChangeEvent(matchEntity: MatchEntity) {
         rabbitTemplate.convertAndSend(
             TURN_CHANGE_EVENT,
-            objectMapper.writeValueAsBytes(TurnChangeEvent(id, login)),
+            objectMapper.writeValueAsBytes(TurnChangeEvent(matchEntity.id, matchEntity.currentPlayer, matchEntity.turns)),
         )
     }
 
@@ -171,6 +171,7 @@ class GameEventService(
         try {
             if (gameService.saveNewMatch(match) != null) {
                 logger.info("Match[${match.id}] saved match to repo")
+                sendTurnChangeEvent(match)
             } else {
                 logger.info("Match[${match.id}] already created")
             }

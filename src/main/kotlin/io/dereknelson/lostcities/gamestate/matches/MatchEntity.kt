@@ -24,6 +24,8 @@ class MatchEntity(
     @LastModifiedDate
     val lastModifiedDate: LocalDateTime? = null,
 ) {
+    var turns: Long = 0
+
     override fun toString(): String {
         return "MatchEntity(id=$id, seed=$seed, player1='$player1', player2=$player2, currentPlayer='$currentPlayer', commands=$commands, createdDate=$createdDate, lastModifiedDate=$lastModifiedDate)"
     }
