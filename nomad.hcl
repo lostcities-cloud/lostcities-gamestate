@@ -135,7 +135,7 @@ job "gamestate" {
           driver = "journald"
           options = [
             {
-              "job" = "lostcities-gamestate"
+              "tag" = "redis"
             }
           ]
 
