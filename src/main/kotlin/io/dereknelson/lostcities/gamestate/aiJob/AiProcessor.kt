@@ -6,7 +6,6 @@ import io.dereknelson.lostcities.gamestate.matches.CommandEntity
 import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.commands.CommandType
 import io.dereknelson.lostcities.models.state.Card
-import mu.KotlinLogging
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,6 +19,7 @@ import java.time.Instant
 @Component
 class AiProcessor : ApplicationListener<AiEvent> {
     private val logger: Log = LogFactory.getLog(this::class.java)
+
     @Autowired @Lazy
     private lateinit var gameService: GameService
 
@@ -32,7 +32,7 @@ class AiProcessor : ApplicationListener<AiEvent> {
         }
 
         var playOrDiscard: CommandDto?
-        val draw = CommandDto(CommandType.DRAW, card=null, color=null, player=game.currentPlayer)
+        val draw = CommandDto(CommandType.DRAW, card = null, color = null, player = game.currentPlayer)
 
         val card: Card? = game.currentHand().firstOrNull {
             game.canPlayCard(game.currentPlayer, it.id)
@@ -40,9 +40,9 @@ class AiProcessor : ApplicationListener<AiEvent> {
 
         if (card == null) {
             val discard = game.currentHand().first()
-            playOrDiscard = CommandDto(CommandType.DISCARD, card=discard.id, color=null, player=game.currentPlayer)
+            playOrDiscard = CommandDto(CommandType.DISCARD, card = discard.id, color = null, player = game.currentPlayer)
         } else {
-            playOrDiscard = CommandDto(CommandType.PLAY, card=card.id, color=null, player=game.currentPlayer)
+            playOrDiscard = CommandDto(CommandType.PLAY, card = card.id, color = null, player = game.currentPlayer)
         }
 
         try {

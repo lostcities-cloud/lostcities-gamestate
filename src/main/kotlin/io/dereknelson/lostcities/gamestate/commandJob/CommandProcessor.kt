@@ -14,14 +14,12 @@ import org.springframework.stereotype.Component
 import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 
-
 @Component
 class CommandProcessor(
     private val gameService: GameService,
-    private val applicationEventPublisher: ApplicationEventPublisher
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) : ApplicationListener<CommandEvent> {
     private val logger: Log = LogFactory.getLog(this::class.java)
-
 
     override fun onApplicationEvent(event: CommandEvent) {
         val game = gameService.build(event.match)

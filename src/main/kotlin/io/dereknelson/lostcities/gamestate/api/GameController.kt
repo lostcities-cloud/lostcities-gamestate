@@ -1,9 +1,8 @@
 package io.dereknelson.lostcities.gamestate.api
 
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
-import io.dereknelson.lostcities.gamestate.api.dto.TurnCommandRequest
-import io.dereknelson.lostcities.gamestate.AiEvent
 import io.dereknelson.lostcities.gamestate.CommandEvent
+import io.dereknelson.lostcities.gamestate.api.dto.TurnCommandRequest
 import io.dereknelson.lostcities.gamestate.matches.MatchService
 import io.dereknelson.lostcities.models.SimpleResponseMessage
 import io.swagger.v3.oas.annotations.Operation
@@ -100,8 +99,6 @@ class GameController(
                 turn.draw,
             ),
         )
-
-
 
         return SimpleResponseMessage("Command processed")
     }
