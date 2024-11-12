@@ -128,7 +128,6 @@ class GameEventService(
         .quorum()
         .build()!!
 
-
     @Bean
     @Qualifier(AI_PLAYER_REQUEST_EVENT)
     fun aiPlayerRequestEventQueue() = QueueBuilder
@@ -145,7 +144,6 @@ class GameEventService(
         .durable(AI_PLAYER_REQUEST_EVENT_DLQ)
         .quorum()
         .build()!!
-
 
     fun sendCommandError(error: CommandError) {
         rabbitTemplate.convertAndSend(
