@@ -39,6 +39,8 @@ class GameEventService(
         const val CREATE_GAME_QUEUE_DLQ = "create-game-dlq"
         const val COMMAND_ERROR_QUEUE = "command-error"
         const val COMMAND_ERROR_QUEUE_DLQ = "command-error-dlq"
+        const val AI_PLAYER_REQUEST_EVENT = "ai-player-request-event"
+        const val AI_PLAYER_REQUEST_EVENT_DLQ = "ai-player-event-request-dlq"
     }
 
     @Bean
@@ -126,6 +128,25 @@ class GameEventService(
         .quorum()
         .build()!!
 
+
+    @Bean
+    @Qualifier(AI_PLAYER_REQUEST_EVENT)
+    fun aiPlayerRequestEventQueue() = QueueBuilder
+        .durable(AI_PLAYER_REQUEST_EVENT)
+        .quorum()
+        .ttl(5000)
+        .withArgument("x-dead-letter-exchange", "")
+        .withArgument("x-dead-letter-routing-key", AI_PLAYER_REQUEST_EVENT_DLQ)
+        .build()!!
+
+    @Bean
+    @Qualifier(AI_PLAYER_REQUEST_EVENT_DLQ)
+    fun aiPlayerRequestEventQueueDlq() = QueueBuilder
+        .durable(AI_PLAYER_REQUEST_EVENT_DLQ)
+        .quorum()
+        .build()!!
+
+
     fun sendCommandError(error: CommandError) {
         rabbitTemplate.convertAndSend(
             COMMAND_ERROR_QUEUE,
@@ -141,6 +162,15 @@ class GameEventService(
     }
 
     fun sendPlayerEvents(playerEvents: Map<String, PlayerViewDto>) {
+        rabbitTemplate.convertAndSend(
+            PLAYER_EVENT,
+            objectMapper.writeValueAsBytes(playerEvents),
+        )
+
+        sendAiPlayerRequestEvent(playerEvents)
+    }
+
+    fun sendAiPlayerRequestEvent(playerEvents: Map<String, PlayerViewDto>) {
         rabbitTemplate.convertAndSend(
             PLAYER_EVENT,
             objectMapper.writeValueAsBytes(playerEvents),
