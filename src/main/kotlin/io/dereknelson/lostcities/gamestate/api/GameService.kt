@@ -41,7 +41,7 @@ class GameService(
         gameState: GameState,
         playOrDiscardCommand: CommandEntity,
         drawCommand: CommandEntity,
-    ) {
+    ): GameState {
         val match = gameState.matchEntity
         match.commands.add(playOrDiscardCommand)
         match.commands.add(drawCommand)
@@ -50,13 +50,15 @@ class GameService(
 
         match.currentPlayer = gameState.currentPlayer
 
-        save(gameState)
+        val newGamestate = save(gameState)
 
         matchEventService.sendTurnChangeEvent(match)
 
         if (gameState.isGameOver()) {
             endGame(gameState.id, gameState.calculateScores())
         }
+
+        return newGamestate
     }
 
     fun play(game: GameState, commandDto: CommandDto, user: String) {
@@ -86,7 +88,7 @@ class GameService(
         if (matchRepository.existsById(matchEntity.id)) {
             val checkMatch = matchRepository.findById(matchEntity.id).get()
 
-            return checkMatch.hash === matchEntity.hash
+            return checkMatch.hash == matchEntity.hash
         }
 
         return true
