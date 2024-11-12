@@ -31,6 +31,10 @@ class AiProcessor : ApplicationListener<AiEvent> {
             return
         }
 
+        if (!game.isCurrentPlayerAi()) {
+            logger.info("Current player is not an AI Player")
+        }
+
         var playOrDiscard: CommandDto?
         val draw = CommandDto(CommandType.DRAW, card = null, color = null, player = game.currentPlayer)
 

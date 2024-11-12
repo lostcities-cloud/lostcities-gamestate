@@ -33,6 +33,7 @@ class GameService(
         matchEntity.currentPlayer = matchEntity.player1
 
         val gameState = gameFactory.build(matchEntity)
+
         return save(gameState)
     }
 
@@ -69,9 +70,26 @@ class GameService(
     }
 
     private fun save(gameState: GameState): GameState {
+        if (!verifyMatchHash(gameState.matchEntity)) {
+            val message = "Game has been modified since matchEntity was read."
+            logger.warn(message)
+            throw RuntimeException(message)
+        }
+
+        gameState.matchEntity.hash = gameState.hashCode()
         matchRepository.save(gameState.matchEntity)
         sendPlayerEvents(gameState)
         return gameState
+    }
+
+    private fun verifyMatchHash(matchEntity: MatchEntity): Boolean {
+        if (matchRepository.existsById(matchEntity.id)) {
+            val checkMatch = matchRepository.findById(matchEntity.id).get()
+
+            return checkMatch.hash === matchEntity.hash
+        }
+
+        return false
     }
 
     private fun endGame(id: Long, scores: Map<String, Int>) {
