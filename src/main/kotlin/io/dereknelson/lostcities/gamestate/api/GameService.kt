@@ -89,7 +89,7 @@ class GameService(
             return checkMatch.hash === matchEntity.hash
         }
 
-        return false
+        return true
     }
 
     private fun endGame(id: Long, scores: Map<String, Int>) {
