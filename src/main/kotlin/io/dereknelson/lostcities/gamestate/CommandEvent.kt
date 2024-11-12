@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.commandJob
+package io.dereknelson.lostcities.gamestate
 
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity

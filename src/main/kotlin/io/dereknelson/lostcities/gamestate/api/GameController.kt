@@ -2,7 +2,8 @@ package io.dereknelson.lostcities.gamestate.api
 
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.gamestate.api.dto.TurnCommandRequest
-import io.dereknelson.lostcities.gamestate.commandJob.CommandEvent
+import io.dereknelson.lostcities.gamestate.AiEvent
+import io.dereknelson.lostcities.gamestate.CommandEvent
 import io.dereknelson.lostcities.gamestate.matches.MatchService
 import io.dereknelson.lostcities.models.SimpleResponseMessage
 import io.swagger.v3.oas.annotations.Operation
@@ -15,6 +16,7 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
@@ -80,6 +82,7 @@ class GameController(
     )
     @SecurityRequirement(name = "Bearer Authentication")
     @PatchMapping("/gamestate/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Transactional
     fun playCommand(
         @PathVariable id: Long,
         @RequestBody turn: TurnCommandRequest,
@@ -97,6 +100,8 @@ class GameController(
                 turn.draw,
             ),
         )
+
+
 
         return SimpleResponseMessage("Command processed")
     }

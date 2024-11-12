@@ -37,6 +37,27 @@ class GameState(
         drawXCards(players.user2!!, 8)
     }
 
+    fun currentHand(): List<Card> {
+        val currentHand = playerHands[currentPlayer]
+
+        if (currentHand.isNullOrEmpty()) {
+            return emptyList()
+        }
+
+
+        return currentHand.values.toList().sortedBy { it.value }
+    }
+
+    fun isCurrentPlayerAi(): Boolean {
+        if(currentPlayer == matchEntity.player1) {
+            return matchEntity.isPlayer1Ai
+        } else if (currentPlayer == matchEntity.player2) {
+            return matchEntity.isPlayer2Ai
+        } else {
+            return false
+        }
+    }
+
     fun isGameOver(): Boolean {
         return deck.isEmpty()
     }

@@ -17,6 +17,8 @@ class MatchEntity(
     var player2: String,
     var currentPlayer: String,
 
+    var isPlayer1Ai: Boolean = false,
+    var isPlayer2Ai: Boolean = false,
     val commands: LinkedHashSet<CommandEntity> = LinkedHashSet(),
 
     @CreatedDate

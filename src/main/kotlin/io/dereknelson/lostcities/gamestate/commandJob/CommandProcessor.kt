@@ -1,34 +1,34 @@
 package io.dereknelson.lostcities.gamestate.commandJob
 
+import io.dereknelson.lostcities.gamestate.AiEvent
+import io.dereknelson.lostcities.gamestate.CommandEvent
 import io.dereknelson.lostcities.gamestate.api.GameService
 import io.dereknelson.lostcities.gamestate.matches.CommandEntity
 import io.dereknelson.lostcities.models.commands.CommandDto
-import mu.KotlinLogging
-import org.springframework.beans.factory.annotation.Autowired
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.ApplicationListener
-import org.springframework.context.annotation.Lazy
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 
-private val logger = KotlinLogging.logger {}
 
 @Component
-class CommandProcessor : ApplicationListener<CommandEvent> {
+class CommandProcessor(
+    private val gameService: GameService,
+    private val applicationEventPublisher: ApplicationEventPublisher
+) : ApplicationListener<CommandEvent> {
+    private val logger: Log = LogFactory.getLog(this::class.java)
 
-    @Autowired @Lazy
-    private lateinit var gameService: GameService
 
     override fun onApplicationEvent(event: CommandEvent) {
         val game = gameService.build(event.match)
         val user = event.userDetails.login
 
         if (game.isGameOver()) {
-            logger.info(
-                "Game Already Completed, Player($user) ",
-                "{${event.playOrDiscard}} {${event.draw}}",
-            )
+            logger.info("Game Already Completed, Player($user) {${event.playOrDiscard}} {${event.draw}}")
         }
 
         try {
@@ -47,6 +47,10 @@ class CommandProcessor : ApplicationListener<CommandEvent> {
             event.playOrDiscard.asEntity(user),
             event.draw.asEntity(user),
         )
+
+        if (game.isCurrentPlayerAi()) {
+            applicationEventPublisher.publishEvent(AiEvent(game.matchEntity))
+        }
     }
 
     private fun CommandDto.asEntity(user: String): CommandEntity {
