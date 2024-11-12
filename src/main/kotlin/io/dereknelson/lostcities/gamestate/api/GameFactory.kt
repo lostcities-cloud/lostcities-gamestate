@@ -1,9 +1,9 @@
 package io.dereknelson.lostcities.gamestate.api
 
-import io.dereknelson.lostcities.common.model.match.UserPair
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.state.Card
 import io.dereknelson.lostcities.models.state.Color
+import io.dereknelson.lostcities.models.state.UserPair
 import org.springframework.stereotype.Service
 import java.util.stream.IntStream
 import kotlin.random.Random
@@ -20,7 +20,9 @@ class GameFactory {
             match.id,
             players = UserPair(
                 user1 = match.player1,
+                isPlayer1Ai = match.isPlayer1Ai,
                 user2 = match.player2,
+                isPlayer2Ai = match.isPlayer2Ai,
             ),
             LinkedHashSet(shuffledCards),
             match,

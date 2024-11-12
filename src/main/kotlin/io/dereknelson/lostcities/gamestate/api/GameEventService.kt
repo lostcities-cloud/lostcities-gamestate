@@ -1,10 +1,12 @@
 package io.dereknelson.lostcities.gamestate.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.dereknelson.lostcities.gamestate.AiEvent
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.commands.CommandError
 import io.dereknelson.lostcities.models.matches.FinishMatchEvent
 import io.dereknelson.lostcities.models.matches.TurnChangeEvent
+import io.dereknelson.lostcities.models.state.PlayerViewDto
 import org.slf4j.LoggerFactory
 import org.springframework.amqp.core.Message
 import org.springframework.amqp.core.QueueBuilder
@@ -12,6 +14,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
@@ -22,6 +25,7 @@ import java.time.ZoneOffset.UTC
 class GameEventService(
     private val objectMapper: ObjectMapper,
     private var rabbitTemplate: RabbitTemplate,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     @Autowired @Lazy
     private lateinit var gameService: GameService
@@ -200,11 +204,18 @@ class GameEventService(
             if (gameService.saveNewMatch(match) != null) {
                 logger.info("Match[${match.id}] saved match to repo")
                 sendTurnChangeEvent(match)
+                triggerAiPlayerForMatch(match)
             } else {
-                logger.info("Match[${match.id}] already created")
+                logger.warn("Match[${match.id}] already created")
             }
         } catch (e: Exception) {
             logger.error(e.message, e)
+        }
+    }
+
+    fun triggerAiPlayerForMatch(matchEntity: MatchEntity) {
+        if (matchEntity.isPlayer1Ai) {
+            applicationEventPublisher.publishEvent(AiEvent(matchEntity))
         }
     }
 }

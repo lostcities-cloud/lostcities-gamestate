@@ -1,6 +1,5 @@
 package io.dereknelson.lostcities.gamestate.api
 
-import io.dereknelson.lostcities.common.model.match.UserPair
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.matches.PlayerEvent
@@ -8,6 +7,8 @@ import io.dereknelson.lostcities.models.matches.PlayerEventType
 import io.dereknelson.lostcities.models.state.Card
 import io.dereknelson.lostcities.models.state.Color
 import io.dereknelson.lostcities.models.state.PlayArea
+import io.dereknelson.lostcities.models.state.PlayerViewDto
+import io.dereknelson.lostcities.models.state.UserPair
 import kotlin.collections.LinkedHashSet
 
 class GameState(
