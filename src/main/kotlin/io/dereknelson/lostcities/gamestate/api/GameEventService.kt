@@ -170,7 +170,7 @@ class GameEventService(
 
     fun sendAiPlayerRequestEvent(playerEvents: Map<String, PlayerViewDto>) {
         rabbitTemplate.convertAndSend(
-            PLAYER_EVENT,
+            AI_PLAYER_REQUEST_EVENT,
             objectMapper.writeValueAsBytes(playerEvents),
         )
     }
