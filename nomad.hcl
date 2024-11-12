@@ -95,7 +95,12 @@ job "gamestate" {
     service {
       name = "gamestate-management"
       port = "management-port"
-      tags = ["urlprefix-/management/gamestate/actuator"]
+
+      tags = [
+        "prometheus",
+        "urlprefix-/management/gamestate/actuator",
+        "metricspath-/management/gamestate/actuator/prometheus",
+      ]
 
       check {
         type                     = "http"
