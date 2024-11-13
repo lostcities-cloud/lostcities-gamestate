@@ -3,12 +3,15 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     jacoco
 
-    id("org.springframework.boot") version "3.2.+"
+    id("org.springframework.boot") version "3.3.+"
     id("org.owasp.dependencycheck") version "11.0.0"
     id("com.github.rising3.semver") version "0.8.2"
     id("io.spring.dependency-management") version "1.1.4"
     id("org.jetbrains.dokka") version "2.0.0-Beta"
     id("com.google.cloud.tools.jib") version "3.4.4"
+
+    id("org.openrewrite.rewrite") version "6.27.0"
+
 	kotlin("jvm") version "2.0.+"
 	kotlin("plugin.spring") version "2.0.+"
 }
@@ -16,7 +19,11 @@ plugins {
 group = "io.dereknelson.lostcities"
 version = project.property("version")!!
 
+rewrite {
+    activeRecipe("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3")
 
+    //exportDatatables = true
+}
 
 repositories {
 
@@ -58,6 +65,9 @@ configurations.matching { it.name.startsWith("dokka") }.configureEach {
 }
 
 dependencies {
+    rewrite("org.openrewrite:rewrite-kotlin:1.21.2")
+    rewrite("org.openrewrite.recipe:rewrite-spring:5.22.0")
+
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.20")
@@ -75,13 +85,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-	implementation("org.apache.commons:commons-pool2:2.11.1")
 	implementation("redis.clients:jedis:3.6.2")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-    implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations")
 
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
 	implementation("org.springframework.boot:spring-boot-starter-web")
