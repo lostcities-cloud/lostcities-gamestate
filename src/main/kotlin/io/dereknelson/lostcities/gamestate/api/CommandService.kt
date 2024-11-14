@@ -4,33 +4,38 @@ import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.commands.CommandError
 import io.dereknelson.lostcities.models.commands.CommandType
 import io.dereknelson.lostcities.models.state.Color
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.springframework.stereotype.Service
 
 @Service
 class CommandService(
     private val gameEventService: GameEventService,
 ) {
+    private val logger: Log = LogFactory.getLog(this::class.java)
 
     fun execCommand(game: GameState, commandDto: CommandDto, user: String) {
         try {
             val (type: CommandType, card: String?, color: Color?) = commandDto
             if (game.currentPlayer != user) {
-                CommandError(
+                gameEventService.sendCommandError(CommandError(
                     game.id,
                     user,
                     commandDto,
                     "Not your turn.",
-                ).send()
+                ))
+                logger.info("Not your turn")
                 return
             }
 
             if (game.isGameOver()) {
-                CommandError(
+                gameEventService.sendCommandError(CommandError(
                     game.id,
                     user,
                     commandDto,
                     "Game over.",
-                ).send()
+                ))
+                logger.info("Game over.")
                 return
             }
 
@@ -41,12 +46,13 @@ class CommandService(
                     game.log.addLast(commandDto)
                     game.playCard(user, card)
                 } else {
-                    CommandError(
+                    logger.info("Unable to play card $card")
+                    gameEventService.sendCommandError(CommandError(
                         game.id,
                         user,
                         commandDto,
                         "Unable to play card.",
-                    ).send()
+                    ))
                     throw Exception()
                 }
             } else if (type === CommandType.DRAW && color !== null) {
@@ -62,27 +68,27 @@ class CommandService(
                     game.log.addLast(commandDto)
                     game.discard(user, card)
                 } else {
-                    CommandError(
+                    gameEventService.sendCommandError(CommandError(
                         game.id,
                         user,
                         commandDto,
                         "Unable to discard card.",
-                    ).send()
+                    ))
+                    logger.info("Unable to discard card $card")
 
                     throw Exception()
                 }
             }
         } catch (e: Exception) {
-            CommandError(
+            gameEventService.sendCommandError(CommandError(
                 game.id,
                 user,
                 commandDto,
                 "Unable to execute command.",
-            ).send()
+            ))
 
             throw e
         }
     }
 
-    private fun CommandError.send() = gameEventService.sendCommandError(this)
 }
