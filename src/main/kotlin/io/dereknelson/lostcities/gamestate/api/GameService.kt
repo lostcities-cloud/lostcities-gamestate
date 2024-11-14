@@ -77,11 +77,11 @@ class GameService(
     }
 
     private fun save(gameState: GameState): GameState {
-        //if (!verifyMatchHash(gameState.matchEntity)) {
+        // if (!verifyMatchHash(gameState.matchEntity)) {
         //    val message = "Game has been modified since matchEntity was read."
         //    logger.warn(message)
         //    throw RuntimeException(message)
-        //}
+        // }
 
         gameState.matchEntity.hash = gameState.hashCode()
         matchRepository.save(gameState.matchEntity)
