@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.matches
+package io.dereknelson.lostcities.gamestate.gamestate.matches
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.springframework.data.annotation.*

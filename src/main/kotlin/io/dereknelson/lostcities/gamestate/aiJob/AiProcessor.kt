@@ -1,10 +1,9 @@
-package io.dereknelson.lostcities.gamestate.commandJob
+package io.dereknelson.lostcities.gamestate.aiJob
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.dereknelson.lostcities.gamestate.api.GameEventService.Companion.AI_PLAYER_REQUEST_EVENT
-import io.dereknelson.lostcities.gamestate.api.GameService
-import io.dereknelson.lostcities.gamestate.matches.CommandEntity
-import io.dereknelson.lostcities.gamestate.matches.MatchEntity
+import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.AI_PLAYER_REQUEST_EVENT
+import io.dereknelson.lostcities.gamestate.gamestate.GameService
+import io.dereknelson.lostcities.gamestate.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.commands.CommandType
 import io.dereknelson.lostcities.models.state.Card
@@ -17,7 +16,6 @@ import org.springframework.context.annotation.Lazy
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ResponseStatusException
-import java.time.Instant
 
 @Component
 class AiProcessor(
@@ -42,6 +40,7 @@ class AiProcessor(
 
         if (!game.isCurrentPlayerAi()) {
             logger.info("GAME=${match.id} PLAYER=${match.currentPlayer} Current player is not an AI Player")
+            return
         }
 
         var playOrDiscard: CommandDto
@@ -69,12 +68,8 @@ class AiProcessor(
 
         gameService.saveTurn(
             game,
-            playOrDiscard.asEntity(game.currentPlayer),
-            draw.asEntity(game.currentPlayer),
+            playOrDiscard,
+            draw,
         )
-    }
-
-    private fun CommandDto.asEntity(user: String): CommandEntity {
-        return CommandEntity(user, type, card, color, Instant.now().toEpochMilli())
     }
 }

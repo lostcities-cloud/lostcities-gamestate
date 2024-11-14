@@ -1,7 +1,7 @@
-package io.dereknelson.lostcities.gamestate.api
+package io.dereknelson.lostcities.gamestate.gamestate
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.dereknelson.lostcities.gamestate.matches.MatchEntity
+import io.dereknelson.lostcities.gamestate.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.commands.CommandError
 import io.dereknelson.lostcities.models.matches.FinishMatchEvent
 import io.dereknelson.lostcities.models.matches.TurnChangeEvent
@@ -166,13 +166,6 @@ class GameEventService(
         rabbitTemplate.convertAndSend(
             PLAYER_EVENT,
             objectMapper.writeValueAsBytes(playerEvents),
-        )
-    }
-
-    fun sendAiPlayerRequestEvent(matchEntity: MatchEntity) {
-        rabbitTemplate.convertAndSend(
-            AI_PLAYER_REQUEST_EVENT,
-            objectMapper.writeValueAsBytes(matchEntity),
         )
     }
 

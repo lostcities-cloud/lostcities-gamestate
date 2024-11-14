@@ -1,5 +1,6 @@
-package io.dereknelson.lostcities.gamestate.matches
+package io.dereknelson.lostcities.gamestate.gamestate.matches
 
+import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.commands.CommandType
 import io.dereknelson.lostcities.models.state.Color
 import java.time.Instant
@@ -13,6 +14,12 @@ class CommandEntity(
     val color: Color?,
     val createdDate: Long,
 ) {
+    companion object {
+        fun fromDto(dto: CommandDto): CommandEntity {
+            return CommandEntity(dto.player!!, dto.type, dto.card, dto.color, Instant.now().toEpochMilli())
+        }
+    }
+
     fun received(): LocalDateTime {
         return LocalDateTime.ofInstant(
             Instant.ofEpochMilli(this.createdDate),

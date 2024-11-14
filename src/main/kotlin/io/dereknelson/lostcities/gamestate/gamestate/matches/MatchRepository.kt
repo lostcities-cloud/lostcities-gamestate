@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.matches
+package io.dereknelson.lostcities.gamestate.gamestate.matches
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository

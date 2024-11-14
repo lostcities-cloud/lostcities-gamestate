@@ -1,24 +1,17 @@
 package io.dereknelson.lostcities.gamestate.commandJob
 
 import io.dereknelson.lostcities.gamestate.CommandEvent
-import io.dereknelson.lostcities.gamestate.api.GameEventService
-import io.dereknelson.lostcities.gamestate.api.GameService
-import io.dereknelson.lostcities.gamestate.matches.CommandEntity
-import io.dereknelson.lostcities.models.commands.CommandDto
+import io.dereknelson.lostcities.gamestate.gamestate.GameService
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.ApplicationListener
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ResponseStatusException
-import java.time.Instant
 
 @Component
 class CommandProcessor(
     private val gameService: GameService,
-    private val gameEventService: GameEventService,
-    private val applicationEventPublisher: ApplicationEventPublisher,
 ) : ApplicationListener<CommandEvent> {
     private val logger: Log = LogFactory.getLog(this::class.java)
 
@@ -40,12 +33,8 @@ class CommandProcessor(
 
         gameService.saveTurn(
             game,
-            event.playOrDiscard.asEntity(user),
-            event.draw.asEntity(user),
+            event.playOrDiscard,
+            event.draw,
         )
-    }
-
-    private fun CommandDto.asEntity(user: String): CommandEntity {
-        return CommandEntity(user, type, card, color, Instant.now().toEpochMilli())
     }
 }

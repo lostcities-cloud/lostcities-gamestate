@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.api
+package io.dereknelson.lostcities.gamestate.gamestate
 
 import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.commands.CommandError

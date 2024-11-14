@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.api.dto
+package io.dereknelson.lostcities.gamestate.gamestate.dto
 
 import io.dereknelson.lostcities.models.commands.CommandDto
 

@@ -1,6 +1,6 @@
-package io.dereknelson.lostcities.gamestate.api
+package io.dereknelson.lostcities.gamestate.gamestate
 
-import io.dereknelson.lostcities.gamestate.matches.MatchEntity
+import io.dereknelson.lostcities.gamestate.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.state.Card
 import io.dereknelson.lostcities.models.state.Color
 import io.dereknelson.lostcities.models.state.UserPair

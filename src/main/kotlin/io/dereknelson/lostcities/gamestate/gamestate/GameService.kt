@@ -1,10 +1,10 @@
-package io.dereknelson.lostcities.gamestate.api
+package io.dereknelson.lostcities.gamestate.gamestate
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.dereknelson.lostcities.gamestate.api.GameEventService.Companion.AI_PLAYER_REQUEST_EVENT
-import io.dereknelson.lostcities.gamestate.matches.CommandEntity
-import io.dereknelson.lostcities.gamestate.matches.MatchEntity
-import io.dereknelson.lostcities.gamestate.matches.MatchRepository
+import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.AI_PLAYER_REQUEST_EVENT
+import io.dereknelson.lostcities.gamestate.gamestate.matches.CommandEntity
+import io.dereknelson.lostcities.gamestate.gamestate.matches.MatchEntity
+import io.dereknelson.lostcities.gamestate.gamestate.matches.MatchRepository
 import io.dereknelson.lostcities.models.commands.CommandDto
 import org.slf4j.LoggerFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
@@ -44,12 +44,12 @@ class GameService(
 
     fun saveTurn(
         gameState: GameState,
-        playOrDiscardCommand: CommandEntity,
-        drawCommand: CommandEntity,
+        playOrDiscardCommand: CommandDto,
+        drawCommand: CommandDto,
     ): GameState {
         val match = gameState.matchEntity
-        match.commands.add(playOrDiscardCommand)
-        match.commands.add(drawCommand)
+        match.commands.add(CommandEntity.fromDto(playOrDiscardCommand))
+        match.commands.add(CommandEntity.fromDto(drawCommand))
 
         match.turns++
 
