@@ -109,6 +109,7 @@ class GameService(
         this.matchEntity.commands.forEach { command ->
             val commandDto = command.toDto()
             try {
+                logger.info("GAME=$id PLAYER=${this.matchEntity.currentPlayer}, Playing Forward command=$commandDto")
                 commandService.execCommand(
                     this,
                     commandDto,
