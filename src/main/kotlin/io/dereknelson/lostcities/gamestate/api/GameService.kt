@@ -1,10 +1,13 @@
 package io.dereknelson.lostcities.gamestate.api
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import io.dereknelson.lostcities.gamestate.api.GameEventService.Companion.END_GAME_EVENT
 import io.dereknelson.lostcities.gamestate.matches.CommandEntity
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.gamestate.matches.MatchRepository
 import io.dereknelson.lostcities.models.commands.CommandDto
 import org.slf4j.LoggerFactory
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,6 +16,8 @@ class GameService(
     private val gameFactory: GameFactory,
     private val matchEventService: GameEventService,
     private val commandService: CommandService,
+    private val rabbitTemplate: RabbitTemplate,
+    private val objectMapper: ObjectMapper,
 ) {
     private val logger = LoggerFactory.getLogger(GameService::class.java)
 
@@ -81,6 +86,8 @@ class GameService(
         gameState.matchEntity.hash = gameState.hashCode()
         matchRepository.save(gameState.matchEntity)
         sendPlayerEvents(gameState)
+        triggerAiPlayerForMatch(gameState)
+
         return gameState
     }
 
@@ -123,4 +130,13 @@ class GameService(
         card = this.card,
         color = this.color,
     )
+
+    private fun triggerAiPlayerForMatch(gameState: GameState) {
+        if (gameState.isCurrentPlayerAi()) {
+            rabbitTemplate.convertAndSend(
+                END_GAME_EVENT,
+                objectMapper.writeValueAsBytes(gameState.matchEntity),
+            )
+        }
+    }
 }

@@ -49,12 +49,16 @@ class GameState(
     }
 
     fun isCurrentPlayerAi(): Boolean {
-        if (currentPlayer == matchEntity.player1) {
-            return matchEntity.isPlayer1Ai
-        } else if (currentPlayer == matchEntity.player2) {
-            return matchEntity.isPlayer2Ai
-        } else {
-            return false
+        return when (matchEntity.currentPlayer) {
+            matchEntity.player1 -> {
+                matchEntity.isPlayer1Ai
+            }
+            matchEntity.player2 -> {
+                matchEntity.isPlayer2Ai
+            }
+            else -> {
+                false
+            }
         }
     }
 

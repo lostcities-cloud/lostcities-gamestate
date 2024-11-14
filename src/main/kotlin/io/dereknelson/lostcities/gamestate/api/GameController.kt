@@ -1,7 +1,6 @@
 package io.dereknelson.lostcities.gamestate.api
 
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
-import io.dereknelson.lostcities.gamestate.AiEvent
 import io.dereknelson.lostcities.gamestate.CommandEvent
 import io.dereknelson.lostcities.gamestate.api.dto.TurnCommandRequest
 import io.dereknelson.lostcities.gamestate.matches.MatchService
@@ -62,11 +61,6 @@ class GameController(
         } catch (e: Exception) {
             logger.error("Unable to build game-state for match: $match")
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-
-        if (gamestate.isCurrentPlayerAi()) {
-            logger.info("Reading game with active Ai player. Triggering ai event.")
-            applicationEventPublisher.publishEvent(AiEvent(gamestate.matchEntity))
         }
 
         val playerViewDto = try {

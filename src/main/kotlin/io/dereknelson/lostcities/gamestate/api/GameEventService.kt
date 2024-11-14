@@ -1,7 +1,6 @@
 package io.dereknelson.lostcities.gamestate.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.dereknelson.lostcities.gamestate.AiEvent
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.commands.CommandError
 import io.dereknelson.lostcities.models.matches.FinishMatchEvent
@@ -168,14 +167,12 @@ class GameEventService(
             PLAYER_EVENT,
             objectMapper.writeValueAsBytes(playerEvents),
         )
-
-        sendAiPlayerRequestEvent(playerEvents)
     }
 
-    fun sendAiPlayerRequestEvent(playerEvents: Map<String, PlayerViewDto>) {
+    fun sendAiPlayerRequestEvent(matchEntity: MatchEntity) {
         rabbitTemplate.convertAndSend(
             AI_PLAYER_REQUEST_EVENT,
-            objectMapper.writeValueAsBytes(playerEvents),
+            objectMapper.writeValueAsBytes(matchEntity),
         )
     }
 
@@ -204,18 +201,11 @@ class GameEventService(
             if (gameService.saveNewMatch(match) != null) {
                 logger.info("Match[${match.id}] saved match to repo")
                 sendTurnChangeEvent(match)
-                triggerAiPlayerForMatch(match)
             } else {
                 logger.warn("Match[${match.id}] already created")
             }
         } catch (e: Exception) {
             logger.error(e.message, e)
-        }
-    }
-
-    fun triggerAiPlayerForMatch(matchEntity: MatchEntity) {
-        if (matchEntity.isPlayer1Ai) {
-            applicationEventPublisher.publishEvent(AiEvent(matchEntity))
         }
     }
 }

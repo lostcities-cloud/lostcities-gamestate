@@ -119,6 +119,7 @@ job "gamestate" {
 
       env {
         SPRING_PROFILES_ACTIVE = "dev"
+        JAVA_OPTS="-XX:+UseSerialGC -Xss512k -XX:MaxRAM=72m"
       }
 
       resources {
