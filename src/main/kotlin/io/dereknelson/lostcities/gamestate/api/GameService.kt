@@ -132,7 +132,9 @@ class GameService(
     )
 
     private fun triggerAiPlayerForMatch(gameState: GameState) {
+        logger.info("Checking for ai player")
         if (gameState.isCurrentPlayerAi()) {
+            logger.info("Triggering ai turn")
             rabbitTemplate.convertAndSend(
                 END_GAME_EVENT,
                 objectMapper.writeValueAsBytes(gameState.matchEntity),

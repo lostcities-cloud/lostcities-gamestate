@@ -30,6 +30,7 @@ class AiProcessor(
 
     @RabbitListener(queues = [AI_PLAYER_REQUEST_EVENT])
     fun createGame(gameMessage: Message) {
+        logger.info("Starting AI turn")
         val match = objectMapper.readValue(gameMessage.body, MatchEntity::class.java)
 
         val game = gameService.build(match)
