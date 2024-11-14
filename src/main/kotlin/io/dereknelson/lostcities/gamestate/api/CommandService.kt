@@ -44,9 +44,8 @@ class CommandService(
             }
 
             if (type === CommandType.PLAY) {
-                if (game.isCardInHand(user, card!!) &&
-                    game.canPlayCard(user, card)
-                ) {
+                if (game.isCardInHand(user, card!!) && game.canPlayCard(user, card)) {
+                    logger.info("GAME=${game.id} PLAYER=${game.currentPlayer} Playing Card $card")
                     game.log.addLast(commandDto)
                     game.playCard(user, card)
                 } else {
