@@ -23,10 +23,10 @@ class CommandService(
                         game.id,
                         user,
                         commandDto,
-                        "Not your turn.",
+                        "Game: ${game.id} | Not your turn.",
                     ),
                 )
-                logger.info("Not your turn")
+                logger.info("GAME=${game.id} PLAYER=${game.currentPlayer} Not your turn")
                 return
             }
 
@@ -39,7 +39,7 @@ class CommandService(
                         "Game over.",
                     ),
                 )
-                logger.info("Game over.")
+                logger.info("GAME=${game.id} PLAYER=${game.currentPlayer} Game over.")
                 return
             }
 
@@ -50,7 +50,7 @@ class CommandService(
                     game.log.addLast(commandDto)
                     game.playCard(user, card)
                 } else {
-                    logger.info("Unable to play card $card")
+                    logger.info("GAME=${game.id} PLAYER=${game.currentPlayer} Unable to play card $card")
                     gameEventService.sendCommandError(
                         CommandError(
                             game.id,
@@ -62,18 +62,22 @@ class CommandService(
                     throw Exception()
                 }
             } else if (type === CommandType.DRAW && color !== null) {
+                logger.info("GAME=${game.id} PLAYER=${game.currentPlayer} Draw from $color")
                 game.log.addLast(commandDto)
                 game.drawFromDiscard(user, color)
                 game.endTurn()
             } else if (type === CommandType.DRAW) {
+                logger.info("GAME=${game.id} PLAYER=${game.currentPlayer} Draw from deck")
                 game.log.addLast(commandDto)
                 game.drawCard(user)
                 game.endTurn()
             } else if (type === CommandType.DISCARD) {
                 if (game.isCardInHand(user, card!!)) {
+                    logger.info("GAME=${game.id} PLAYER=${game.currentPlayer} Discard $card")
                     game.log.addLast(commandDto)
                     game.discard(user, card)
                 } else {
+                    logger.info("GAME=${game.id} PLAYER=${game.currentPlayer} Unable to discard $card")
                     gameEventService.sendCommandError(
                         CommandError(
                             game.id,
