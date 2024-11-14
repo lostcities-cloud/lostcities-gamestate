@@ -9,6 +9,8 @@ import io.dereknelson.lostcities.models.state.Color
 import io.dereknelson.lostcities.models.state.PlayArea
 import io.dereknelson.lostcities.models.state.PlayerViewDto
 import io.dereknelson.lostcities.models.state.UserPair
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import kotlin.collections.LinkedHashSet
 
 class GameState(
@@ -17,6 +19,7 @@ class GameState(
     private val deck: LinkedHashSet<Card>,
     val matchEntity: MatchEntity,
 ) {
+    private val logger: Log = LogFactory.getLog(this::class.java)
     val playerEvents = mutableListOf<PlayerEvent>()
     val log = mutableListOf<CommandDto>()
     val playerAreas: Map<String, PlayArea> = mapOf(
@@ -139,11 +142,15 @@ class GameState(
         val current = nextPlayer
         val next = currentPlayer
 
+        logger.info("GAME=$id PLAYER=$currentPlayer End Of Turn")
+
         playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.END_TURN, null, null))
-        playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.START_TURN, null, null))
 
         currentPlayer = current
         nextPlayer = next
+
+        playerEvents.add(PlayerEvent(id, currentPlayer, PlayerEventType.START_TURN, null, null))
+        logger.info("GAME=$id PLAYER=$currentPlayer Start Of Turn")
     }
 
     private fun calculateScoreForPlayer(player: String): Int {
