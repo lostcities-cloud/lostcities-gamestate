@@ -1,6 +1,7 @@
 package io.dereknelson.lostcities.gamestate.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.dereknelson.lostcities.gamestate.api.GameEventService.Companion.AI_PLAYER_REQUEST_EVENT
 import io.dereknelson.lostcities.gamestate.api.GameEventService.Companion.END_GAME_EVENT
 import io.dereknelson.lostcities.gamestate.matches.CommandEntity
 import io.dereknelson.lostcities.gamestate.matches.MatchEntity
@@ -136,7 +137,7 @@ class GameService(
         if (gameState.isCurrentPlayerAi()) {
             logger.info("Triggering ai turn")
             rabbitTemplate.convertAndSend(
-                END_GAME_EVENT,
+                AI_PLAYER_REQUEST_EVENT,
                 objectMapper.writeValueAsBytes(gameState.matchEntity),
             )
         }
