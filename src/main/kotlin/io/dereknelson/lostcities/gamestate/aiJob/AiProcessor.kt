@@ -44,8 +44,8 @@ class AiProcessor(
             logger.info("GAME=${match.id} PLAYER=${match.currentPlayer} Current player is not an AI Player")
         }
 
-        val playOrDiscard: CommandDto
-        val draw = CommandDto(CommandType.DRAW, card = null, color = null, player = game.currentPlayer)
+        var playOrDiscard: CommandDto
+        val draw = CommandDto(CommandType.DRAW, card = null, color = null, player = game.currentPlayer, )
 
         val card: Card? = game.currentHand().firstOrNull {
             game.canPlayCard(game.currentPlayer, it.id)
