@@ -29,19 +29,20 @@ class AiProcessor(
     private lateinit var gameService: GameService
 
     @RabbitListener(queues = [AI_PLAYER_REQUEST_EVENT])
-    fun createGame(gameMessage: Message) {
-        logger.info("Starting AI turn")
+    fun playAiTurn(gameMessage: Message) {
+
         val match = objectMapper.readValue(gameMessage.body, MatchEntity::class.java)
 
+        logger.info("GAME=${match.id} PLAYER=${match.currentPlayer} Starting AI turn")
         val game = gameService.build(match)
 
         if (game.isGameOver()) {
-            logger.info("Game Already Completed")
+            logger.info("GAME=${match.id} PLAYER=${match.currentPlayer} Game Already Completed")
             return
         }
 
         if (!game.isCurrentPlayerAi()) {
-            logger.info("Current player is not an AI Player")
+            logger.info("GAME=${match.id} PLAYER=${match.currentPlayer} Current player is not an AI Player")
         }
 
         val playOrDiscard: CommandDto
@@ -59,6 +60,8 @@ class AiProcessor(
         }
 
         try {
+            logger.info("GAME=${match.id} PLAYER=${match.currentPlayer} Command $playOrDiscard")
+            logger.info("GAME=${match.id} PLAYER=${match.currentPlayer} Command $draw")
             gameService.play(game, playOrDiscard, game.currentPlayer)
             gameService.play(game, draw, game.currentPlayer)
         } catch (e: Exception) {

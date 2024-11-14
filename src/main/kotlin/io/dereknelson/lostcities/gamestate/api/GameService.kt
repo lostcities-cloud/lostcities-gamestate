@@ -115,7 +115,7 @@ class GameService(
                     this.currentPlayer,
                 )
             } catch (e: Exception) {
-                logger.error("Command failed: $command")
+                logger.error("GAME=$id Command failed: $command")
             }
         }
 
