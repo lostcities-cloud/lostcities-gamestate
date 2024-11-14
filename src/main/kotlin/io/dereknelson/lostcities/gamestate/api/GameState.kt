@@ -49,7 +49,7 @@ class GameState(
     }
 
     fun isCurrentPlayerAi(): Boolean {
-        return when (matchEntity.currentPlayer) {
+        return when (currentPlayer) {
             matchEntity.player1 -> {
                 matchEntity.isPlayer1Ai
             }
