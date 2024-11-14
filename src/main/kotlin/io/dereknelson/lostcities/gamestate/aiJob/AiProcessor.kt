@@ -45,7 +45,7 @@ class AiProcessor(
         }
 
         var playOrDiscard: CommandDto
-        val draw = CommandDto(CommandType.DRAW, card = null, color = null, player = game.currentPlayer, )
+        val draw = CommandDto(CommandType.DRAW, card = null, color = null, player = game.currentPlayer)
 
         val card: Card? = game.currentHand().firstOrNull {
             game.canPlayCard(game.currentPlayer, it.id)
