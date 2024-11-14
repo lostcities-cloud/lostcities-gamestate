@@ -18,23 +18,27 @@ class CommandService(
         try {
             val (type: CommandType, card: String?, color: Color?) = commandDto
             if (game.currentPlayer != user) {
-                gameEventService.sendCommandError(CommandError(
-                    game.id,
-                    user,
-                    commandDto,
-                    "Not your turn.",
-                ))
+                gameEventService.sendCommandError(
+                    CommandError(
+                        game.id,
+                        user,
+                        commandDto,
+                        "Not your turn.",
+                    ),
+                )
                 logger.info("Not your turn")
                 return
             }
 
             if (game.isGameOver()) {
-                gameEventService.sendCommandError(CommandError(
-                    game.id,
-                    user,
-                    commandDto,
-                    "Game over.",
-                ))
+                gameEventService.sendCommandError(
+                    CommandError(
+                        game.id,
+                        user,
+                        commandDto,
+                        "Game over.",
+                    ),
+                )
                 logger.info("Game over.")
                 return
             }
@@ -47,12 +51,14 @@ class CommandService(
                     game.playCard(user, card)
                 } else {
                     logger.info("Unable to play card $card")
-                    gameEventService.sendCommandError(CommandError(
-                        game.id,
-                        user,
-                        commandDto,
-                        "Unable to play card.",
-                    ))
+                    gameEventService.sendCommandError(
+                        CommandError(
+                            game.id,
+                            user,
+                            commandDto,
+                            "Unable to play card.",
+                        ),
+                    )
                     throw Exception()
                 }
             } else if (type === CommandType.DRAW && color !== null) {
@@ -68,27 +74,30 @@ class CommandService(
                     game.log.addLast(commandDto)
                     game.discard(user, card)
                 } else {
-                    gameEventService.sendCommandError(CommandError(
-                        game.id,
-                        user,
-                        commandDto,
-                        "Unable to discard card.",
-                    ))
+                    gameEventService.sendCommandError(
+                        CommandError(
+                            game.id,
+                            user,
+                            commandDto,
+                            "Unable to discard card.",
+                        ),
+                    )
                     logger.info("Unable to discard card $card")
 
                     throw Exception()
                 }
             }
         } catch (e: Exception) {
-            gameEventService.sendCommandError(CommandError(
-                game.id,
-                user,
-                commandDto,
-                "Unable to execute command.",
-            ))
+            gameEventService.sendCommandError(
+                CommandError(
+                    game.id,
+                    user,
+                    commandDto,
+                    "Unable to execute command.",
+                ),
+            )
 
             throw e
         }
     }
-
 }

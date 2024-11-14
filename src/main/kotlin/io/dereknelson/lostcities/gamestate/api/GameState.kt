@@ -39,7 +39,6 @@ class GameState(
             matchEntity.currentPlayer = value
         }
 
-
     private var nextPlayer: String = players.user2!!
 
     init {
