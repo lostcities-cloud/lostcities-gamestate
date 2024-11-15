@@ -77,6 +77,7 @@ class GameService(
     }
 
     private fun save(gameState: GameState): GameState {
+        logger.info("GAME=${gameState.id} Saving gamestate")
         // if (!verifyMatchHash(gameState.matchEntity)) {
         //    val message = "Game has been modified since matchEntity was read."
         //    logger.warn(message)
@@ -85,7 +86,9 @@ class GameService(
 
         gameState.matchEntity.hash = gameState.hashCode()
         matchRepository.save(gameState.matchEntity)
+        logger.info("GAME=${gameState.id} Sending player events")
         sendPlayerEvents(gameState)
+        logger.info("GAME=${gameState.id} Sending ai requests")
         triggerAiPlayerForMatch(gameState)
 
         return gameState
