@@ -1,9 +1,9 @@
 package io.dereknelson.lostcities.gamestate.aiJob
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.dereknelson.lostcities.gamestate.AiEvent
 import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.AI_PLAYER_REQUEST_EVENT
 import io.dereknelson.lostcities.gamestate.gamestate.GameService
-import io.dereknelson.lostcities.gamestate.gamestate.MatchEntity
 import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.commands.CommandType
 import io.dereknelson.lostcities.models.state.Card
@@ -28,18 +28,17 @@ class AiProcessor(
 
     @RabbitListener(queues = [AI_PLAYER_REQUEST_EVENT])
     fun playAiTurn(gameMessage: Message) {
-        val match = objectMapper.readValue(gameMessage.body, MatchEntity::class.java)
+        val aiEvent = objectMapper.readValue(gameMessage.body, AiEvent::class.java)
 
-        logger.info("GAME=${match.id} PLAYER=${match.currentPlayer} Starting AI turn")
-        val game = gameService.build(match)
-
+        val game = gameService.getGame(aiEvent.id)
+        logger.info("GAME=${aiEvent.id} PLAYER=${game.currentPlayer} Starting AI turn")
         if (game.isGameOver()) {
-            logger.info("GAME=${match.id} PLAYER=${match.currentPlayer} Game Already Completed")
+            logger.info("GAME=${aiEvent.id} PLAYER=${game.currentPlayer} Game Already Completed")
             return
         }
 
         if (!game.isCurrentPlayerAi()) {
-            logger.info("GAME=${match.id} PLAYER=${match.currentPlayer} Current player is not an AI Player")
+            logger.info("GAME=${aiEvent.id} PLAYER=${game.currentPlayer} Current player is not an AI Player")
             return
         }
 
@@ -58,8 +57,8 @@ class AiProcessor(
         }
 
         try {
-            logger.info("GAME=${match.id} PLAYER=${match.currentPlayer} Command $playOrDiscard")
-            logger.info("GAME=${match.id} PLAYER=${match.currentPlayer} Command $draw")
+            logger.info("GAME=${aiEvent.id} PLAYER=${game.currentPlayer} Command $playOrDiscard")
+            logger.info("GAME=${aiEvent.id} PLAYER=${game.currentPlayer} Command $draw")
             gameService.play(game, playOrDiscard, game.currentPlayer)
             gameService.play(game, draw, game.currentPlayer)
         } catch (e: Exception) {

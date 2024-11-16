@@ -1,6 +1,7 @@
 package io.dereknelson.lostcities.gamestate.gamestate
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.dereknelson.lostcities.gamestate.AiEvent
 import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.AI_PLAYER_REQUEST_EVENT
 import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.TURN_CHANGE_EVENT
 import io.dereknelson.lostcities.models.commands.CommandDto
@@ -8,7 +9,6 @@ import io.dereknelson.lostcities.models.matches.TurnChangeEvent
 import org.slf4j.LoggerFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Service
-import java.util.Optional
 
 @Service
 class GameService internal constructor(
@@ -25,10 +25,10 @@ class GameService internal constructor(
         return matchRepository.existsById(id)
     }
 
-    fun getGame(id: Long): Optional<GameState> {
+    fun getGame(id: Long): GameState {
         return matchRepository.findById(id).map {
             build(it)
-        }
+        }.get()
     }
 
     internal fun build(matchEntity: MatchEntity): GameState {
@@ -154,7 +154,7 @@ class GameService internal constructor(
             logger.info("Triggering ai turn")
             rabbitTemplate.convertAndSend(
                 AI_PLAYER_REQUEST_EVENT,
-                objectMapper.writeValueAsBytes(gameState.matchEntity),
+                objectMapper.writeValueAsBytes(AiEvent(gameState.id)),
             )
         }
     }

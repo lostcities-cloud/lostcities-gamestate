@@ -32,7 +32,6 @@ import org.springframework.web.server.ResponseStatusException
     ],
 )
 class GameController(
-    private var applicationEventPublisher: ApplicationEventPublisher,
     private var gameService: GameService,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -50,11 +49,12 @@ class GameController(
         @PathVariable id: Long,
         @AuthenticationPrincipal @Parameter(hidden = true) userDetails: LostCitiesUserDetails,
     ): PlayerViewDto {
-        val gamestate = gameService.getGame(id)
-            .orElseThrow {
-                logger.error("Unable to build game-state for match: $id")
-                throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
-            }
+        val gamestate = try {
+            gameService.getGame(id)
+        } catch (e: Exception) {
+            logger.error("Unable to build game-state for match: $id")
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
 
         val playerViewDto = try {
             gamestate.asPlayerView(userDetails.login)
@@ -81,11 +81,13 @@ class GameController(
         @RequestBody turn: TurnCommandRequest,
         @AuthenticationPrincipal @Parameter(hidden = true) userDetails: LostCitiesUserDetails,
     ): SimpleResponseMessage {
-        val gamestate = gameService.getGame(id)
-            .orElseThrow {
-                logger.error("Unable to build game-state for match: $id")
-                throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
-            }
+        val gamestate = try {
+            gameService.getGame(id)
+        } catch (e: Exception) {
+            logger.error("Unable to build game-state for match: $id")
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+
         if (gamestate.isGameOver()) {
             logger.info("Game Already Completed, Player($userDetails.login)")
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
