@@ -1,6 +1,7 @@
 package io.dereknelson.lostcities.gamestate.gamestate
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.gamestate.AiEvent
 import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.AI_PLAYER_REQUEST_EVENT
 import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.TURN_CHANGE_EVENT
@@ -49,13 +50,14 @@ class GameService internal constructor(
     }
 
     fun saveTurn(
+        userDetails: LostCitiesUserDetails,
         gameState: GameState,
         playOrDiscardCommand: CommandDto,
         drawCommand: CommandDto,
     ): GameState {
         val match = gameState.matchEntity
-        match.commands.add(CommandEntity.fromDto(playOrDiscardCommand))
-        match.commands.add(CommandEntity.fromDto(drawCommand))
+        match.commands.add(CommandEntity.fromDto(userDetails, playOrDiscardCommand))
+        match.commands.add(CommandEntity.fromDto(userDetails, drawCommand))
 
         match.turns++
 

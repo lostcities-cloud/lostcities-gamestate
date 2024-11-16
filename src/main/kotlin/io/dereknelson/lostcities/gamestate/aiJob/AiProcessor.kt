@@ -31,6 +31,8 @@ class AiProcessor(
         val aiEvent = objectMapper.readValue(gameMessage.body, AiEvent::class.java)
 
         val game = gameService.getGame(aiEvent.id)
+
+        val userDetails = AiLostCitiesUserDetails(game.currentPlayer)
         logger.info("GAME=${aiEvent.id} PLAYER=${game.currentPlayer} Starting AI turn")
         if (game.isGameOver()) {
             logger.info("GAME=${aiEvent.id} PLAYER=${game.currentPlayer} Game Already Completed")
@@ -66,6 +68,7 @@ class AiProcessor(
         }
 
         gameService.saveTurn(
+            userDetails,
             game,
             playOrDiscard,
             draw,

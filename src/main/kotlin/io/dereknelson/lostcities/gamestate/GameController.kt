@@ -100,6 +100,7 @@ class GameController(
         }
 
         gameService.saveTurn(
+            userDetails,
             gamestate,
             turn.playOrDiscard,
             turn.draw,

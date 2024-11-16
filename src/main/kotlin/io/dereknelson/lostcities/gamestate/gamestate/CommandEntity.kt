@@ -1,5 +1,6 @@
 package io.dereknelson.lostcities.gamestate.gamestate
 
+import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.commands.CommandType
 import io.dereknelson.lostcities.models.state.Color
@@ -15,8 +16,8 @@ internal class CommandEntity(
     val createdDate: Long,
 ) {
     companion object {
-        fun fromDto(dto: CommandDto): CommandEntity {
-            return CommandEntity(dto.player!!, dto.type, dto.card, dto.color, Instant.now().toEpochMilli())
+        fun fromDto(userDetails: LostCitiesUserDetails, dto: CommandDto): CommandEntity {
+            return CommandEntity(userDetails.login, dto.type, dto.card, dto.color, Instant.now().toEpochMilli())
         }
     }
 
