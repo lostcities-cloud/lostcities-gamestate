@@ -3,7 +3,7 @@ package io.dereknelson.lostcities.gamestate.aiJob
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.AI_PLAYER_REQUEST_EVENT
 import io.dereknelson.lostcities.gamestate.gamestate.GameService
-import io.dereknelson.lostcities.gamestate.gamestate.matches.MatchEntity
+import io.dereknelson.lostcities.gamestate.gamestate.MatchEntity
 import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.commands.CommandType
 import io.dereknelson.lostcities.models.state.Card

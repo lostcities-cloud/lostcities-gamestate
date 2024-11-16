@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.gamestate.matches
+package io.dereknelson.lostcities.gamestate.gamestate
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.springframework.data.annotation.*
@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 @RedisHash("matches")
 @JsonIgnoreProperties(ignoreUnknown = true)
-class MatchEntity(
+internal class MatchEntity(
 
     @Id
     var id: Long,

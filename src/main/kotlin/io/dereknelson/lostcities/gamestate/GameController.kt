@@ -1,9 +1,8 @@
-package io.dereknelson.lostcities.gamestate.gamestate
+package io.dereknelson.lostcities.gamestate
 
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
-import io.dereknelson.lostcities.gamestate.CommandEvent
+import io.dereknelson.lostcities.gamestate.gamestate.GameService
 import io.dereknelson.lostcities.gamestate.gamestate.dto.TurnCommandRequest
-import io.dereknelson.lostcities.gamestate.gamestate.matches.MatchService
 import io.dereknelson.lostcities.models.SimpleResponseMessage
 import io.dereknelson.lostcities.models.state.PlayerViewDto
 import io.swagger.v3.oas.annotations.Operation
@@ -34,7 +33,6 @@ import org.springframework.web.server.ResponseStatusException
 )
 class GameController(
     private var applicationEventPublisher: ApplicationEventPublisher,
-    private var matchService: MatchService,
     private var gameService: GameService,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -52,21 +50,16 @@ class GameController(
         @PathVariable id: Long,
         @AuthenticationPrincipal @Parameter(hidden = true) userDetails: LostCitiesUserDetails,
     ): PlayerViewDto {
-        val match = matchService.getMatch(id).orElseThrow {
-            ResponseStatusException(HttpStatus.NOT_FOUND)
-        }
-
-        val gamestate = try {
-            gameService.build(match)
-        } catch (e: Exception) {
-            logger.error("Unable to build game-state for match: $match")
-            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+        val gamestate = gameService.getGame(id)
+            .orElseThrow {
+                logger.error("Unable to build game-state for match: $id")
+                throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
+            }
 
         val playerViewDto = try {
             gamestate.asPlayerView(userDetails.login)
         } catch (e: Exception) {
-            logger.error("Unable to build player-view for game-state: $match")
+            logger.error("Unable to build player-view for game-state: $id")
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
         }
 
@@ -88,17 +81,27 @@ class GameController(
         @RequestBody turn: TurnCommandRequest,
         @AuthenticationPrincipal @Parameter(hidden = true) userDetails: LostCitiesUserDetails,
     ): SimpleResponseMessage {
-        val match = matchService
-            .getMatch(id)
-            .orElseThrow { throw ResponseStatusException(HttpStatus.NOT_FOUND) }
+        val gamestate = gameService.getGame(id)
+            .orElseThrow {
+                logger.error("Unable to build game-state for match: $id")
+                throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        if (gamestate.isGameOver()) {
+            logger.info("Game Already Completed, Player($userDetails.login)")
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
 
-        applicationEventPublisher.publishEvent(
-            CommandEvent(
-                userDetails,
-                match,
-                turn.playOrDiscard,
-                turn.draw,
-            ),
+        try {
+            gameService.play(gamestate, turn.playOrDiscard, userDetails.login)
+            gameService.play(gamestate, turn.draw, userDetails.login)
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+
+        gameService.saveTurn(
+            gamestate,
+            turn.playOrDiscard,
+            turn.draw,
         )
 
         return SimpleResponseMessage("Command processed")

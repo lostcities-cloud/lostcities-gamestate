@@ -9,7 +9,7 @@ import org.apache.commons.logging.LogFactory
 import org.springframework.stereotype.Service
 
 @Service
-class CommandService(
+internal class CommandService(
     private val gameEventService: GameEventService,
 ) {
     private val logger: Log = LogFactory.getLog(this::class.java)

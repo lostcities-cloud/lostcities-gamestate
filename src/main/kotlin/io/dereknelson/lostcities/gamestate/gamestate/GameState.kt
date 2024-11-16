@@ -1,6 +1,5 @@
 package io.dereknelson.lostcities.gamestate.gamestate
 
-import io.dereknelson.lostcities.gamestate.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.matches.PlayerEvent
 import io.dereknelson.lostcities.models.matches.PlayerEventType
@@ -13,11 +12,11 @@ import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import kotlin.collections.LinkedHashSet
 
-class GameState(
+class GameState internal constructor(
     val id: Long,
     players: UserPair,
     private val deck: LinkedHashSet<Card>,
-    val matchEntity: MatchEntity,
+    internal val matchEntity: MatchEntity,
 ) {
     private val logger: Log = LogFactory.getLog(this::class.java)
     val playerEvents = mutableListOf<PlayerEvent>()

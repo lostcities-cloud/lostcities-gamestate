@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.gamestate.gamestate.matches
+package io.dereknelson.lostcities.gamestate.gamestate
 
 import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.commands.CommandType
@@ -7,7 +7,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-class CommandEntity(
+internal class CommandEntity(
     val user: String,
     val type: CommandType,
     val card: String?,

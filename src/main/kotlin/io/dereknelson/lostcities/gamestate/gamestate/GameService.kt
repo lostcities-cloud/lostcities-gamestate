@@ -2,20 +2,20 @@ package io.dereknelson.lostcities.gamestate.gamestate
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.AI_PLAYER_REQUEST_EVENT
-import io.dereknelson.lostcities.gamestate.gamestate.matches.CommandEntity
-import io.dereknelson.lostcities.gamestate.gamestate.matches.MatchEntity
-import io.dereknelson.lostcities.gamestate.gamestate.matches.MatchRepository
+import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.TURN_CHANGE_EVENT
 import io.dereknelson.lostcities.models.commands.CommandDto
+import io.dereknelson.lostcities.models.matches.TurnChangeEvent
 import org.slf4j.LoggerFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Service
+import java.util.Optional
 
 @Service
-class GameService(
-    private val matchRepository: MatchRepository,
+class GameService internal constructor(
     private val gameFactory: GameFactory,
     private val matchEventService: GameEventService,
     private val commandService: CommandService,
+    private val matchRepository: MatchRepository,
     private val rabbitTemplate: RabbitTemplate,
     private val objectMapper: ObjectMapper,
 ) {
@@ -25,12 +25,18 @@ class GameService(
         return matchRepository.existsById(id)
     }
 
-    fun build(matchEntity: MatchEntity): GameState {
+    fun getGame(id: Long): Optional<GameState> {
+        return matchRepository.findById(id).map {
+            build(it)
+        }
+    }
+
+    internal fun build(matchEntity: MatchEntity): GameState {
         return gameFactory.build(matchEntity)
             .playCommandsForward()
     }
 
-    fun saveNewMatch(matchEntity: MatchEntity): GameState? {
+    internal fun saveNewMatch(matchEntity: MatchEntity): GameState? {
         if (matchRepository.existsById(matchEntity.id)) {
             return null
         }
@@ -57,7 +63,7 @@ class GameService(
 
         val newGamestate = save(gameState)
 
-        matchEventService.sendTurnChangeEvent(match)
+        sendTurnChangeEvent(match)
 
         if (gameState.isGameOver()) {
             endGame(gameState.id, gameState.calculateScores())
@@ -68,6 +74,13 @@ class GameService(
 
     fun play(game: GameState, commandDto: CommandDto, user: String) {
         commandService.execCommand(game, commandDto, user)
+    }
+
+    private fun sendTurnChangeEvent(matchEntity: MatchEntity) {
+        rabbitTemplate.convertAndSend(
+            TURN_CHANGE_EVENT,
+            objectMapper.writeValueAsBytes(TurnChangeEvent(matchEntity.id, matchEntity.currentPlayer, matchEntity.turns)),
+        )
     }
 
     private fun sendPlayerEvents(gameState: GameState) {

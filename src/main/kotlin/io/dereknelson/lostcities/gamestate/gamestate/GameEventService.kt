@@ -1,21 +1,14 @@
 package io.dereknelson.lostcities.gamestate.gamestate
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.dereknelson.lostcities.gamestate.gamestate.matches.MatchEntity
 import io.dereknelson.lostcities.models.commands.CommandError
 import io.dereknelson.lostcities.models.matches.FinishMatchEvent
-import io.dereknelson.lostcities.models.matches.TurnChangeEvent
 import io.dereknelson.lostcities.models.state.PlayerViewDto
 import org.slf4j.LoggerFactory
-import org.springframework.amqp.core.Message
 import org.springframework.amqp.core.QueueBuilder
-import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.amqp.rabbit.core.RabbitTemplate
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.time.ZoneOffset.UTC
@@ -24,11 +17,7 @@ import java.time.ZoneOffset.UTC
 class GameEventService(
     private val objectMapper: ObjectMapper,
     private var rabbitTemplate: RabbitTemplate,
-    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
-    @Autowired @Lazy
-    private lateinit var gameService: GameService
-
     private val logger = LoggerFactory.getLogger(javaClass)
 
     companion object {
@@ -155,13 +144,6 @@ class GameEventService(
         )
     }
 
-    fun sendTurnChangeEvent(matchEntity: MatchEntity) {
-        rabbitTemplate.convertAndSend(
-            TURN_CHANGE_EVENT,
-            objectMapper.writeValueAsBytes(TurnChangeEvent(matchEntity.id, matchEntity.currentPlayer, matchEntity.turns)),
-        )
-    }
-
     fun sendPlayerEvents(playerEvents: Map<String, PlayerViewDto>) {
         rabbitTemplate.convertAndSend(
             PLAYER_EVENT,
@@ -182,23 +164,5 @@ class GameEventService(
             END_GAME_EVENT,
             objectMapper.writeValueAsBytes(event),
         )
-    }
-
-    @RabbitListener(queues = [CREATE_GAME_QUEUE])
-    fun createGame(gameMessage: Message) {
-        val match = objectMapper.readValue(gameMessage.body, MatchEntity::class.java)
-
-        logger.info("Create Match[${match.id}]: $match}")
-
-        try {
-            if (gameService.saveNewMatch(match) != null) {
-                logger.info("Match[${match.id}] saved match to repo")
-                sendTurnChangeEvent(match)
-            } else {
-                logger.warn("Match[${match.id}] already created")
-            }
-        } catch (e: Exception) {
-            logger.error(e.message, e)
-        }
     }
 }
