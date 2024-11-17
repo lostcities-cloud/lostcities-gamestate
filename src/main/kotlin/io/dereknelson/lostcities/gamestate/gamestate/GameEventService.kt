@@ -2,7 +2,6 @@ package io.dereknelson.lostcities.gamestate.gamestate
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.dereknelson.lostcities.models.commands.CommandError
-import io.dereknelson.lostcities.models.matches.FinishMatchEvent
 import io.dereknelson.lostcities.models.state.PlayerViewDto
 import org.slf4j.LoggerFactory
 import org.springframework.amqp.core.QueueBuilder
@@ -10,8 +9,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
-import java.time.LocalDateTime
-import java.time.ZoneOffset.UTC
 
 @Component
 class GameEventService(
@@ -25,8 +22,8 @@ class GameEventService(
         const val TURN_CHANGE_EVENT_DLQ = "turn-change-dlq"
         const val PLAYER_EVENT = "player-event"
         const val PLAYER_EVENT_DLQ = "player-event-dlq"
-        const val END_GAME_EVENT = "end-game-event"
-        const val END_GAME_EVENT_DLQ = "end-game-event-dlq"
+        const val END_GAME_EVENT = "end-game"
+        const val END_GAME_EVENT_DLQ = "end-game-dlq"
         const val CREATE_GAME_QUEUE = "create-game"
         const val CREATE_GAME_QUEUE_DLQ = "create-game-dlq"
         const val COMMAND_ERROR_QUEUE = "command-error"
@@ -148,21 +145,6 @@ class GameEventService(
         rabbitTemplate.convertAndSend(
             PLAYER_EVENT,
             objectMapper.writeValueAsBytes(playerEvents),
-        )
-    }
-
-    fun endGame(id: Long, scores: Map<String, Int>) {
-        val event = FinishMatchEvent(
-            id,
-            scores,
-            LocalDateTime.now(UTC),
-        )
-
-        logger.info("Finished Match: $event")
-
-        rabbitTemplate.convertAndSend(
-            END_GAME_EVENT,
-            objectMapper.writeValueAsBytes(event),
         )
     }
 }

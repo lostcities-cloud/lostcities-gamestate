@@ -5,14 +5,18 @@ import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.gamestate.AiEvent
 import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.AI_PLAYER_REQUEST_EVENT
 import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.CREATE_GAME_QUEUE
+import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.END_GAME_EVENT
 import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.TURN_CHANGE_EVENT
 import io.dereknelson.lostcities.models.commands.CommandDto
+import io.dereknelson.lostcities.models.matches.FinishMatchEvent
 import io.dereknelson.lostcities.models.matches.TurnChangeEvent
 import org.slf4j.LoggerFactory
 import org.springframework.amqp.core.Message
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.time.ZoneOffset.UTC
 
 @Service
 class GameService internal constructor(
@@ -141,7 +145,18 @@ class GameService internal constructor(
     }
 
     private fun endGame(id: Long, scores: Map<String, Int>) {
-        matchEventService.endGame(id, scores)
+        val event = FinishMatchEvent(
+            id,
+            scores,
+            LocalDateTime.now(UTC),
+        )
+
+        logger.info("Finished Match: $event")
+
+        rabbitTemplate.convertAndSend(
+            END_GAME_EVENT,
+            objectMapper.writeValueAsBytes(event),
+        )
     }
 
     private fun GameState.playCommandsForward(): GameState {
