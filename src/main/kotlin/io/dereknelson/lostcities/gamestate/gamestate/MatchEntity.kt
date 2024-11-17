@@ -19,7 +19,7 @@ internal class MatchEntity(
 
     var isPlayer1Ai: Boolean = false,
     var isPlayer2Ai: Boolean = false,
-    val commands: LinkedHashSet<CommandEntity> = LinkedHashSet(),
+    val commands: List<CommandEntity> = mutableListOf(),
     var hash: Int? = 0,
     @CreatedDate
     val createdDate: LocalDateTime? = null,
