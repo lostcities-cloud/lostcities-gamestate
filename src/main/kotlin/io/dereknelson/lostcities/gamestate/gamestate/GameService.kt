@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.gamestate.AiEvent
 import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.AI_PLAYER_REQUEST_EVENT
+import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.CREATE_GAME_QUEUE
 import io.dereknelson.lostcities.gamestate.gamestate.GameEventService.Companion.TURN_CHANGE_EVENT
 import io.dereknelson.lostcities.models.commands.CommandDto
 import io.dereknelson.lostcities.models.matches.TurnChangeEvent
 import org.slf4j.LoggerFactory
+import org.springframework.amqp.core.Message
+import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Service
 
@@ -76,6 +79,24 @@ class GameService internal constructor(
 
     fun play(game: GameState, commandDto: CommandDto, user: String) {
         commandService.execCommand(game, commandDto, user)
+    }
+
+    @RabbitListener(queues = [CREATE_GAME_QUEUE])
+    fun createGame(gameMessage: Message) {
+        val match = objectMapper.readValue(gameMessage.body, MatchEntity::class.java)
+
+        logger.info("Create Match[${match.id}]: $match}")
+
+        try {
+            if (saveNewMatch(match) != null) {
+                logger.info("Match[${match.id}] saved match to repo")
+                sendTurnChangeEvent(match)
+            } else {
+                logger.warn("Match[${match.id}] already created")
+            }
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+        }
     }
 
     private fun sendTurnChangeEvent(matchEntity: MatchEntity) {
