@@ -9,7 +9,6 @@ internal class AiLostCitiesUserDetails(
     id = 0,
     login = login,
     email = "",
-    password = "",
     userRef = UserRef(id = 0),
     token = "",
     authority = emptySet(),

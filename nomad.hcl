@@ -3,6 +3,12 @@ variable "version" {
   default = "latest"
 }
 
+variable "priority" {
+  type = number
+  default = 20
+}
+
+
 variable "cpu" {
   type    = number
   default = 300
@@ -35,7 +41,7 @@ variable "memory_swappiness" {
 
 variable count {
   type    = number
-  default = 8
+  default = 2
 }
 
 variable max_parallel {
@@ -47,6 +53,7 @@ job "gamestate" {
   region    = "global"
   namespace = "lostcities"
   datacenters = ["tower-datacenter"]
+  priority = var.priority
 
   spread {
     attribute = "${node.datacenter}"
