@@ -122,7 +122,7 @@ class GameEventService(
     fun aiPlayerRequestEventQueue() = QueueBuilder
         .durable(AI_PLAYER_REQUEST_EVENT)
         .quorum()
-        .ttl(5000)
+        .ttl(30000)
         .withArgument("x-dead-letter-exchange", "")
         .withArgument("x-dead-letter-routing-key", AI_PLAYER_REQUEST_EVENT_DLQ)
         .build()!!
