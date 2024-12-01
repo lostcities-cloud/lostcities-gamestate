@@ -85,7 +85,7 @@ job "gamestate" {
     service {
       name = "gamestate-service"
       port = "service-port"
-      tags = ["urlprefix-/api/gamestate"]
+      tags = ["urlprefix-lostcities.app/api/gamestate"]
       #address_mode = "alloc"
 
       check {
@@ -105,7 +105,7 @@ job "gamestate" {
 
       tags = [
         "prometheus",
-        "urlprefix-/management/gamestate/actuator",
+        "urlprefix-lostcities.app/management/gamestate/actuator",
         "metricspath-/management/gamestate/actuator/prometheus",
       ]
 
