@@ -26,7 +26,7 @@ class AiProcessor(
     @Autowired @Lazy
     private lateinit var gameService: GameService
 
-    @RabbitListener(queues = [AI_PLAYER_REQUEST_EVENT], concurrency = "1-8")
+    @RabbitListener(queues = [AI_PLAYER_REQUEST_EVENT], concurrency = "1-2")
     fun playAiTurn(gameMessage: Message) {
         val aiEvent = objectMapper.readValue(gameMessage.body, AiEvent::class.java)
 
