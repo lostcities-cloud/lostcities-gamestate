@@ -3,15 +3,14 @@ spring:
   application.name: gamestate
 
   rabbitmq:
-    host: ${RABBITMQ_IP}
+    addresses: ${RABBITMQ_IP:rabbitmq}
     port: 5672
-    username: guest
-    password: guest
-
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
   data:
     redis:
       database: 0
-      host: ${REDIS_IP}
+      host: ${REDIS_IP:redis}
       port: 6379
 
 web:

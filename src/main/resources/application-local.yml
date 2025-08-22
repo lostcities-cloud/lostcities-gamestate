@@ -30,6 +30,14 @@ application:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
 
+web:
+  cors:
+    allowed-origins: http://192.168.1.241:8080, http://192.168.1.201:8091, http://localhost:8080, http://localhost:4452, http://127.0.0.1:8080, http://127.0.0.1:4452, http://192.168.1.233:80
+    allowed-methods: GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD
+    max-age: 3600
+    allowed-headers: "*"
+    exposed-headers: "*"
+
 logging:
   level:
     ROOT: error
@@ -49,9 +57,10 @@ logging:
       max-history: 10
 
 server:
-  port: 8092
+  port: 8082
+
 management:
   server:
-    port: 4452
+    port: 4454
 
 

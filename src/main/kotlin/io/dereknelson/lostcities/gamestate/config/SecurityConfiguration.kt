@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher
 import org.springframework.web.filter.ForwardedHeaderFilter
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
@@ -80,7 +79,7 @@ class SecurityConfiguration(
             .authorizeHttpRequests { requests ->
                 requests
                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers(antMatcher("/gamestate/**")).hasAuthority(AuthoritiesConstants.USER)
+                    .requestMatchers("/gamestate/**").hasAuthority(AuthoritiesConstants.USER)
                     .requestMatchers(
                         "/actuator",
                         "/actuator/**",
@@ -102,15 +101,15 @@ class SecurityConfiguration(
         return WebSecurityCustomizer { web: WebSecurity ->
             web
                 .ignoring()
-                .requestMatchers(antMatcher(HttpMethod.OPTIONS, "/**"))
+                .requestMatchers(HttpMethod.OPTIONS, "/**")
                 // .requestMatchers("/api/**")
                 // .requestMatchers("/app/**/*.{js,html}")
                 .requestMatchers("/actuator/**")
-                .requestMatchers(antMatcher(HttpMethod.GET, "/actuator/**"))
+                .requestMatchers(HttpMethod.GET, "/actuator/**")
                 .requestMatchers("/i18n/**")
                 .requestMatchers("/content/**")
                 .requestMatchers("/swagger-ui/**")
-                .requestMatchers(antMatcher("/v3/api-docs/**"))
+                .requestMatchers("/v3/api-docs/**")
                 .requestMatchers("/v3/api-docs/swagger-config")
                 .requestMatchers("/test/**")
         }
