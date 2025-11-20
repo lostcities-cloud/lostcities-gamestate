@@ -3,11 +3,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     jacoco
 
-    id("org.springframework.boot") version "3.3.+"
+    id("org.springframework.boot") version "3.2.+"
     id("org.owasp.dependencycheck") version "11.0.0"
     id("com.github.rising3.semver") version "0.8.2"
     id("io.spring.dependency-management") version "1.1.4"
-    id("org.jetbrains.dokka") version "2.0.0"
+    id("org.jetbrains.dokka") version "2.1.0"
     id("com.google.cloud.tools.jib") version "3.4.4"
 
     //id("org.openrewrite.rewrite") version "6.27.0"
@@ -74,7 +74,10 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-devtools")
 
-    if(  rootProject.hasProperty("debug")){
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.5.1")
+    implementation("org.apache.httpcomponents.core5:httpcore5:5.3.6")
+
+    if(rootProject.hasProperty("debug")){
         implementation(project(":lostcities-common"))
         implementation(project(":lostcities-models"))
     } else {
@@ -98,11 +101,13 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.8.0")
+
     ktlint("com.pinterest:ktlint:0.49.1") {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
         }
     }
+
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:2.0.0")
 
     testImplementation("org.assertj:assertj-core:3.22.0")
@@ -142,8 +147,8 @@ semver {
 tasks.withType<KotlinCompile>() {
 
     compilerOptions {
-        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
-        languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
+        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2)
+        languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2)
         freeCompilerArgs.addAll(listOf(
             "-Xjsr305=strict", "-opt-in=kotlin.RequiresOptIn"
         ))
