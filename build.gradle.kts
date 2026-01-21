@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
     jacoco
@@ -9,6 +10,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     id("org.jetbrains.dokka") version "2.1.0"
     id("com.google.cloud.tools.jib") version "3.4.4"
+    id("org.graalvm.buildtools.native") version "0.11.1"
 
     //id("org.openrewrite.rewrite") version "6.27.0"
 
@@ -49,6 +51,11 @@ repositories {
 
 val ktlint by configurations.creating
 
+tasks.named<BootRun>("bootRun") {
+    if(rootProject.hasProperty("debug")) {
+        systemProperty("spring.profiles.active", "local")
+    }
+}
 
 dependencyManagement {
     imports {
@@ -70,25 +77,23 @@ dependencies {
 
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 
-    implementation("io.github.microutils:kotlin-logging-jvm:2.1.20")
-
     implementation("org.springframework.boot:spring-boot-devtools")
 
-    implementation("org.apache.httpcomponents.client5:httpclient5:5.5.1")
-    implementation("org.apache.httpcomponents.core5:httpcore5:5.3.6")
+    implementation("org.apache.httpcomponents.client5:httpclient5:${rootProject.extra["httpclient5.version"]}")
+    implementation("org.apache.httpcomponents.core5:httpcore5:${rootProject.extra["httpcore5.version"]}")
 
     if(rootProject.hasProperty("debug")){
         implementation(project(":lostcities-common"))
         implementation(project(":lostcities-models"))
     } else {
-        implementation("io.dereknelson.lostcities-cloud:lostcities-common:0.0.7")
-        implementation("io.dereknelson.lostcities-cloud:lostcities-models:0.0.6")
+        implementation("io.dereknelson.lostcities-cloud:lostcities-common:${rootProject.extra["lostcities-common.version"]}")
+        implementation("io.dereknelson.lostcities-cloud:lostcities-models:${rootProject.extra["lostcities-models.version"]}")
     }
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-	implementation("redis.clients:jedis:3.6.2")
+	implementation("redis.clients:jedis:${rootProject.extra["jedis.version"]}")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
@@ -98,11 +103,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0")
-    implementation("org.springdoc:springdoc-openapi-kotlin:1.8.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${rootProject.extra["springdoc.version"]}")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:${rootProject.extra["springdoc.version"]}")
 
-    ktlint("com.pinterest:ktlint:0.49.1") {
+    ktlint("com.pinterest:ktlint:${rootProject.extra["ktlint.version"]}") {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
         }

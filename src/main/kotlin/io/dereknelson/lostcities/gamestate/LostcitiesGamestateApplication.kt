@@ -7,12 +7,17 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.dereknelson.lostcities.common.WebConfigProperties
+import io.swagger.v3.oas.annotations.OpenAPIDefinition
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
+import io.swagger.v3.oas.annotations.security.SecurityScheme
+import io.swagger.v3.oas.annotations.servers.Server
 import org.springframework.amqp.rabbit.annotation.EnableRabbit
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 
 @SpringBootApplication(
     scanBasePackages = [
@@ -23,6 +28,14 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @EnableConfigurationProperties(WebConfigProperties::class)
 @EnableRabbit
 @EnableRedisRepositories
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = false, jsr250Enabled = true)
+@SecurityScheme(
+    name = "Bearer Authentication",
+    type = SecuritySchemeType.HTTP,
+    bearerFormat = "JWT",
+    scheme = "bearer",
+)
+@OpenAPIDefinition(servers = [Server(url = "lostcities.com", )])
 class LostcitiesGamestateApplication
 
 fun main(args: Array<String>) {

@@ -1,10 +1,9 @@
 package io.dereknelson.lostcities.gamestate.config
 
-import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.common.WebConfigProperties
 import io.dereknelson.lostcities.common.auth.JwtFilter
 import io.dereknelson.lostcities.common.auth.PublicTokenValidator
-import io.dereknelson.lostcities.common.auth.TokenProvider
+import io.dereknelson.lostcities.common.model.Role
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import io.swagger.v3.oas.annotations.security.SecurityScheme
 import org.springframework.context.annotation.Bean
@@ -27,15 +26,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 @EnableWebSecurity(debug = true)
-@EnableMethodSecurity(prePostEnabled = true, securedEnabled = false, jsr250Enabled = true)
-@SecurityScheme(
-    name = "Bearer Authentication",
-    type = SecuritySchemeType.HTTP,
-    bearerFormat = "JWT",
-    scheme = "bearer",
-)
+
 class SecurityConfiguration(
-    private val tokenProvider: TokenProvider,
     private val publicTokenValidator: PublicTokenValidator
 ) {
 
@@ -80,8 +72,8 @@ class SecurityConfiguration(
             }
             .authorizeHttpRequests { requests ->
                 requests
-                    .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers("/gamestate/**").hasAuthority(AuthoritiesConstants.USER)
+                    .requestMatchers("/api/admin/**").hasAuthority(Role.ADMIN.authority)
+                    .requestMatchers("/gamestate/**").hasAuthority(Role.USER.authority)
                     .requestMatchers(
                         "/actuator",
                         "/actuator/**",

@@ -15,10 +15,7 @@ spring:
       port: 6379
 
 
-springdoc:
-  use-management-port: true
-  api-docs.enabled: true
-  packagesToScan: io.dereknelson.lostcities.gamestate.api
+
 
 application:
   security:
@@ -58,8 +55,19 @@ logging:
 server:
   port: 8082
 
+springdoc:
+  use-management-port: true
+  show-actuator: true
+  api-docs.enabled: true
+  packagesToScan: io.dereknelson.lostcities.gamestate
+
+
 management:
   server:
     port: 4454
+  endpoints:
+    web:
+      exposure:
+        include: "*, openapi, swagger-ui"
 
 
