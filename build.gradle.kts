@@ -51,11 +51,6 @@ repositories {
 
 val ktlint by configurations.creating
 
-tasks.named<BootRun>("bootRun") {
-    if(rootProject.hasProperty("debug")) {
-        systemProperty("spring.profiles.active", "local")
-    }
-}
 
 dependencyManagement {
     imports {
@@ -71,6 +66,8 @@ configurations.matching { it.name.startsWith("dokka") }.configureEach {
     }
 }
 
+val openTelemetryAgent: Configuration by configurations.creating
+val otelAgentVersion = "2.24.0" // Use the desired agent version
 dependencies {
     //rewrite("org.openrewrite:rewrite-kotlin:1.21.2")
     //rewrite("org.openrewrite.recipe:rewrite-spring:5.22.0")
@@ -82,13 +79,12 @@ dependencies {
     implementation("org.apache.httpcomponents.client5:httpclient5:${rootProject.extra["httpclient5.version"]}")
     implementation("org.apache.httpcomponents.core5:httpcore5:${rootProject.extra["httpcore5.version"]}")
 
-    if(rootProject.hasProperty("debug")){
-        implementation(project(":lostcities-common"))
-        implementation(project(":lostcities-models"))
-    } else {
-        implementation("io.dereknelson.lostcities-cloud:lostcities-common:${rootProject.extra["lostcities-common.version"]}")
-        implementation("io.dereknelson.lostcities-cloud:lostcities-models:${rootProject.extra["lostcities-models.version"]}")
-    }
+    openTelemetryAgent("io.opentelemetry.javaagent:opentelemetry-javaagent:${otelAgentVersion}") // Use the latest stable version
+    implementation("io.micrometer:micrometer-tracing-bridge-otel")
+
+    implementation(project(":lostcities-common"))
+    implementation(project(":lostcities-models"))
+
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -120,6 +116,23 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.5")
 	testImplementation("org.springframework.amqp:spring-rabbit-test:2.3.9")
 }
+
+tasks.named<BootRun>("bootRun") {
+    if(rootProject.hasProperty("debug")) {
+        systemProperty("spring.profiles.active", "local")
+
+
+    }
+
+    // Pass the -javaagent flag as a JVM argument
+    jvmArgs("-javaagent:${openTelemetryAgent.singleFile.path}")
+
+    // Optional: Configure common OpenTelemetry properties
+    systemProperty("otel.service.name", project.name)
+    systemProperty("otel.exporter.otlp.endpoint", "http://localhost:4318") // Default OTLP gRPC port
+
+}
+
 
 val outputDir = "${layout.buildDirectory}/reports/ktlint/"
 val inputFiles = project.fileTree(mapOf("dir" to "src", "include" to "**/*.kt"))
