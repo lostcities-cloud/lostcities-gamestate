@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.springframework.data.annotation.*
 import org.springframework.data.redis.core.RedisHash
 import java.time.LocalDateTime
+import kotlinx.datetime.serializers.LocalDateTimeIso8601Serializer
+import kotlinx.serialization.Serializable
 
+@Serializable
 @RedisHash("matches")
 @JsonIgnoreProperties(ignoreUnknown = true)
-internal class MatchEntity(
+data class MatchEntity(
 
     @Id
     var id: Long,
@@ -21,9 +24,9 @@ internal class MatchEntity(
     var isPlayer2Ai: Boolean = false,
     val commands: MutableList<CommandEntity> = mutableListOf(),
     var hash: Int? = 0,
-    @CreatedDate
+    @Serializable(with = LocalDateTimeIso8601Serializer::class)
     val createdDate: LocalDateTime? = null,
-    @LastModifiedDate
+    @Serializable(with = LocalDateTimeIso8601Serializer::class)
     val lastModifiedDate: LocalDateTime? = null,
 ) {
     var turns: Long = 0
@@ -39,6 +42,7 @@ internal class MatchEntity(
         other as MatchEntity
 
         if (id != other.id) return false
+//@Serializable false
         if (seed != other.seed) return false
         if (currentPlayer != other.currentPlayer) return false
         if (commands != other.commands) return false

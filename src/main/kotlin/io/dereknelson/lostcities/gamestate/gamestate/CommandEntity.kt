@@ -7,8 +7,10 @@ import io.dereknelson.lostcities.models.state.Color
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import kotlinx.serialization.Serializable
 
-internal class CommandEntity(
+@Serializable
+data class CommandEntity(
     val user: String,
     val type: CommandType,
     val card: String?,

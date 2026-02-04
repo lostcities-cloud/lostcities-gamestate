@@ -16,7 +16,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.data.redis.connection.RedisConnectionFactory
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories
+import org.springframework.data.redis.serializer.StringRedisSerializer
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 
 @SpringBootApplication(
@@ -35,7 +38,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
     bearerFormat = "JWT",
     scheme = "bearer",
 )
-@OpenAPIDefinition(servers = [Server(url = "lostcities.com", )])
+@OpenAPIDefinition(servers = [Server(url = "lostcities.com")])
 class LostcitiesGamestateApplication
 
 fun main(args: Array<String>) {
@@ -49,3 +52,4 @@ fun mapper(): ObjectMapper =
         .registerModule(Jdk8Module())
         .registerModule(JavaTimeModule())
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)!!
+

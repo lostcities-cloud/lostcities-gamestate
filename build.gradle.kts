@@ -10,13 +10,14 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     id("org.jetbrains.dokka") version "2.1.0"
     id("com.google.cloud.tools.jib") version "3.4.4"
-    id("org.graalvm.buildtools.native") version "0.11.1"
-
+    //id("org.graalvm.buildtools.native") version "0.11.1"
     //id("org.openrewrite.rewrite") version "6.27.0"
 
-	kotlin("jvm") version "2.0.+"
-	kotlin("plugin.spring") version "2.0.+"
+	kotlin("jvm") version "2.3.+"
+	kotlin("plugin.spring") version "2.3.+"
+    kotlin("plugin.serialization") version "2.3.+"
 }
+
 
 group = "io.dereknelson.lostcities"
 version = project.property("version")!!
@@ -71,7 +72,9 @@ val otelAgentVersion = "2.24.0" // Use the desired agent version
 dependencies {
     //rewrite("org.openrewrite:rewrite-kotlin:1.21.2")
     //rewrite("org.openrewrite.recipe:rewrite-spring:5.22.0")
-
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.10.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 
     implementation("org.springframework.boot:spring-boot-devtools")
@@ -164,8 +167,8 @@ semver {
 tasks.withType<KotlinCompile>() {
 
     compilerOptions {
-        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2)
-        languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2)
+        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_3)
+        languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_3)
         freeCompilerArgs.addAll(listOf(
             "-Xjsr305=strict", "-opt-in=kotlin.RequiresOptIn"
         ))
@@ -222,4 +225,3 @@ tasks.test {
 tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
 }
-
